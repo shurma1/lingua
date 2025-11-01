@@ -1,0 +1,73 @@
+.page {
+	min-height: 100vh;
+	background: var(--background-primary-color-dark);
+}
+
+.container {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.title {
+	font-size: 34px;
+	font-weight: 700;
+	margin-bottom: 8px;
+	color: var(--accent-color);
+	line-height: 1.2;
+}
+
+.description {
+	font-size: 17px;
+	color: var(--innactive-color);
+	line-height: 1.5;
+	margin-bottom: 24px;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.card {
+	background: rgba(118, 118, 128, 0.12);
+	border-radius: 12px;
+	padding: 16px;
+	transition: transform 0.2s ease, background 0.2s ease;
+
+	&:active {
+		transform: scale(0.98);
+		background: rgba(118, 118, 128, 0.16);
+	}
+}
+
+.cardTitle {
+	font-size: 20px;
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: var(--accent-color);
+}
+
+.cardText {
+	font-size: 15px;
+	color: var(--innactive-color);
+	line-height: 1.5;
+}
+
+.button {
+	margin-top: 12px;
+	padding: 12px 20px;
+	background: var(--accent-color);
+	color: white;
+	border: none;
+	border-radius: 12px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: opacity 0.2s ease;
+
+	&:active {
+		opacity: 0.7;
+	}
+}

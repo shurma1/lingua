@@ -1,0 +1,93 @@
+.tabBar {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+    padding: 4px 0 calc(28px);
+
+  &Container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-index-tabbar);
+
+    border-top: .5px solid var(--border-color);
+  }
+
+    @media (prefers-color-scheme: dark) {
+      &Container {
+        background: var(--background-secondary-color);
+        border: none;
+      }
+    }
+}
+
+.tabItem {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	min-width: 60px;
+	max-width: 100px;
+	padding: 4px 8px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	transition: transform 0.2s ease;
+	-webkit-tap-highlight-color: transparent;
+
+	&:active {
+		transform: scale(0.95);
+	}
+}
+
+.iconWrapper {
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 3px;
+	transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
+
+	.tabItem.active & {
+		transform: scale(1.1);
+	}
+
+}
+
+.icon {
+	width: 100%;
+	height: 100%;
+	transition: filter 0.2s ease;
+}
+
+.label {
+	font-size: 10px;
+	font-weight: 500;
+	letter-spacing: -0.08px;
+	color: var(--innactive-color);
+	transition: color 0.2s ease, transform 0.2s ease;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+
+  .tabItem.active & {
+		color: var(--accent-color);
+		font-weight: 600;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		color: var(--innactive-color);
+
+		.tabItem.active & {
+          color: var(--accent-color);
+		}
+	}
+}

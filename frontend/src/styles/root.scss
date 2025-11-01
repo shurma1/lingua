@@ -1,0 +1,57 @@
+
+:root {
+  --accent-color: #007AFF;
+  --innactive-color: #7D7D7F;
+
+  --loader-icon: #ffffff;
+
+  // Light theme (default)
+  --background-primary-color: #FFFFFF;
+  --background-secondary-color: #F5F5F5;
+
+  --text-primary-color: #000000;
+  --text-secondary-color: #7B7C7C;
+
+  --border-color: #D8D8D8;
+
+  //layers
+  --z-index-base: 0;
+  --z-index-content: 1;
+  --z-index-tabbar: 2;
+  --z-index-dropdown: 10;
+  --z-index-overlay: 11;
+  --z-index-modal: 12;
+  --z-index-tooltip: 13;
+  --z-index-popover: 14;
+  --z-index-loader: 15;
+  --z-index-topmost: 100;
+
+
+  //transitions speed
+  --animation-speed-1: .3s;
+  --animation-speed-2: .6s;
+  --animation-speed-3: 1s;
+
+  //transitions animation
+  --transition-ease: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  //transitions
+  --transition-ease-fast: var(--animation-speed-1) var(--transition-ease);
+
+
+
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    // Dark theme
+    --background-primary-color: #17181C;
+    --background-secondary-color: #1E1F24;
+
+    --text-primary-color: #ffffff;
+    --text-secondary-color: #7B7C7C;
+
+    --border-color: #333438;
+  }
+}
+

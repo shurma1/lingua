@@ -1,0 +1,25 @@
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent-color);
+  opacity: 1;
+  transition: opacity .3s ease-out;
+  z-index: var(--z-index-loader);
+
+  &.exiting {
+    opacity: 0;
+  }
+}
+
+.lottieContainer {
+  width: 200px;
+  height: 200px;
+  transition: transform var(--transition-ease-fast);
+
+}

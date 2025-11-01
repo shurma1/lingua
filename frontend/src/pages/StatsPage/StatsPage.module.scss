@@ -1,0 +1,22 @@
+.page {
+	padding: 20px;
+	min-height: calc(100vh - 100px);
+}
+
+.container {
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.title {
+	font-size: 32px;
+	font-weight: 700;
+	margin-bottom: 16px;
+	color: var(--accent-color);
+}
+
+.description {
+	font-size: 16px;
+	color: var(--innactive-color);
+	line-height: 1.5;
+}

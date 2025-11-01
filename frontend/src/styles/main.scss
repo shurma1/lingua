@@ -1,0 +1,7 @@
+@import "root";
+
+body {
+  background: var(--background-primary-color);
+
+  touch-action: manipulation;
+}
