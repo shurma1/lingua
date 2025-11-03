@@ -1,0 +1,5 @@
+export enum QuestType {
+  MATCH_WORDS = 'MATCH_WORDS',
+  DICTATION = 'DICTATION',
+  TRANSLATE = 'TRANSLATE',
+}
