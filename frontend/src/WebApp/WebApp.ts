@@ -1,6 +1,6 @@
 import BackButton from "./BackButton";
 import HapticFeedback from "./HapticFeedback";
-import {Platform} from "./types/Platform";
+import {Platform} from "@WebApp/types";
 
 const WebAppRoot = window.Telegram.WebApp;
 

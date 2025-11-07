@@ -1,13 +1,13 @@
-import {FC} from "react";
+import {FC, MouseEvent} from "react";
 
 import {Button as MaxButton, ButtonProps} from "@maxhub/max-ui";
 
-import WebApp from "../../WebApp/WebApp";
-import {ImpactStyle} from "../../WebApp/types/ImpactStyle";
-import {NotificationType} from "../../WebApp/types/NotificationType";
+import WebApp from "@WebApp/WebApp";
+import {ImpactStyle} from "@WebApp/types/ImpactStyle";
+import {NotificationType} from "@WebApp/types/NotificationType";
 
 const Button: FC<ButtonProps> = ({onClick, disabled, ...props}) => {
-	const handleWrapperClick = (e: React.MouseEvent<HTMLDivElement>) => {
+	const handleWrapperClick = (e: MouseEvent<HTMLDivElement>) => {
 		if (disabled) {
 			WebApp.HapticFeedback.notificationOccurred(NotificationType.ERROR);
 			e.preventDefault();

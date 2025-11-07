@@ -7,7 +7,7 @@ import "./setupDevMode";
 import "virtual:svg-icons-register";
 
 import App from "./App";
-import {HistoryProvider} from "./contexts/HistoryContext";
+import {HistoryProvider} from "@contexts/HistoryContext";
 
 import "./styles/main.scss";
 import "@maxhub/max-ui/dist/styles.css";

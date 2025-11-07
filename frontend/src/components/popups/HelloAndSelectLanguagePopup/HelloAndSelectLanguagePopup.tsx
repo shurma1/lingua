@@ -1,8 +1,8 @@
 import {FC, useCallback, useState} from "react";
 
-import LanguagesBackground from "../../LanguagesBackground/LanguagesBackground";
-import {LanguageSelector} from "../../LanguageSelector/LanguageSelector";
-import OnBoarding from "../../OnBoarding/OnBoarding";
+import LanguagesBackground from "@components/LanguagesBackground/LanguagesBackground";
+import {LanguageSelector} from "@components/LanguageSelector/LanguageSelector";
+import OnBoarding from "@components/OnBoarding/OnBoarding";
 
 const popupInfoV1 = {
 	id: 1,

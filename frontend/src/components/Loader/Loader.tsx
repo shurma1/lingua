@@ -1,7 +1,7 @@
 import {useRef, useState, useEffect, useImperativeHandle, forwardRef} from "react";
 
-import animationData from "../../assets/lottie/language.json";
-import ColoredLottie from "../ColoredLottie/ColoredLottie";
+import animationData from "@assets/lottie/language.json";
+import ColoredLottie from "@components/ColoredLottie/ColoredLottie";
 
 import styles from "./Loader.module.scss";
 

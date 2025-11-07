@@ -1,10 +1,10 @@
 import {CSSProperties, FC, useEffect, useRef} from "react";
 
-import {generateRandomArrayFromArray} from "../../utils/generateRandomArrayFromArray";
-import {random} from "../../utils/random";
+import {generateRandomArrayFromArray} from "@utils/generateRandomArrayFromArray";
+import {random} from "@utils/random";
 
 import styles from "./LanguagesBackground.module.scss";
-
+import {GREETING_STRINGS} from "@constants/greetings";
 
 interface GreetingWord {
 	text: string;
@@ -25,28 +25,17 @@ const SPEED = [0.2, 0.4];
 const OPACITY = [0.5, 1];
 const SIZE = [0.5, 1.25];
 
-const greetingStrings = [
-	"Hello", "Bonjour", "Hola", "Ciao", "Olá",
-	"Hallo", "Привет", "你好", "こんにちは", "안녕하세요",
-	"Merhaba", "שלום", "สวัสดี", "مرحبًا",
-	"Hej", "Ahoj", "Szia", "Saluton", "Kumusta",
-	"Jambo", "Sawubona", "Namaste", "Xin chào",
-	"Salam", "Hallå", "Terve", "Cześć", "Bongu",
-	"Kia ora", "Hei", "Halló", "Tere", "Sveiki",
-	"Përshëndetje", "Sawatdii", "Dobrý den", "Salve"
-];
-
 const rows: GreetingRow[] = [];
 
 for(let i = 0; i < ROWS; i++) {
-	const greetingsInRow = generateRandomArrayFromArray(greetingStrings, GREETINGS_IN_ROW);
+	const greetingsInRow = generateRandomArrayFromArray(GREETING_STRINGS, GREETINGS_IN_ROW);
 	const words: GreetingWord[] = greetingsInRow.map(text => {
 		const opacity = random(OPACITY[0], OPACITY[1], 1);
 		const size = random(SIZE[0], SIZE[1], 2);
 		return {text, opacity, size};
 	});
 	const speed = random(SPEED[0], SPEED[1], 2);
-	const direction = i % 2 === 0 ? 1 : -1; // Четные строки влево, нечетные вправо
+	const direction = i % 2 === 0 ? 1 : -1;
 	
 	rows.push({words, speed, direction});
 }
@@ -61,15 +50,13 @@ const LanguagesBackground: FC<OwnProps> = ({background}) => {
 	const rowWordsRef = useRef<GreetingWord[][]>(rows.map(row => [...row.words, ...row.words, ...row.words, ...row.words]));
 	
 	useEffect(() => {
-		// Инициализируем начальные позиции
 		rowRefs.current.forEach((rowEl, index) => {
 			if (!rowEl) return;
 			const row = rows[index];
-			// Для строк, движущихся влево, начинаем справа
+			
 			if (row.direction === 1) {
 				rowEl.style.left = "0px";
 			} else {
-				// Для строк, движущихся вправо, начинаем слева за экраном
 				rowEl.style.left = `-${rowEl.scrollWidth / 2}px`;
 			}
 		});
@@ -84,13 +71,12 @@ const LanguagesBackground: FC<OwnProps> = ({background}) => {
 				const rowWidth = rowEl.scrollWidth;
 				const halfWidth = rowWidth / 2;
 				
-				// Зацикливаем позицию, когда прошли половину (т.к. слова дублированы)
 				if (row.direction === 1 && newLeft <= -halfWidth) {
 					rowEl.style.left = `${newLeft + halfWidth}px`;
-				} 
+				}
 				else if (row.direction === -1 && newLeft >= 0) {
 					rowEl.style.left = `${newLeft - halfWidth}px`;
-				} 
+				}
 				else {
 					rowEl.style.left = `${newLeft}px`;
 				}
@@ -138,7 +124,6 @@ const LanguagesBackground: FC<OwnProps> = ({background}) => {
 					style={getRowStyles(index)}
 					key={index}
 				>
-					{/* Дублируем слова дважды для бесшовного зацикливания */}
 					{rowWordsRef.current[index].map((word, wordIndex) => (
 						<span
 							className={styles.word}

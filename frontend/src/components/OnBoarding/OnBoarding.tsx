@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useState, useRef} from "react";
 
 import {Button, Typography} from "@maxhub/max-ui";
 
-import cls from "../../utils/cls";
+import cls from "@utils/cls";
 
 import styles from "./OnBoarding.module.scss";
 

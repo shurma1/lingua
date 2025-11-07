@@ -6,7 +6,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const iconsDir = path.resolve(__dirname, "../src/assets/icons");
-const outputFile = path.resolve(__dirname, "../src/components/Icon/iconTypes.ts");
+const outputFile = path.resolve(__dirname, "../src/types/generated/iconTypes.ts");
 
 function generateIconTypes() {
 	if (!fs.existsSync(iconsDir)) {

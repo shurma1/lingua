@@ -2,11 +2,11 @@ import React, {useState} from "react";
 
 import {CellList, CellSimple} from "@maxhub/max-ui";
 
-import cls from "../../utils/cls";
-import {ImpactStyle} from "../../WebApp/types/ImpactStyle";
-import {NotificationType} from "../../WebApp/types/NotificationType";
+import cls from "@utils/cls";
+import {ImpactStyle} from "@WebApp/types";
+import {NotificationType} from "@WebApp/types";
 import WebApp from "../../WebApp/WebApp";
-import Icon from "../Icon/Icon";
+import Icon from "@components/Icon/Icon";
 
 import styles from "./LanguageSelector.module.scss";
 

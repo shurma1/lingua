@@ -1,8 +1,8 @@
 import { useState, type ReactNode } from "react";
 
-import TabBar, { type TabConfig } from "../TabBar/TabBar";
+import TabBar, { type TabConfig } from "@components/TabBar/TabBar";
 import styles from "./TabNavigator.module.scss";
-import PageContainer from "../PageContainer/PageContainer";
+import PageContainer from "@components/PageContainer/PageContainer";
 
 export interface TabNavigatorConfig extends TabConfig {
 	component: ReactNode;

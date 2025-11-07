@@ -6,7 +6,7 @@ import CoursePage from "../pages/CoursePage/CoursePage";
 import GamePage from "../pages/GamePage/GamePage";
 import StatsPage from "../pages/StatsPage/StatsPage";
 
-import type {TabNavigatorConfig} from "../components/TabNavigator/TabNavigator";
+import type {TabNavigatorConfig} from "@components/TabNavigator/TabNavigator";
 
 export const getTabsConfig = (openPopup: (content: JSX.Element) => void): TabNavigatorConfig[] => [
 	{

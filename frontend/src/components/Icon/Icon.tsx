@@ -1,4 +1,4 @@
-import type { IconName } from "./iconTypes";
+import type { IconName } from "@/types/generated/iconTypes";
 import {FC} from "react";
 
 interface IconProps {

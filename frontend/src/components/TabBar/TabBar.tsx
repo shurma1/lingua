@@ -1,8 +1,8 @@
 import {useRef, useState} from "react";
 
-import {ImpactStyle} from "../../WebApp/types/ImpactStyle";
-import WebApp from "../../WebApp/WebApp";
-import ColoredLottie from "../ColoredLottie/ColoredLottie";
+import {ImpactStyle} from "@WebApp/types/ImpactStyle";
+import WebApp from "@WebApp/WebApp";
+import ColoredLottie from "@components/ColoredLottie/ColoredLottie";
 
 import styles from "./TabBar.module.scss";
 

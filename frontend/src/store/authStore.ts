@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User } from '../types/auth';
+import { User } from '@/types/auth';
 
 interface AuthState {
 	accessToken: string | null;
@@ -13,14 +13,14 @@ export const useAuthStore = create<AuthState>((set) => ({
 	accessToken: null,
 	user: null,
 	isAuthenticated: false,
-	setAuth: (accessToken, user) => set({ 
-		accessToken, 
-		user, 
-		isAuthenticated: true 
+	setAuth: (accessToken, user) => set({
+		accessToken,
+		user,
+		isAuthenticated: true
 	}),
-	clearAuth: () => set({ 
-		accessToken: null, 
-		user: null, 
-		isAuthenticated: false 
+	clearAuth: () => set({
+		accessToken: null,
+		user: null,
+		isAuthenticated: false
 	}),
 }));

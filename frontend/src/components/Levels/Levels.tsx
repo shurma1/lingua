@@ -1,5 +1,5 @@
 import React from 'react';
-import { LevelButton } from '../LevelButton/LevelButton';
+import { LevelButton } from '@components/LevelButton/LevelButton';
 import styles from './Levels.module.scss';
 
 export interface LevelItem {
@@ -18,8 +18,8 @@ export const Levels: React.FC<LevelsProps> = ({ levels }) => {
   return (
     <div className={styles.levels}>
       {levels.map((level) => (
-        <div 
-          key={level.id} 
+        <div
+          key={level.id}
           className={styles.levelItem}
         >
           <LevelButton

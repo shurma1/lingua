@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { HistoryContext } from "../contexts/HistoryContext";
+import { HistoryContext } from "@contexts/HistoryContext";
 
 export const useHistory = () => {
 	const context = useContext(HistoryContext);

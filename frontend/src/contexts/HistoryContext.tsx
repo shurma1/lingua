@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback, useRef } from "react";
 import type { ReactNode } from "react";
 
-import WebApp from "../WebApp/WebApp";
+import WebApp from "@WebApp/WebApp";
 
 interface HistoryItem {
   backFunction: () => void;

@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 
 import axios from "axios";
 
-import { API_URL } from "../config/api";
-import { useAuthStore } from "../store/authStore";
-import { AuthResponse } from "../types/auth";
-import WebApp from "../WebApp/WebApp";
+import { API_URL } from "@config/api";
+import { useAuthStore } from "@store/authStore";
+import { AuthResponse } from "@/types/auth";
+import WebApp from "@WebApp/WebApp";
 
 export const useAuth = () => {
 	const [isLoading, setIsLoading] = useState(true);

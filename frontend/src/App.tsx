@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
-import DevWrapper from "./components/DEVELOPMENT/DevWrapper/DevWrapper";
-import Loader, { type LoaderRef } from "./components/Loader/Loader";
-import PopupContainer from "./components/PopupContainer/PopupContainer";
-import TabNavigator from "./components/TabNavigator/TabNavigator";
-import { getTabsConfig } from "./config/tabsConfig";
-import { PopupProvider, usePopup } from "./contexts/PopupContext";
-import { useAuth } from "./hooks/useAuth";
-import ApiLoader from "./components/ApiLoader/ApiLoader";
+import DevWrapper from "@components/DEVELOPMENT/DevWrapper/DevWrapper";
+import Loader, { type LoaderRef } from "@components/Loader/Loader";
+import PopupContainer from "@components/PopupContainer/PopupContainer";
+import TabNavigator from "@components/TabNavigator/TabNavigator";
+import { getTabsConfig } from "@config/tabsConfig";
+import { PopupProvider, usePopup } from "@contexts/PopupContext";
+import { useAuth } from "@hooks/useAuth";
+import ApiLoader from "@components/ApiLoader/ApiLoader";
 
 const isDev = import.meta.env.DEV;
 
@@ -53,7 +53,7 @@ function App() {
 		console.log(user);
 	}, [user]);
 	if (authError || !isAuthenticated) {
-		return <div>Authentication Error: {authError || 'Not authenticated'}</div>;
+		return <div>Authentication Error: {authError || "Not authenticated"}</div>;
 	}
 
 	const appContent = (
