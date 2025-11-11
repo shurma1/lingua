@@ -4,9 +4,10 @@ import { config } from '../config';
 import type { InitData, JwtPayload } from '../types';
 import logger from '../utils/logger';
 import { ApiError } from "../error/apiError";
+
 import tokenService from './token.service';
-import { UserDTO } from '../dtos/user.dto';
-import { AuthResponseDTO } from '../dtos/authResponse.dto';
+import { UserDTO } from '../dtos';
+import { AuthResponseDTO } from '../dtos';
 
 export class AuthService {
 	validateBotInitData(initDataString: string): InitData {
@@ -14,14 +15,14 @@ export class AuthService {
 		if (!botToken) {
 		  throw ApiError.errorByType('INTERNAL_SERVER_ERROR');
 		}
-	  
+	 
 		const params = new URLSearchParams(decodeURIComponent(initDataString));
 		const hash = params.get('hash');
-      
+  
 		if (!hash) {
 			throw ApiError.errorByType('BAD_REQUEST');
 		}
-	  
+	 
 		const dataCheckArr: string[] = [];
 		params.forEach((value, key) => {
 			if (key !== 'hash') {
@@ -30,7 +31,7 @@ export class AuthService {
 		});
 		dataCheckArr.sort();
 		const dataCheckString = dataCheckArr.join('\n');
-	  
+	 
 		const secretKey = crypto
 			.createHmac('sha256', 'WebAppData')
 			.update(botToken)
@@ -44,8 +45,8 @@ export class AuthService {
 		if (computedHash !== hash) {
 			throw ApiError.errorByType('UNAUTHORIZED');
 		}
-	  
-      
+	 
+  
 		const userStr = params.get('user');
 		const user = userStr ? JSON.parse(userStr) : undefined;
 
@@ -56,7 +57,7 @@ export class AuthService {
 		};
 	}
 
-  
+ 
 	async authenticate(initDataString: string): Promise<AuthResponseDTO> {
 		const initData = this.validateBotInitData(initDataString);
 		if (!initData.user) {
@@ -109,7 +110,7 @@ export class AuthService {
 
 	async getProfile(userId: number): Promise<UserDTO> {
 		const user = await User.findByPk(userId);
-    
+  
 		if (!user) {
 			throw ApiError.errorByType('NOT_FOUND');
 		}

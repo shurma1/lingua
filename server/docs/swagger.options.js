@@ -43,7 +43,7 @@ const options = (dirname) => {
             docs: '/swagger.json',
         },
         basedir: dirname,
-    apis: ['src/dtos/*.ts', 'src/routes/*.ts'], // includes x-permissions via JSDoc @openapi
+    apis: ['src/config/swaggerTags.ts', 'src/dtos/*.ts', 'src/routes/*.ts', 'src/controllers/*.ts'], // includes x-permissions via JSDoc @openapi
     };
 }
 

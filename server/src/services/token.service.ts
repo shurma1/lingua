@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config';
 import logger from '../utils/logger';
-import { TokenDTO } from '../dtos/token.dto';
+import { TokenDTO } from '../dtos';
 import { ApiError } from '../error/apiError';
 
 interface IPayload {

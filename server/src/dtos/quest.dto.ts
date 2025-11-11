@@ -1,352 +1,207 @@
+import type { Quest } from '../models/entities/Quest';
+import type { QuestMatchWords } from '../models/entities/QuestMatchWords';
+import type { QuestDictation } from '../models/entities/QuestDictation';
+import type { QuestTranslate } from '../models/entities/QuestTranslate';
+import type { QuestType } from '../models/types/QuestType';
+
 /**
  * @openapi
  * components:
  *   schemas:
- *     QuestMatchWordsDataDTO:
+ *     QuestMatchWordsDTO:
  *       type: object
  *       required:
+ *         - id
+ *         - questId
  *         - word
  *         - translate
  *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         questId:
+ *           type: integer
+ *           example: 1
  *         word:
  *           type: string
- *           description: Word in foreign language
  *           example: hello
  *         translate:
  *           type: string
- *           description: Translation of the word
  *           example: привет
- *     
  *     WordDTO:
  *       type: object
  *       required:
  *         - id
  *         - value
- *         - position
  *       properties:
  *         id:
  *           type: integer
- *           description: Word ID
  *           example: 1
  *         value:
  *           type: string
- *           description: Word value
- *           example: How
- *         position:
- *           type: integer
- *           description: Position in sentence
- *           example: 0
- *     
- *     DistractorWordDTO:
- *       type: object
- *       required:
- *         - id
- *         - value
- *       properties:
- *         id:
- *           type: integer
- *           description: Word ID
- *           example: 4
- *         value:
+ *           example: hello
+ *         audioUrl:
  *           type: string
- *           description: Distractor word value
- *           example: is
- *     
- *     SentenceDTO:
+ *           example: /media/audio_1.wav
+ *     QuestDictationDTO:
  *       type: object
  *       required:
  *         - id
- *         - text
+ *         - questId
+ *         - correctSentence
  *         - words
  *       properties:
  *         id:
  *           type: integer
- *           description: Sentence ID
  *           example: 1
- *         text:
+ *         questId:
+ *           type: integer
+ *           example: 1
+ *         audioUrl:
  *           type: string
- *           description: Full sentence text
- *           example: How are you
+ *           example: /media/audio_1.wav
+ *         correctSentence:
+ *           type: string
+ *           example: I like tea
  *         words:
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/WordDTO'
- *     
- *     QuestDictationDataDTO:
+ *     QuestTranslateDTO:
  *       type: object
  *       required:
- *         - correctSentence
- *       properties:
- *         audioMediaId:
- *           type: integer
- *           description: Audio media ID for playback
- *           example: 1
- *         correctSentence:
- *           $ref: '#/components/schemas/SentenceDTO'
- *         distractorWords:
- *           type: array
- *           items:
- *             $ref: '#/components/schemas/DistractorWordDTO'
- *     
- *     QuestTranslateDataDTO:
- *       type: object
- *       required:
+ *         - id
+ *         - questId
  *         - sourceSentence
  *         - correctSentence
+ *         - words
  *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         questId:
+ *           type: integer
+ *           example: 1
  *         sourceSentence:
  *           type: string
- *           description: Sentence to translate
- *           example: Как дела
+ *           example: Я люблю чай
  *         correctSentence:
- *           $ref: '#/components/schemas/SentenceDTO'
- *         distractorWords:
+ *           type: string
+ *           example: I like tea
+ *         words:
  *           type: array
  *           items:
- *             $ref: '#/components/schemas/DistractorWordDTO'
- *     
+ *             $ref: '#/components/schemas/WordDTO'
  *     QuestDTO:
  *       type: object
  *       required:
  *         - id
  *         - type
  *         - levelId
- *         - data
  *       properties:
  *         id:
  *           type: integer
- *           description: Quest ID
  *           example: 1
  *         type:
  *           type: string
- *           enum: [match_words, dictation, translate]
- *           description: Quest type
- *           example: match_words
+ *           enum: [MATCH_WORDS, DICTATION, TRANSLATE]
+ *           example: MATCH_WORDS
  *         levelId:
  *           type: integer
- *           description: Level ID this quest belongs to
  *           example: 1
  *         data:
  *           oneOf:
- *             - $ref: '#/components/schemas/QuestMatchWordsDataDTO'
- *             - $ref: '#/components/schemas/QuestDictationDataDTO'
- *             - $ref: '#/components/schemas/QuestTranslateDataDTO'
- *     
- *     CreateQuestMatchWordsInput:
- *       type: object
- *       required:
- *         - type
- *         - levelId
- *         - word
- *         - translate
- *       properties:
- *         type:
- *           type: string
- *           enum: [match_words]
- *           example: match_words
- *         levelId:
- *           type: integer
- *           description: Level ID
- *           example: 1
- *         word:
- *           type: string
- *           description: Word in foreign language
- *           example: apple
- *         translate:
- *           type: string
- *           description: Translation
- *           example: яблоко
- *     
- *     CreateQuestDictationInput:
- *       type: object
- *       required:
- *         - type
- *         - levelId
- *         - text
- *         - language
- *       properties:
- *         type:
- *           type: string
- *           enum: [dictation]
- *           example: dictation
- *         levelId:
- *           type: integer
- *           description: Level ID
- *           example: 1
- *         text:
- *           type: string
- *           description: Text to be dictated (audio will be generated)
- *           example: I like apples
- *         language:
- *           type: string
- *           description: Language code for TTS
- *           example: en
- *         distractorWords:
- *           type: array
- *           items:
- *             type: string
- *           description: Additional words to confuse user
- *           example: [oranges, bananas, grapes]
- *     
- *     CreateQuestTranslateInput:
- *       type: object
- *       required:
- *         - type
- *         - levelId
- *         - sourceSentence
- *         - correctSentence
- *         - targetLanguage
- *       properties:
- *         type:
- *           type: string
- *           enum: [translate]
- *           example: translate
- *         levelId:
- *           type: integer
- *           description: Level ID
- *           example: 1
- *         sourceSentence:
- *           type: string
- *           description: Sentence to translate
- *           example: Я люблю яблоки
- *         correctSentence:
- *           type: string
- *           description: Correct translation
- *           example: I like apples
- *         targetLanguage:
- *           type: string
- *           description: Target language code for TTS
- *           example: en
- *         distractorWords:
- *           type: array
- *           items:
- *             type: string
- *           description: Additional words to confuse user
- *           example: [oranges, bananas]
- *     
- *     SubmitAnswerInput:
- *       type: object
- *       required:
- *         - questId
- *         - answer
- *       properties:
- *         questId:
- *           type: integer
- *           description: Quest ID
- *           example: 1
- *         answer:
- *           oneOf:
- *             - type: string
- *               description: Answer for match_words quest
- *               example: привет
- *             - type: array
- *               items:
- *                 type: string
- *               description: Array of words for dictation/translate quest
- *               example: [How, are, you]
- *     
- *     QuestResultDTO:
- *       type: object
- *       required:
- *         - questId
- *         - correct
- *       properties:
- *         questId:
- *           type: integer
- *           description: Quest ID
- *           example: 1
- *         correct:
- *           type: boolean
- *           description: Whether the answer was correct
- *           example: true
- *         correctAnswer:
- *           oneOf:
- *             - type: string
- *               description: Correct answer for match_words
- *               example: привет
- *             - type: array
- *               items:
- *                 type: string
- *               description: Correct answer for dictation/translate
- *               example: [How, are, you]
+ *             - $ref: '#/components/schemas/QuestMatchWordsDTO'
+ *             - $ref: '#/components/schemas/QuestDictationDTO'
+ *             - $ref: '#/components/schemas/QuestTranslateDTO'
  */
 
-export interface WordDTO {
-  id: number;
-  value: string;
-  position: number;
+export class WordDTO {
+	id: number;
+	value: string;
+	audioUrl?: string;
+
+	constructor(word: { id: number; value: string; audioMediaId?: number | null }) {
+		this.id = word.id;
+		this.value = word.value;
+		this.audioUrl = word.audioMediaId ? `/media/${word.audioMediaId}` : undefined;
+	}
 }
 
-export interface DistractorWordDTO {
-  id: number;
-  value: string;
+export class QuestMatchWordsDTO {
+	id: number;
+	questId: number;
+	word: string;
+	translate: string;
+
+	constructor(data: QuestMatchWords) {
+		this.id = data.id;
+		this.questId = data.questId;
+		this.word = data.word;
+		this.translate = data.translate;
+	}
 }
 
-export interface SentenceDTO {
-  id: number;
-  text: string;
-  words: WordDTO[];
+export class QuestDictationDTO {
+	id: number;
+	questId: number;
+	audioUrl?: string;
+	correctSentence: string;
+	words: WordDTO[];
+
+	constructor(
+		data: QuestDictation,
+		correctSentence: string,
+		words: Array<{ id: number; value: string; audioMediaId?: number | null }>
+	) {
+		this.id = data.id;
+		this.questId = data.questId;
+		this.audioUrl = data.audioMediaId ? `/media/${data.audioMediaId}` : undefined;
+		this.correctSentence = correctSentence;
+		this.words = words.map(w => new WordDTO(w));
+	}
 }
 
-export interface QuestMatchWordsDataDTO {
-  word: string;
-  translate: string;
+export class QuestTranslateDTO {
+	id: number;
+	questId: number;
+	sourceSentence: string;
+	correctSentence: string;
+	words: WordDTO[];
+
+	constructor(
+		data: QuestTranslate,
+		correctSentence: string,
+		words: Array<{ id: number; value: string; audioMediaId?: number | null }>
+	) {
+		this.id = data.id;
+		this.questId = data.questId;
+		this.sourceSentence = data.sourceSentence;
+		this.correctSentence = correctSentence;
+		this.words = words.map(w => new WordDTO(w));
+	}
 }
 
-export interface QuestDictationDataDTO {
-  audioMediaId?: number;
-  correctSentence: SentenceDTO;
-  distractorWords?: DistractorWordDTO[];
-}
+export class QuestDTO {
+	id: number;
+	type: QuestType;
+	levelId: number;
+	data?: QuestMatchWordsDTO | QuestDictationDTO | QuestTranslateDTO;
 
-export interface QuestTranslateDataDTO {
-  sourceSentence: string;
-  correctSentence: SentenceDTO;
-  distractorWords?: DistractorWordDTO[];
-}
+	constructor(
+		quest: Quest,
+		data?: QuestMatchWordsDTO | QuestDictationDTO | QuestTranslateDTO
+	) {
+		this.id = quest.id;
+		this.type = quest.type;
+		this.levelId = quest.levelId;
+		this.data = data;
+	}
 
-export type QuestDataDTO = QuestMatchWordsDataDTO | QuestDictationDataDTO | QuestTranslateDataDTO;
-
-export interface QuestDTO {
-  id: number;
-  type: 'match_words' | 'dictation' | 'translate';
-  levelId: number;
-  data: QuestDataDTO;
-}
-
-export interface CreateQuestMatchWordsInput {
-  type: 'match_words';
-  levelId: number;
-  word: string;
-  translate: string;
-}
-
-export interface CreateQuestDictationInput {
-  type: 'dictation';
-  levelId: number;
-  text: string;
-  language: string;
-  distractorWords?: string[];
-}
-
-export interface CreateQuestTranslateInput {
-  type: 'translate';
-  levelId: number;
-  sourceSentence: string;
-  correctSentence: string;
-  targetLanguage: string;
-  distractorWords?: string[];
-}
-
-export type CreateQuestInput = CreateQuestMatchWordsInput | CreateQuestDictationInput | CreateQuestTranslateInput;
-
-export interface SubmitAnswerInput {
-  questId: number;
-  answer: string | string[];
-}
-
-export interface QuestResultDTO {
-  questId: number;
-  correct: boolean;
-  correctAnswer?: string | string[];
+	static fromQuest(
+		quest: Quest,
+		data?: QuestMatchWordsDTO | QuestDictationDTO | QuestTranslateDTO
+	): QuestDTO {
+		return new QuestDTO(quest, data);
+	}
 }

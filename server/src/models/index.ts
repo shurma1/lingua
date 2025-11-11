@@ -3,6 +3,7 @@ import sequelize from './db';
 import { Language } from './entities/Language';
 import { Module } from './entities/Module';
 import { Level } from './entities/Level';
+import { Lesson } from './entities/Lesson';
 import { Quest } from './entities/Quest';
 import { QuestMatchWords } from './entities/QuestMatchWords';
 import { QuestDictation } from './entities/QuestDictation';
@@ -12,7 +13,7 @@ import { Words } from './entities/Words';
 import { SentenceWords } from './entities/SentenceWords';
 import { User } from './entities/User';
 import { UserLevel } from './entities/UserLevel';
-import { FriendRequest } from './entities/FriendRequest';
+import { FriendInvite } from './entities/FriendInvite';
 import { Friends } from './entities/Friends';
 import { Duel } from './entities/Duel';
 import { AudioMedia } from './entities/AudioMedia';
@@ -27,6 +28,10 @@ const initAssociations = () => {
 	// Module associations
 	Module.belongsTo(Language, { foreignKey: 'languageId', as: 'language' });
 	Module.hasMany(Level, { foreignKey: 'moduleId', as: 'levels' });
+	Module.hasMany(Lesson, { foreignKey: 'moduleId', as: 'lessons' });
+
+	// Lesson associations
+	Lesson.belongsTo(Module, { foreignKey: 'moduleId', as: 'module' });
 
 	// Level associations
 	Level.belongsTo(Module, { foreignKey: 'moduleId', as: 'module' });
@@ -81,8 +86,7 @@ const initAssociations = () => {
 	// User associations
 	User.belongsTo(Language, { foreignKey: 'languageId', as: 'language' });
 	User.hasMany(UserLevel, { foreignKey: 'userId', as: 'userLevels' });
-	User.hasMany(FriendRequest, { foreignKey: 'requesterId', as: 'sentFriendRequests' });
-	User.hasMany(FriendRequest, { foreignKey: 'addresseeId', as: 'receivedFriendRequests' });
+	User.hasMany(FriendInvite, { foreignKey: 'userId', as: 'friendInvites' });
 	User.hasMany(Duel, { foreignKey: 'winnerId', as: 'wonDuels' });
 	User.hasMany(Duel, { foreignKey: 'loserId', as: 'lostDuels' });
 
@@ -90,9 +94,8 @@ const initAssociations = () => {
 	UserLevel.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 	UserLevel.belongsTo(Level, { foreignKey: 'levelId', as: 'level' });
 
-	// FriendRequest associations
-	FriendRequest.belongsTo(User, { foreignKey: 'requesterId', as: 'requester' });
-	FriendRequest.belongsTo(User, { foreignKey: 'addresseeId', as: 'addressee' });
+	// FriendInvite associations
+	FriendInvite.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 	// Friends associations
 	Friends.belongsTo(User, { foreignKey: 'user1Id', as: 'user1' });
@@ -110,6 +113,7 @@ export {
 	Language,
 	Module,
 	Level,
+	Lesson,
 	Quest,
 	QuestMatchWords,
 	QuestDictation,
@@ -119,7 +123,7 @@ export {
 	SentenceWords,
 	User,
 	UserLevel,
-	FriendRequest,
+	FriendInvite,
 	Friends,
 	Duel,
 	AudioMedia,
@@ -128,7 +132,6 @@ export {
 };
 
 export * from './types/QuestType';
-export * from './types/FriendRequestStatus';
 export * from './types/UserRole';
 
 export default {
@@ -136,6 +139,7 @@ export default {
 	Language,
 	Module,
 	Level,
+	Lesson,
 	Quest,
 	QuestMatchWords,
 	QuestDictation,
@@ -145,7 +149,7 @@ export default {
 	SentenceWords,
 	User,
 	UserLevel,
-	FriendRequest,
+	FriendInvite,
 	Friends,
 	Duel,
 	AudioMedia,

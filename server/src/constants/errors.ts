@@ -1,8 +1,18 @@
 const API_ERROR = {
+	NOT_FOUND: {
+		type: 'NOT_FOUND',
+		description: 'Not found.',
+		code: 404,
+	},
 	BAD_REQUEST: {
 		type: 'BAD_REQUEST',
 		description: 'Bad request.',
 		code: 400,
+	},
+	INTERNAL_SERVER_ERROR: {
+		type: 'INTERNAL_SERVER_ERROR',
+		description: 'Internal error',
+		code: 500,
 	},
 	UNAUTHORIZED: {
 		type: 'UNAUTHORIZED',
@@ -11,83 +21,111 @@ const API_ERROR = {
 	},
 	FORBIDDEN: {
 		type: 'FORBIDDEN',
-		description: 'Access forbidden.',
+		description: 'Forbidden.',
 		code: 403,
-	},
-	NOT_FOUND: {
-		type: 'NOT_FOUND',
-		description: 'Not found.',
-		code: 404,
-	},
-	LANGUAGE_NOT_FOUND: {
-		type: 'LANGUAGE_NOT_FOUND',
-		description: 'Language not found.',
-		code: 404,
-	},
-	MODULE_NOT_FOUND: {
-		type: 'MODULE_NOT_FOUND',
-		description: 'Module not found.',
-		code: 404,
-	},
-	LEVEL_NOT_FOUND: {
-		type: 'LEVEL_NOT_FOUND',
-		description: 'Level not found.',
-		code: 404,
-	},
-	QUEST_NOT_FOUND: {
-		type: 'QUEST_NOT_FOUND',
-		description: 'Quest not found.',
-		code: 404,
 	},
 	USER_NOT_FOUND: {
 		type: 'USER_NOT_FOUND',
 		description: 'User not found.',
 		code: 404,
 	},
-	INVALID_ANSWER: {
-		type: 'INVALID_ANSWER',
-		description: 'Invalid answer format.',
-		code: 400,
-	},
 	ADMIN_REQUIRED: {
 		type: 'ADMIN_REQUIRED',
 		description: 'Admin access required.',
 		code: 403,
 	},
-	FRIEND_REQUEST_NOT_FOUND: {
-		type: 'FRIEND_REQUEST_NOT_FOUND',
-		description: 'Friend request not found.',
+	// Friends
+	FRIEND_NOT_FOUND: {
+		type: 'FRIEND_NOT_FOUND',
+		description: 'Friend not found.',
 		code: 404,
 	},
-	FRIEND_REQUEST_ALREADY_EXISTS: {
-		type: 'FRIEND_REQUEST_ALREADY_EXISTS',
-		description: 'Friend request already exists.',
-		code: 400,
+	INVITE_NOT_FOUND: {
+		type: 'INVITE_NOT_FOUND',
+		description: 'Invite not found.',
+		code: 404,
 	},
 	ALREADY_FRIENDS: {
 		type: 'ALREADY_FRIENDS',
 		description: 'Users are already friends.',
 		code: 400,
 	},
-	CANNOT_ADD_YOURSELF: {
-		type: 'CANNOT_ADD_YOURSELF',
-		description: 'Cannot send friend request to yourself.',
+	CANNOT_ACCEPT_OWN_INVITE: {
+		type: 'CANNOT_ACCEPT_OWN_INVITE',
+		description: 'Cannot accept your own invite.',
 		code: 400,
 	},
-	NOT_REQUEST_PARTICIPANT: {
-		type: 'NOT_REQUEST_PARTICIPANT',
-		description: 'You are not a participant of this friend request.',
-		code: 403,
-	},
-	REQUEST_ALREADY_RESPONDED: {
-		type: 'REQUEST_ALREADY_RESPONDED',
-		description: 'Friend request has already been responded to.',
+	// Stats
+	INVALID_LEADERBOARD_TYPE: {
+		type: 'INVALID_LEADERBOARD_TYPE',
+		description: 'Invalid leaderboard type.',
 		code: 400,
 	},
-	INTERNAL_SERVER_ERROR: {
-		type: 'INTERNAL_SERVER_ERROR',
-		description: 'Internal server error.',
-		code: 500,
+	// Modules
+	MODULE_NOT_FOUND: {
+		type: 'MODULE_NOT_FOUND',
+		description: 'Module not found.',
+		code: 404,
+	},
+	MODULE_ALREADY_EXISTS: {
+		type: 'MODULE_ALREADY_EXISTS',
+		description: 'Module already exists.',
+		code: 400,
+	},
+	// Levels
+	LEVEL_NOT_FOUND: {
+		type: 'LEVEL_NOT_FOUND',
+		description: 'Level not found.',
+		code: 404,
+	},
+	INVALID_QUESTS_COUNT: {
+		type: 'INVALID_QUESTS_COUNT',
+		description: 'Invalid quests count.',
+		code: 400,
+	},
+	INVALID_SCORE: {
+		type: 'INVALID_SCORE',
+		description: 'Invalid score. Must be between 0 and 100.',
+		code: 400,
+	},
+	// Quests
+	QUEST_NOT_FOUND: {
+		type: 'QUEST_NOT_FOUND',
+		description: 'Quest not found.',
+		code: 404,
+	},
+	INVALID_QUEST_TYPE: {
+		type: 'INVALID_QUEST_TYPE',
+		description: 'Invalid quest type.',
+		code: 400,
+	},
+	// Media
+	MEDIA_NOT_FOUND: {
+		type: 'MEDIA_NOT_FOUND',
+		description: 'Media not found.',
+		code: 404,
+	},
+	// Lessons
+	LESSON_NOT_FOUND: {
+		type: 'LESSON_NOT_FOUND',
+		description: 'Lesson not found.',
+		code: 404,
+	},
+	LESSON_ALREADY_EXISTS: {
+		type: 'LESSON_ALREADY_EXISTS',
+		description: 'Lesson already exists for this module.',
+		code: 400,
+	},
+	// Languages
+	LANGUAGE_NOT_FOUND: {
+		type: 'LANGUAGE_NOT_FOUND',
+		description: 'Language not found.',
+		code: 404,
+	},
+	LANGUAGE_ALREADY_EXISTS: {
+		type: 'LANGUAGE_ALREADY_EXISTS',
+		description: 'Language already exists.',
+		code: 400,
 	},
 };
 

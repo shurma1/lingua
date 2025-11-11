@@ -1,3 +1,5 @@
+import type { Language } from '../models/entities/Language';
+
 /**
  * @openapi
  * components:
@@ -18,62 +20,21 @@
  *           example: English
  *         icon:
  *           type: string
- *           description: Language icon (emoji or URL)
- *           example: 🇬🇧
- *     
- *     CreateLanguageInput:
- *       type: object
- *       required:
- *         - name
- *       properties:
- *         name:
- *           type: string
- *           description: Language name
- *           example: German
- *         icon:
- *           type: string
- *           description: Language icon (emoji or URL)
- *           example: 🇩🇪
- *     
- *     UpdateLanguageInput:
- *       type: object
- *       properties:
- *         name:
- *           type: string
- *           description: Language name
- *           example: Spanish
- *         icon:
- *           type: string
- *           description: Language icon (emoji or URL)
- *           example: 🇪🇸
- *     
- *     SetUserLanguageInput:
- *       type: object
- *       required:
- *         - languageId
- *       properties:
- *         languageId:
- *           type: integer
- *           description: Language ID to set for user
- *           example: 1
+ *           description: Language icon URL
+ *           example: /icons/en.png
  */
+export class LanguageDTO {
+	id: number;
+	name: string;
+	icon?: string;
 
-export interface LanguageDTO {
-  id: number;
-  name: string;
-  icon?: string | null;
-}
+	constructor(language: Language) {
+		this.id = language.id;
+		this.name = language.name;
+		this.icon = language.icon || undefined;
+	}
 
-export interface CreateLanguageInput {
-  name: string;
-  icon?: string;
-}
-
-export interface UpdateLanguageInput {
-  name?: string;
-  icon?: string;
-}
-
-export interface SetUserLanguageInput {
-  languageId: number;
+	static fromLanguage(language: Language): LanguageDTO {
+		return new LanguageDTO(language);
+	}
 }

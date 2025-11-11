@@ -40,35 +40,16 @@
           user: 
             $ref: "#/components/schemas/UserDTO"
         description: "Response after successful authentication"
-      ErrorResponse: 
+      FriendDTO: 
         type: "object"
         required: 
-          - "code"
-          - "type"
-          - "message"
-        properties: 
-          code: 
-            type: "integer"
-            description: "HTTP status code"
-            example: 404
-          type: 
-            type: "string"
-            description: "Error type identifier"
-            example: "QUEST_NOT_FOUND"
-          message: 
-            type: "string"
-            description: "Human-readable error message"
-            example: "Quest not found."
-      UserShortDTO: 
-        type: "object"
-        required: 
-          - "id"
+          - "userId"
           - "username"
           - "stars"
           - "exp"
         properties: 
-          id: 
-            type: "number"
+          userId: 
+            type: "integer"
             description: "User ID"
             example: 1
           username: 
@@ -77,145 +58,69 @@
             example: "john_doe"
           firstName: 
             type: "string"
-            nullable: true
-            description: "User's first name"
+            description: "First name"
             example: "John"
           lastName: 
             type: "string"
-            nullable: true
-            description: "User's last name"
+            description: "Last name"
             example: "Doe"
           photoUrl: 
             type: "string"
-            nullable: true
-            description: "URL to user's photo"
+            description: "Photo URL"
             example: "https://example.com/photo.jpg"
           stars: 
-            type: "number"
-            description: "Number of stars earned"
+            type: "integer"
+            description: "Stars earned"
             example: 150
           exp: 
-            type: "number"
+            type: "integer"
             description: "Experience points"
-            example: 500
-      FriendDTO: 
+            example: 750
+      FriendInviteDTO: 
         type: "object"
         required: 
-          - "id"
-          - "username"
-          - "stars"
-          - "exp"
-          - "friendsSince"
-        properties: 
-          id: 
-            type: "integer"
-            description: "Friend's user ID"
-            example: 2
-          username: 
-            type: "string"
-            description: "Friend's username"
-            example: "jane_doe"
-          firstName: 
-            type: "string"
-            nullable: true
-            description: "Friend's first name"
-            example: "Jane"
-          lastName: 
-            type: "string"
-            nullable: true
-            description: "Friend's last name"
-            example: "Doe"
-          photoUrl: 
-            type: "string"
-            nullable: true
-            description: "URL to friend's photo"
-            example: "https://example.com/photo.jpg"
-          stars: 
-            type: "integer"
-            description: "Friend's stars count"
-            example: 50
-          exp: 
-            type: "integer"
-            description: "Friend's experience points"
-            example: 200
-          friendsSince: 
-            type: "string"
-            format: "date-time"
-            description: "Date when friendship was established"
-            example: "2024-01-01T00:00:00.000Z"
-        allOf: 
-          - 
-            $ref: "#/components/schemas/UserShortDTO"
-          - 
-            type: "object"
-            properties: 
-              friendsSince: 
-                type: "string"
-                format: "date-time"
-                example: "2024-01-15T10:30:00.000Z"
-      FriendRequestDTO: 
-        type: "object"
-        required: 
-          - "id"
-          - "requesterId"
-          - "addresseeId"
-          - "status"
+          - "inviteId"
+          - "userId"
           - "createdAt"
         properties: 
-          id: 
-            type: "number"
-            description: "Friend request ID"
+          inviteId: 
+            type: "integer"
+            description: "Invite ID"
+            example: 123
+          userId: 
+            type: "integer"
+            description: "User ID who created the invite"
             example: 1
-          requesterId: 
-            type: "number"
-            description: "ID of user who sent the request"
-            example: 1
-          addresseeId: 
-            type: "number"
-            description: "ID of user who received the request"
-            example: 2
-          status: 
-            type: "string"
-            enum: 
-              - "PENDING"
-              - "ACCEPTED"
-              - "REJECTED"
-              - "CANCELED"
-            description: "Request status"
-            example: "PENDING"
           createdAt: 
             type: "string"
             format: "date-time"
-            description: "Request creation date"
-            example: "2024-01-15T10:30:00.000Z"
-          respondedAt: 
+            description: "Creation date"
+            example: "2024-01-01T00:00:00.000Z"
+      FriendshipDTO: 
+        type: "object"
+        required: 
+          - "id"
+          - "user1Id"
+          - "user2Id"
+          - "createdAt"
+        properties: 
+          id: 
+            type: "integer"
+            description: "Friendship ID"
+            example: 1
+          user1Id: 
+            type: "integer"
+            description: "First user ID"
+            example: 1
+          user2Id: 
+            type: "integer"
+            description: "Second user ID"
+            example: 2
+          createdAt: 
             type: "string"
             format: "date-time"
-            nullable: true
-            description: "Response date (null if pending)"
-            example: null
-          requester: 
-            $ref: "#/components/schemas/UserShortDTO"
-          addressee: 
-            $ref: "#/components/schemas/UserShortDTO"
-      SendFriendRequestInput: 
-        type: "object"
-        required: 
-          - "addresseeId"
-        properties: 
-          addresseeId: 
-            type: "integer"
-            description: "ID of the user to send friend request to"
-            example: 2
-      RespondToFriendRequestInput: 
-        type: "object"
-        required: 
-          - "accept"
-        properties: 
-          accept: 
-            type: "boolean"
-            description: "Whether to accept (true) or reject (false) the request"
-            example: true
+            description: "Creation date"
+            example: "2024-01-01T00:00:00.000Z"
       LanguageDTO: 
         type: "object"
         required: 
@@ -232,64 +137,94 @@
             example: "English"
           icon: 
             type: "string"
-            description: "Language icon (emoji or URL)"
-            example: "🇬🇧"
-      CreateLanguageInput: 
+            description: "Language icon URL"
+            example: "/icons/en.png"
+      LeaderboardEntryDTO: 
         type: "object"
         required: 
-          - "name"
+          - "position"
+          - "userId"
+          - "username"
+          - "stars"
         properties: 
-          name: 
-            type: "string"
-            description: "Language name"
-            example: "German"
-          icon: 
-            type: "string"
-            description: "Language icon (emoji or URL)"
-            example: "🇩🇪"
-      UpdateLanguageInput: 
-        type: "object"
-        properties: 
-          name: 
-            type: "string"
-            description: "Language name"
-            example: "Spanish"
-          icon: 
-            type: "string"
-            description: "Language icon (emoji or URL)"
-            example: "🇪🇸"
-      SetUserLanguageInput: 
-        type: "object"
-        required: 
-          - "languageId"
-        properties: 
-          languageId: 
+          position: 
             type: "integer"
-            description: "Language ID to set for user"
+            description: "Position in leaderboard"
             example: 1
-      ModuleDTO: 
+          userId: 
+            type: "integer"
+            description: "User ID"
+            example: 1
+          username: 
+            type: "string"
+            description: "Username"
+            example: "john_doe"
+          firstName: 
+            type: "string"
+            description: "First name"
+            example: "John"
+          lastName: 
+            type: "string"
+            description: "Last name"
+            example: "Doe"
+          photoUrl: 
+            type: "string"
+            description: "Photo URL"
+            example: "https://example.com/photo.jpg"
+          stars: 
+            type: "integer"
+            description: "Stars earned"
+            example: 500
+      LeaderboardDTO: 
+        type: "object"
+        required: 
+          - "leaders"
+          - "currentUser"
+        properties: 
+          leaders: 
+            type: "array"
+            items: 
+              $ref: "#/components/schemas/LeaderboardEntryDTO"
+          currentUser: 
+            $ref: "#/components/schemas/LeaderboardEntryDTO"
+      LessonDTO: 
         type: "object"
         required: 
           - "id"
-          - "languageId"
-          - "name"
+          - "moduleId"
+          - "title"
+          - "text"
         properties: 
           id: 
             type: "integer"
+            description: "Lesson ID"
+            example: 1
+          moduleId: 
+            type: "integer"
             description: "Module ID"
             example: 1
-          languageId: 
+          title: 
+            type: "string"
+            description: "Lesson title"
+            example: "Introduction to Grammar"
+          text: 
+            type: "string"
+            description: "Lesson content"
+            example: "This lesson covers basic grammar rules..."
+      UserProgressDTO: 
+        type: "object"
+        required: 
+          - "questsCount"
+          - "score"
+        properties: 
+          questsCount: 
             type: "integer"
-            description: "Language ID this module belongs to"
-            example: 1
-          name: 
-            type: "string"
-            description: "Module name"
-            example: "Beginner"
-          icon: 
-            type: "string"
-            description: "Module icon (emoji or URL)"
-            example: "📚"
+            description: "Number of quests completed"
+            example: 5
+          score: 
+            type: "integer"
+            description: "Total score achieved"
+            example: 450
       LevelDTO: 
         type: "object"
         required: 
@@ -304,63 +239,70 @@
             example: 1
           moduleId: 
             type: "integer"
-            description: "Module ID this level belongs to"
+            description: "Module ID"
             example: 1
           name: 
             type: "string"
             description: "Level name"
-            example: "Greetings"
+            example: "Level 1"
           questsCount: 
             type: "integer"
-            description: "Number of quests in this level"
+            description: "Total number of quests in level"
             example: 10
-      LevelProgressDTO: 
+          userProgress: 
+            allOf: 
+              - 
+                $ref: "#/components/schemas/UserProgressDTO"
+            nullable: true
+      MediaDTO: 
         type: "object"
         required: 
-          - "questsCompleted"
-          - "score"
-          - "stars"
+          - "mediaId"
+          - "filename"
+          - "url"
+          - "createdAt"
         properties: 
-          questsCompleted: 
+          mediaId: 
             type: "integer"
-            description: "Number of quests completed by user"
-            example: 5
-          score: 
+            description: "Media ID"
+            example: 1
+          filename: 
+            type: "string"
+            description: "File name"
+            example: "audio_123.wav"
+          mimetype: 
+            type: "string"
+            description: "MIME type"
+            example: "audio/wav"
+          duration: 
+            type: "number"
+            format: "float"
+            description: "Duration in seconds"
+            example: 3.5
+          fileSize: 
             type: "integer"
-            description: "Number of correct answers"
-            example: 4
-          stars: 
-            type: "integer"
-            description: "Stars earned (equal to score)"
-            example: 4
-      LevelWithProgressDTO: 
-        allOf: 
-          - 
-            $ref: "#/components/schemas/LevelDTO"
-          - 
-            type: "object"
-            properties: 
-              userProgress: 
-                $ref: "#/components/schemas/LevelProgressDTO"
-      ModuleWithLevelsDTO: 
-        allOf: 
-          - 
-            $ref: "#/components/schemas/ModuleDTO"
-          - 
-            type: "object"
-            required: 
-              - "levels"
-            properties: 
-              levels: 
-                type: "array"
-                items: 
-                  $ref: "#/components/schemas/LevelWithProgressDTO"
-      CreateModuleInput: 
+            description: "File size in bytes"
+            example: 102400
+          url: 
+            type: "string"
+            description: "URL to access the media file"
+            example: "/media/1"
+          createdAt: 
+            type: "string"
+            format: "date-time"
+            description: "Creation date"
+            example: "2024-01-01T00:00:00.000Z"
+      ModuleDTO: 
         type: "object"
         required: 
+          - "id"
           - "languageId"
           - "name"
         properties: 
+          id: 
+            type: "integer"
+            description: "Module ID"
+            example: 1
           languageId: 
             type: "integer"
             description: "Language ID"
@@ -368,440 +310,123 @@
           name: 
             type: "string"
             description: "Module name"
-            example: "Intermediate"
+            example: "Basics"
           icon: 
             type: "string"
-            description: "Module icon (emoji or URL)"
-            example: "📖"
-      UpdateModuleInput: 
-        type: "object"
-        properties: 
-          name: 
-            type: "string"
-            description: "Module name"
-            example: "Advanced"
-          icon: 
-            type: "string"
-            description: "Module icon (emoji or URL)"
-            example: "🎓"
-      CreateLevelInput: 
-        type: "object"
-        required: 
-          - "moduleId"
-          - "name"
-          - "questsCount"
-        properties: 
-          moduleId: 
-            type: "integer"
-            description: "Module ID"
-            example: 1
-          name: 
-            type: "string"
-            description: "Level name"
-            example: "Food and Drinks"
-          questsCount: 
-            type: "integer"
-            description: "Number of quests in this level"
-            example: 20
-      UpdateLevelInput: 
-        type: "object"
-        properties: 
-          name: 
-            type: "string"
-            description: "Level name"
-            example: "Animals"
-          questsCount: 
-            type: "integer"
-            description: "Number of quests in this level"
-            example: 15
-      UserLevelProgressDTO: 
+            description: "Module icon URL"
+            example: "/icons/basics.png"
+      QuestMatchWordsDTO: 
         type: "object"
         required: 
           - "id"
-          - "userId"
-          - "levelId"
-          - "questsCount"
-          - "score"
-          - "stars"
-          - "exp"
-        properties: 
-          id: 
-            type: "integer"
-            description: "User level progress ID"
-            example: 1
-          userId: 
-            type: "integer"
-            description: "User ID"
-            example: 1
-          levelId: 
-            type: "integer"
-            description: "Level ID"
-            example: 1
-          questsCount: 
-            type: "integer"
-            description: "Number of quests completed"
-            example: 5
-          score: 
-            type: "integer"
-            description: "Number of correct answers"
-            example: 4
-          stars: 
-            type: "integer"
-            description: "Stars earned (equal to score)"
-            example: 4
-          exp: 
-            type: "integer"
-            description: "Experience earned (score / 100)"
-            example: 0
-      CurrentLevelDTO: 
-        type: "object"
-        required: 
-          - "levelId"
-          - "levelName"
-          - "progress"
-          - "questsCompleted"
-          - "totalQuests"
-        properties: 
-          levelId: 
-            type: "integer"
-            description: "Current level ID"
-            example: 2
-          levelName: 
-            type: "string"
-            description: "Current level name"
-            example: "Numbers"
-          progress: 
-            type: "number"
-            description: "Progress percentage (0-100)"
-            example: 33.33
-          questsCompleted: 
-            type: "integer"
-            description: "Number of quests completed"
-            example: 5
-          totalQuests: 
-            type: "integer"
-            description: "Total number of quests in level"
-            example: 15
-      UserStatsDTO: 
-        type: "object"
-        required: 
-          - "totalStars"
-          - "totalExp"
-          - "completedLevels"
-        properties: 
-          totalStars: 
-            type: "integer"
-            description: "Total stars earned across all levels"
-            example: 15
-          totalExp: 
-            type: "integer"
-            description: "Total experience earned"
-            example: 0
-          completedLevels: 
-            type: "integer"
-            description: "Number of completed levels"
-            example: 1
-          currentLevel: 
-            $ref: "#/components/schemas/CurrentLevelDTO"
-      SaveProgressInput: 
-        type: "object"
-        required: 
-          - "levelId"
           - "questId"
-          - "correct"
-        properties: 
-          levelId: 
-            type: "integer"
-            description: "Level ID"
-            example: 1
-          questId: 
-            type: "integer"
-            description: "Quest ID"
-            example: 1
-          correct: 
-            type: "boolean"
-            description: "Whether the answer was correct"
-            example: true
-      QuestMatchWordsDataDTO: 
-        type: "object"
-        required: 
           - "word"
           - "translate"
         properties: 
+          id: 
+            type: "integer"
+            example: 1
+          questId: 
+            type: "integer"
+            example: 1
           word: 
             type: "string"
-            description: "Word in foreign language"
             example: "hello"
           translate: 
             type: "string"
-            description: "Translation of the word"
             example: "привет"
       WordDTO: 
         type: "object"
         required: 
           - "id"
           - "value"
-          - "position"
         properties: 
           id: 
             type: "integer"
-            description: "Word ID"
             example: 1
           value: 
             type: "string"
-            description: "Word value"
-            example: "How"
-          position: 
-            type: "integer"
-            description: "Position in sentence"
-            example: 0
-      DistractorWordDTO: 
-        type: "object"
-        required: 
-          - "id"
-          - "value"
-        properties: 
-          id: 
-            type: "integer"
-            description: "Word ID"
-            example: 4
-          value: 
+            example: "hello"
+          audioUrl: 
             type: "string"
-            description: "Distractor word value"
-            example: "is"
-      SentenceDTO: 
+            example: "/media/audio_1.wav"
+      QuestDictationDTO: 
         type: "object"
         required: 
           - "id"
-          - "text"
+          - "questId"
+          - "correctSentence"
           - "words"
         properties: 
           id: 
             type: "integer"
-            description: "Sentence ID"
             example: 1
-          text: 
+          questId: 
+            type: "integer"
+            example: 1
+          audioUrl: 
             type: "string"
-            description: "Full sentence text"
-            example: "How are you"
+            example: "/media/audio_1.wav"
+          correctSentence: 
+            type: "string"
+            example: "I like tea"
           words: 
             type: "array"
             items: 
               $ref: "#/components/schemas/WordDTO"
-      QuestDictationDataDTO: 
+      QuestTranslateDTO: 
         type: "object"
         required: 
-          - "correctSentence"
-        properties: 
-          audioMediaId: 
-            type: "integer"
-            description: "Audio media ID for playback"
-            example: 1
-          correctSentence: 
-            $ref: "#/components/schemas/SentenceDTO"
-          distractorWords: 
-            type: "array"
-            items: 
-              $ref: "#/components/schemas/DistractorWordDTO"
-      QuestTranslateDataDTO: 
-        type: "object"
-        required: 
+          - "id"
+          - "questId"
           - "sourceSentence"
           - "correctSentence"
+          - "words"
         properties: 
+          id: 
+            type: "integer"
+            example: 1
+          questId: 
+            type: "integer"
+            example: 1
           sourceSentence: 
             type: "string"
-            description: "Sentence to translate"
-            example: "Как дела"
+            example: "Я люблю чай"
           correctSentence: 
-            $ref: "#/components/schemas/SentenceDTO"
-          distractorWords: 
+            type: "string"
+            example: "I like tea"
+          words: 
             type: "array"
             items: 
-              $ref: "#/components/schemas/DistractorWordDTO"
+              $ref: "#/components/schemas/WordDTO"
       QuestDTO: 
         type: "object"
         required: 
           - "id"
           - "type"
           - "levelId"
-          - "data"
         properties: 
           id: 
             type: "integer"
-            description: "Quest ID"
             example: 1
           type: 
             type: "string"
             enum: 
-              - "match_words"
-              - "dictation"
-              - "translate"
-            description: "Quest type"
-            example: "match_words"
+              - "MATCH_WORDS"
+              - "DICTATION"
+              - "TRANSLATE"
+            example: "MATCH_WORDS"
           levelId: 
             type: "integer"
-            description: "Level ID this quest belongs to"
             example: 1
           data: 
             oneOf: 
               - 
-                $ref: "#/components/schemas/QuestMatchWordsDataDTO"
+                $ref: "#/components/schemas/QuestMatchWordsDTO"
               - 
-                $ref: "#/components/schemas/QuestDictationDataDTO"
+                $ref: "#/components/schemas/QuestDictationDTO"
               - 
-                $ref: "#/components/schemas/QuestTranslateDataDTO"
-      CreateQuestMatchWordsInput: 
-        type: "object"
-        required: 
-          - "type"
-          - "levelId"
-          - "word"
-          - "translate"
-        properties: 
-          type: 
-            type: "string"
-            enum: 
-              - "match_words"
-            example: "match_words"
-          levelId: 
-            type: "integer"
-            description: "Level ID"
-            example: 1
-          word: 
-            type: "string"
-            description: "Word in foreign language"
-            example: "apple"
-          translate: 
-            type: "string"
-            description: "Translation"
-            example: "яблоко"
-      CreateQuestDictationInput: 
-        type: "object"
-        required: 
-          - "type"
-          - "levelId"
-          - "text"
-          - "language"
-        properties: 
-          type: 
-            type: "string"
-            enum: 
-              - "dictation"
-            example: "dictation"
-          levelId: 
-            type: "integer"
-            description: "Level ID"
-            example: 1
-          text: 
-            type: "string"
-            description: "Text to be dictated (audio will be generated)"
-            example: "I like apples"
-          language: 
-            type: "string"
-            description: "Language code for TTS"
-            example: "en"
-          distractorWords: 
-            type: "array"
-            items: 
-              type: "string"
-            description: "Additional words to confuse user"
-            example: 
-              - "oranges"
-              - "bananas"
-              - "grapes"
-      CreateQuestTranslateInput: 
-        type: "object"
-        required: 
-          - "type"
-          - "levelId"
-          - "sourceSentence"
-          - "correctSentence"
-          - "targetLanguage"
-        properties: 
-          type: 
-            type: "string"
-            enum: 
-              - "translate"
-            example: "translate"
-          levelId: 
-            type: "integer"
-            description: "Level ID"
-            example: 1
-          sourceSentence: 
-            type: "string"
-            description: "Sentence to translate"
-            example: "Я люблю яблоки"
-          correctSentence: 
-            type: "string"
-            description: "Correct translation"
-            example: "I like apples"
-          targetLanguage: 
-            type: "string"
-            description: "Target language code for TTS"
-            example: "en"
-          distractorWords: 
-            type: "array"
-            items: 
-              type: "string"
-            description: "Additional words to confuse user"
-            example: 
-              - "oranges"
-              - "bananas"
-      SubmitAnswerInput: 
-        type: "object"
-        required: 
-          - "questId"
-          - "answer"
-        properties: 
-          questId: 
-            type: "integer"
-            description: "Quest ID"
-            example: 1
-          answer: 
-            oneOf: 
-              - 
-                type: "string"
-                description: "Answer for match_words quest"
-                example: "привет"
-              - 
-                type: "array"
-                items: 
-                  type: "string"
-                description: "Array of words for dictation/translate quest"
-                example: 
-                  - "How"
-                  - "are"
-                  - "you"
-      QuestResultDTO: 
-        type: "object"
-        required: 
-          - "questId"
-          - "correct"
-        properties: 
-          questId: 
-            type: "integer"
-            description: "Quest ID"
-            example: 1
-          correct: 
-            type: "boolean"
-            description: "Whether the answer was correct"
-            example: true
-          correctAnswer: 
-            oneOf: 
-              - 
-                type: "string"
-                description: "Correct answer for match_words"
-                example: "привет"
-              - 
-                type: "array"
-                items: 
-                  type: "string"
-                description: "Correct answer for dictation/translate"
-                example: 
-                  - "How"
-                  - "are"
-                  - "you"
+                $ref: "#/components/schemas/QuestTranslateDTO"
       UserDTO: 
         type: "object"
         required: 
@@ -866,117 +491,6 @@
             format: "date-time"
             description: "Last login date"
             example: "2024-01-15T10:30:00.000Z"
-    responses: 
-      BadRequest: 
-        description: "Bad request - Invalid input data"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 400
-              type: "BAD_REQUEST"
-              message: "Bad request."
-      Unauthorized: 
-        description: "Unauthorized - Invalid or missing authentication token"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 401
-              type: "UNAUTHORIZED"
-              message: "Unauthorized."
-      Forbidden: 
-        description: "Forbidden - Insufficient permissions"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 403
-              type: "ADMIN_REQUIRED"
-              message: "Admin access required."
-      NotFound: 
-        description: "Resource not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "NOT_FOUND"
-              message: "Not found."
-      LanguageNotFound: 
-        description: "Language not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "LANGUAGE_NOT_FOUND"
-              message: "Language not found."
-      ModuleNotFound: 
-        description: "Module not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "MODULE_NOT_FOUND"
-              message: "Module not found."
-      LevelNotFound: 
-        description: "Level not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "LEVEL_NOT_FOUND"
-              message: "Level not found."
-      QuestNotFound: 
-        description: "Quest not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "QUEST_NOT_FOUND"
-              message: "Quest not found."
-      UserNotFound: 
-        description: "User not found"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 404
-              type: "USER_NOT_FOUND"
-              message: "User not found."
-      InvalidAnswer: 
-        description: "Invalid answer format"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 400
-              type: "INVALID_ANSWER"
-              message: "Invalid answer format."
-      InternalServerError: 
-        description: "Internal server error"
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/ErrorResponse"
-            example: 
-              code: 500
-              type: "INTERNAL_SERVER_ERROR"
-              message: "Internal server error."
   paths: 
     /api/auth: 
       post: 
@@ -1036,14 +550,13 @@
       get: 
         tags: 
           - "Friends"
-        summary: "Get list of friends"
-        description: "Returns the list of all friends for the authenticated user"
+        summary: "Get friend list"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         responses: 
           200: 
-            description: "List of friends retrieved successfully"
+            description: "List of friends"
             content: 
               application/json: 
                 schema: 
@@ -1051,196 +564,15 @@
                   items: 
                     $ref: "#/components/schemas/FriendDTO"
           401: 
-            description: "Unauthorized - invalid or missing access token"
-    /api/friends/search: 
-      get: 
-        tags: 
-          - "Friends"
-        summary: "Search for users"
-        description: "Search for users by username (excluding current user and existing friends)"
-        security: 
-          - 
-            JWT: []
-        parameters: 
-          - 
-            in: "query"
-            name: "query"
-            required: true
-            schema: 
-              type: "string"
-            description: "Search query for username"
-          - 
-            in: "query"
-            name: "limit"
-            required: false
-            schema: 
-              type: "integer"
-              default: 20
-            description: "Maximum number of results to return"
-        responses: 
-          200: 
-            description: "Search results retrieved successfully"
-            content: 
-              application/json: 
-                schema: 
-                  type: "array"
-                  items: 
-                    $ref: "#/components/schemas/UserShortDTO"
-          400: 
-            description: "Bad request - missing or invalid query parameter"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-    /api/friends/requests/incoming: 
-      get: 
-        tags: 
-          - "Friends"
-        summary: "Get incoming friend requests"
-        description: "Returns all pending friend requests received by the authenticated user"
-        security: 
-          - 
-            JWT: []
-        responses: 
-          200: 
-            description: "Incoming friend requests retrieved successfully"
-            content: 
-              application/json: 
-                schema: 
-                  type: "array"
-                  items: 
-                    $ref: "#/components/schemas/FriendRequestDTO"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-    /api/friends/requests/outgoing: 
-      get: 
-        tags: 
-          - "Friends"
-        summary: "Get outgoing friend requests"
-        description: "Returns all pending friend requests sent by the authenticated user"
-        security: 
-          - 
-            JWT: []
-        responses: 
-          200: 
-            description: "Outgoing friend requests retrieved successfully"
-            content: 
-              application/json: 
-                schema: 
-                  type: "array"
-                  items: 
-                    $ref: "#/components/schemas/FriendRequestDTO"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-    /api/friends/requests: 
-      post: 
-        tags: 
-          - "Friends"
-        summary: "Send a friend request"
-        description: "Sends a friend request to another user"
-        security: 
-          - 
-            JWT: []
-        requestBody: 
-          required: true
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/SendFriendRequestInput"
-        responses: 
-          201: 
-            description: "Friend request sent successfully"
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/FriendRequestDTO"
-          400: 
-            description: "Bad request - invalid input or friend request already exists"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-          404: 
-            description: "User not found"
-    /api/friends/requests/{requestId}/respond: 
-      post: 
-        tags: 
-          - "Friends"
-        summary: "Respond to a friend request"
-        description: "Accept or reject a friend request"
-        security: 
-          - 
-            JWT: []
-        parameters: 
-          - 
-            in: "path"
-            name: "requestId"
-            required: true
-            schema: 
-              type: "integer"
-            description: "ID of the friend request"
-        requestBody: 
-          required: true
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/RespondToFriendRequestInput"
-        responses: 
-          200: 
-            description: "Friend request responded to successfully"
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/FriendRequestDTO"
-          400: 
-            description: "Bad request - invalid input or request already responded"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-          403: 
-            description: "Forbidden - you are not the recipient of this request"
-          404: 
-            description: "Friend request not found"
-    /api/friends/requests/{requestId}/cancel: 
-      delete: 
-        tags: 
-          - "Friends"
-        summary: "Cancel a friend request"
-        description: "Cancel a pending friend request that you sent"
-        security: 
-          - 
-            JWT: []
-        parameters: 
-          - 
-            in: "path"
-            name: "requestId"
-            required: true
-            schema: 
-              type: "integer"
-            description: "ID of the friend request to cancel"
-        responses: 
-          200: 
-            description: "Friend request canceled successfully"
-            content: 
-              application/json: 
-                schema: 
-                  type: "object"
-                  properties: 
-                    message: 
-                      type: "string"
-                      example: "Friend request canceled"
-          400: 
-            description: "Bad request - request already responded"
-          401: 
-            description: "Unauthorized - invalid or missing access token"
-          403: 
-            description: "Forbidden - you did not send this request"
-          404: 
-            description: "Friend request not found"
+            description: "Unauthorized"
     /api/friends/{friendId}: 
       delete: 
         tags: 
           - "Friends"
         summary: "Remove a friend"
-        description: "Remove a user from your friends list"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
@@ -1248,28 +580,68 @@
             required: true
             schema: 
               type: "integer"
-            description: "ID of the friend to remove"
+            description: "Friend's user ID"
         responses: 
-          200: 
+          204: 
             description: "Friend removed successfully"
+          401: 
+            description: "Unauthorized"
+          404: 
+            description: "Friend not found"
+    /api/friends/invite: 
+      post: 
+        tags: 
+          - "Friends"
+        summary: "Create a friend invite"
+        security: 
+          - 
+            bearerAuth: []
+        responses: 
+          201: 
+            description: "Invite created successfully"
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  properties: 
-                    message: 
-                      type: "string"
-                      example: "Friend removed"
+                  $ref: "#/components/schemas/FriendInviteDTO"
           401: 
-            description: "Unauthorized - invalid or missing access token"
+            description: "Unauthorized"
+    /api/friends/invite/{inviteId}/accept: 
+      post: 
+        tags: 
+          - "Friends"
+        summary: "Accept a friend invite"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "inviteId"
+            required: true
+            schema: 
+              type: "integer"
+            description: "Invite ID"
+        responses: 
+          201: 
+            description: "Friendship created successfully"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/FriendshipDTO"
+          400: 
+            description: "Already friends or cannot accept own invite"
+          401: 
+            description: "Unauthorized"
           404: 
-            description: "Friendship not found"
+            description: "Invite not found"
     /api/languages: 
       get: 
         tags: 
           - "Languages"
         summary: "Get all languages"
-        description: "Returns a list of all available languages for learning"
+        security: 
+          - 
+            bearerAuth: []
         responses: 
           200: 
             description: "List of languages"
@@ -1282,18 +654,23 @@
       post: 
         tags: 
           - "Languages"
-          - "Admin"
-        summary: "Create a new language (Admin only)"
-        description: "Creates a new language for learning. Requires admin privileges."
+        summary: "Create a language (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/CreateLanguageInput"
+                type: "object"
+                required: 
+                  - "name"
+                properties: 
+                  name: 
+                    type: "string"
+                  icon: 
+                    type: "string"
         responses: 
           201: 
             description: "Language created successfully"
@@ -1301,24 +678,25 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LanguageDTO"
-          401: 
-            description: "Unauthorized"
+          400: 
+            description: "Language already exists"
           403: 
             description: "Admin access required"
-    /api/languages/{id}: 
+    /api/languages/{languageId}: 
       get: 
         tags: 
           - "Languages"
         summary: "Get language by ID"
-        description: "Returns a specific language by its ID"
+        security: 
+          - 
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "languageId"
             required: true
             schema: 
               type: "integer"
-            description: "Language ID"
         responses: 
           200: 
             description: "Language data"
@@ -1331,26 +709,28 @@
       put: 
         tags: 
           - "Languages"
-          - "Admin"
-        summary: "Update a language (Admin only)"
-        description: "Updates an existing language. Requires admin privileges."
+        summary: "Update a language (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "languageId"
             required: true
             schema: 
               type: "integer"
-            description: "Language ID"
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/UpdateLanguageInput"
+                type: "object"
+                properties: 
+                  name: 
+                    type: "string"
+                  icon: 
+                    type: "string"
         responses: 
           200: 
             description: "Language updated successfully"
@@ -1358,8 +738,8 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LanguageDTO"
-          401: 
-            description: "Unauthorized"
+          400: 
+            description: "Language name already exists"
           403: 
             description: "Admin access required"
           404: 
@@ -1367,94 +747,189 @@
       delete: 
         tags: 
           - "Languages"
-          - "Admin"
-        summary: "Delete a language (Admin only)"
-        description: "Deletes a language. Requires admin privileges."
+        summary: "Delete a language (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "languageId"
             required: true
             schema: 
               type: "integer"
-            description: "Language ID"
         responses: 
           204: 
             description: "Language deleted successfully"
-          401: 
-            description: "Unauthorized"
           403: 
             description: "Admin access required"
           404: 
             description: "Language not found"
-    /api/languages/user/set: 
-      put: 
+    /api/modules/{moduleId}/lesson: 
+      get: 
         tags: 
-          - "Languages"
-        summary: "Set user's learning language"
-        description: "Sets the language that the user wants to learn"
+          - "Lessons"
+        summary: "Get module lesson"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "moduleId"
+            required: true
+            schema: 
+              type: "integer"
+        responses: 
+          200: 
+            description: "Lesson data"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/LessonDTO"
+          204: 
+            description: "No lesson found"
+          404: 
+            description: "Module not found"
+      post: 
+        tags: 
+          - "Lessons"
+        summary: "Create a lesson (admin only)"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "moduleId"
+            required: true
+            schema: 
+              type: "integer"
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/SetUserLanguageInput"
+                type: "object"
+                required: 
+                  - "title"
+                  - "text"
+                properties: 
+                  title: 
+                    type: "string"
+                  text: 
+                    type: "string"
         responses: 
-          200: 
-            description: "Language set successfully"
+          201: 
+            description: "Lesson created successfully"
             content: 
               application/json: 
                 schema: 
-                  type: "object"
-                  properties: 
-                    message: 
-                      type: "string"
-                      example: "Language set successfully"
-          401: 
-            description: "Unauthorized"
+                  $ref: "#/components/schemas/LessonDTO"
+          400: 
+            description: "Lesson already exists"
+          403: 
+            description: "Admin access required"
           404: 
-            description: "Language not found"
-    /api/languages/user/current: 
-      get: 
+            description: "Module not found"
+      put: 
         tags: 
-          - "Languages"
-        summary: "Get user's current learning language"
-        description: "Returns the language currently selected by the user for learning"
+          - "Lessons"
+        summary: "Update a lesson (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "moduleId"
+            required: true
+            schema: 
+              type: "integer"
+        requestBody: 
+          required: true
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  title: 
+                    type: "string"
+                  text: 
+                    type: "string"
         responses: 
           200: 
-            description: "Current user language"
+            description: "Lesson updated successfully"
             content: 
               application/json: 
                 schema: 
-                  $ref: "#/components/schemas/LanguageDTO"
-          401: 
-            description: "Unauthorized"
-    /api/levels/{id}: 
+                  $ref: "#/components/schemas/LessonDTO"
+          403: 
+            description: "Admin access required"
+          404: 
+            description: "Module or lesson not found"
+      delete: 
+        tags: 
+          - "Lessons"
+        summary: "Delete a lesson (admin only)"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "moduleId"
+            required: true
+            schema: 
+              type: "integer"
+        responses: 
+          204: 
+            description: "Lesson deleted successfully"
+          403: 
+            description: "Admin access required"
+          404: 
+            description: "Module or lesson not found"
+    /api/modules/{moduleId}/levels: 
+      get: 
+        tags: 
+          - "Levels"
+        summary: "Get levels of a module with user progress"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "moduleId"
+            required: true
+            schema: 
+              type: "integer"
+        responses: 
+          200: 
+            description: "List of levels"
+            content: 
+              application/json: 
+                schema: 
+                  type: "array"
+                  items: 
+                    $ref: "#/components/schemas/LevelDTO"
+          404: 
+            description: "Module not found"
+    /api/levels/{levelId}: 
       get: 
         tags: 
           - "Levels"
         summary: "Get level by ID"
-        description: "Returns a specific level by its ID"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "levelId"
             required: true
             schema: 
               type: "integer"
-            description: "Level ID"
         responses: 
           200: 
             description: "Level data"
@@ -1462,33 +937,33 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LevelDTO"
-          401: 
-            description: "Unauthorized"
           404: 
             description: "Level not found"
       put: 
         tags: 
           - "Levels"
-          - "Admin"
-        summary: "Update a level (Admin only)"
-        description: "Updates an existing level. Requires admin privileges."
+        summary: "Update a level (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "levelId"
             required: true
             schema: 
               type: "integer"
-            description: "Level ID"
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/UpdateLevelInput"
+                type: "object"
+                properties: 
+                  name: 
+                    type: "string"
+                  questsCount: 
+                    type: "integer"
         responses: 
           200: 
             description: "Level updated successfully"
@@ -1496,8 +971,8 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LevelDTO"
-          401: 
-            description: "Unauthorized"
+          400: 
+            description: "Invalid quests count"
           403: 
             description: "Admin access required"
           404: 
@@ -1505,25 +980,20 @@
       delete: 
         tags: 
           - "Levels"
-          - "Admin"
-        summary: "Delete a level (Admin only)"
-        description: "Deletes a level and all its quests. Requires admin privileges."
+        summary: "Delete a level (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "levelId"
             required: true
             schema: 
               type: "integer"
-            description: "Level ID"
         responses: 
           204: 
             description: "Level deleted successfully"
-          401: 
-            description: "Unauthorized"
           403: 
             description: "Admin access required"
           404: 
@@ -1532,18 +1002,27 @@
       post: 
         tags: 
           - "Levels"
-          - "Admin"
-        summary: "Create a new level (Admin only)"
-        description: "Creates a new level in a module. Requires admin privileges."
+        summary: "Create a level (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/CreateLevelInput"
+                type: "object"
+                required: 
+                  - "moduleId"
+                  - "name"
+                  - "questsCount"
+                properties: 
+                  moduleId: 
+                    type: "integer"
+                  name: 
+                    type: "string"
+                  questsCount: 
+                    type: "integer"
         responses: 
           201: 
             description: "Level created successfully"
@@ -1551,21 +1030,87 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LevelDTO"
-          401: 
-            description: "Unauthorized"
           403: 
             description: "Admin access required"
           404: 
             description: "Module not found"
-    /api/modules/{languageId}: 
+    /api/levels/{levelId}/submit: 
+      post: 
+        tags: 
+          - "Levels"
+        summary: "Submit level completion result"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "levelId"
+            required: true
+            schema: 
+              type: "integer"
+        requestBody: 
+          required: true
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "score"
+                properties: 
+                  score: 
+                    type: "integer"
+                    minimum: 0
+                    maximum: 100
+                    description: "Score achieved (0-100)"
+        responses: 
+          200: 
+            description: "Level submitted successfully"
+            content: 
+              application/json: 
+                schema: 
+                  type: "object"
+                  properties: 
+                    stars: 
+                      type: "integer"
+                    exp: 
+                      type: "integer"
+          400: 
+            description: "Invalid score"
+          404: 
+            description: "Level not found"
+    /api/media/{mediaId}: 
+      get: 
+        tags: 
+          - "Media"
+        summary: "Get media file metadata"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "mediaId"
+            required: true
+            schema: 
+              type: "integer"
+        responses: 
+          200: 
+            description: "Media metadata"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/MediaDTO"
+          404: 
+            description: "Media not found"
+    /api/languages/{languageId}/modules: 
       get: 
         tags: 
           - "Modules"
         summary: "Get modules by language"
-        description: "Returns all modules for a specific language with levels and user progress"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
@@ -1573,37 +1118,32 @@
             required: true
             schema: 
               type: "integer"
-            description: "Language ID"
         responses: 
           200: 
-            description: "List of modules with levels and progress"
+            description: "List of modules"
             content: 
               application/json: 
                 schema: 
                   type: "array"
                   items: 
-                    $ref: "#/components/schemas/ModuleWithLevelsDTO"
-          401: 
-            description: "Unauthorized"
+                    $ref: "#/components/schemas/ModuleDTO"
           404: 
             description: "Language not found"
-    /api/modules/single/{id}: 
+    /api/modules/{moduleId}: 
       get: 
         tags: 
           - "Modules"
         summary: "Get module by ID"
-        description: "Returns a specific module by its ID"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "moduleId"
             required: true
             schema: 
               type: "integer"
-            description: "Module ID"
         responses: 
           200: 
             description: "Module data"
@@ -1611,63 +1151,33 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/ModuleDTO"
-          401: 
-            description: "Unauthorized"
           404: 
             description: "Module not found"
-    /api/modules: 
-      post: 
-        tags: 
-          - "Modules"
-          - "Admin"
-        summary: "Create a new module (Admin only)"
-        description: "Creates a new learning module for a language. Requires admin privileges."
-        security: 
-          - 
-            JWT: []
-        requestBody: 
-          required: true
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/CreateModuleInput"
-        responses: 
-          201: 
-            description: "Module created successfully"
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/ModuleDTO"
-          401: 
-            description: "Unauthorized"
-          403: 
-            description: "Admin access required"
-          404: 
-            description: "Language not found"
-    /api/modules/{id}: 
       put: 
         tags: 
           - "Modules"
-          - "Admin"
-        summary: "Update a module (Admin only)"
-        description: "Updates an existing module. Requires admin privileges."
+        summary: "Update a module (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "moduleId"
             required: true
             schema: 
               type: "integer"
-            description: "Module ID"
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/UpdateModuleInput"
+                type: "object"
+                properties: 
+                  name: 
+                    type: "string"
+                  icon: 
+                    type: "string"
         responses: 
           200: 
             description: "Module updated successfully"
@@ -1675,8 +1185,8 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/ModuleDTO"
-          401: 
-            description: "Unauthorized"
+          400: 
+            description: "Module name already exists"
           403: 
             description: "Admin access required"
           404: 
@@ -1684,114 +1194,69 @@
       delete: 
         tags: 
           - "Modules"
-          - "Admin"
-        summary: "Delete a module (Admin only)"
-        description: "Deletes a module and all its levels. Requires admin privileges."
+        summary: "Delete a module (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "moduleId"
             required: true
             schema: 
               type: "integer"
-            description: "Module ID"
         responses: 
           204: 
             description: "Module deleted successfully"
-          401: 
-            description: "Unauthorized"
           403: 
             description: "Admin access required"
           404: 
             description: "Module not found"
-    /api/progress/save: 
+    /api/modules: 
       post: 
         tags: 
-          - "Progress"
-        summary: "Save user progress"
-        description: "Saves progress after completing a quest. Updates user's level progress and overall statistics.\n\nStars are equal to the score (number of correct answers).\nExperience is calculated as score / 100.\n"
+          - "Modules"
+        summary: "Create a module (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         requestBody: 
           required: true
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/SaveProgressInput"
+                type: "object"
+                required: 
+                  - "languageId"
+                  - "name"
+                properties: 
+                  languageId: 
+                    type: "integer"
+                  name: 
+                    type: "string"
+                  icon: 
+                    type: "string"
         responses: 
-          200: 
-            description: "Progress saved successfully"
+          201: 
+            description: "Module created successfully"
             content: 
               application/json: 
                 schema: 
-                  $ref: "#/components/schemas/UserLevelProgressDTO"
-          401: 
-            description: "Unauthorized"
+                  $ref: "#/components/schemas/ModuleDTO"
+          400: 
+            description: "Module already exists"
+          403: 
+            description: "Admin access required"
           404: 
-            description: "Level or user not found"
-    /api/progress/stats: 
-      get: 
-        tags: 
-          - "Progress"
-        summary: "Get user statistics"
-        description: "Returns comprehensive user statistics including total stars, experience, \ncompleted levels count, and current level progress.\n"
-        security: 
-          - 
-            JWT: []
-        responses: 
-          200: 
-            description: "User statistics"
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/UserStatsDTO"
-          401: 
-            description: "Unauthorized"
-          404: 
-            description: "User not found"
-    /api/progress/level/{levelId}: 
-      get: 
-        tags: 
-          - "Progress"
-        summary: "Get progress for a specific level"
-        description: "Returns user's progress on a specific level"
-        security: 
-          - 
-            JWT: []
-        parameters: 
-          - 
-            in: "path"
-            name: "levelId"
-            required: true
-            schema: 
-              type: "integer"
-            description: "Level ID"
-        responses: 
-          200: 
-            description: "Level progress data (null if not started)"
-            content: 
-              application/json: 
-                schema: 
-                  oneOf: 
-                    - 
-                      $ref: "#/components/schemas/UserLevelProgressDTO"
-                    - 
-                      type: "null"
-          401: 
-            description: "Unauthorized"
-    /api/quests/level/{levelId}: 
+            description: "Language not found"
+    /api/levels/{levelId}/quests: 
       get: 
         tags: 
           - "Quests"
-        summary: "Get quests by level"
-        description: "Returns all quests for a specific level"
+        summary: "Get quests of a level"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
@@ -1799,7 +1264,6 @@
             required: true
             schema: 
               type: "integer"
-            description: "Level ID"
         responses: 
           200: 
             description: "List of quests"
@@ -1809,27 +1273,23 @@
                   type: "array"
                   items: 
                     $ref: "#/components/schemas/QuestDTO"
-          401: 
-            description: "Unauthorized"
           404: 
             description: "Level not found"
-    /api/quests/{id}: 
+    /api/quests/{questId}: 
       get: 
         tags: 
           - "Quests"
-        summary: "Get quest by ID"
-        description: "Returns a specific quest by its ID with all data"
+        summary: "Get full quest data"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "questId"
             required: true
             schema: 
               type: "integer"
-            description: "Quest ID"
         responses: 
           200: 
             description: "Quest data"
@@ -1837,74 +1297,37 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/QuestDTO"
-          401: 
-            description: "Unauthorized"
           404: 
             description: "Quest not found"
       delete: 
         tags: 
           - "Quests"
-          - "Admin"
-        summary: "Delete a quest (Admin only)"
-        description: "Deletes a quest and all related data. Requires admin privileges."
+        summary: "Delete a quest (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         parameters: 
           - 
             in: "path"
-            name: "id"
+            name: "questId"
             required: true
             schema: 
               type: "integer"
-            description: "Quest ID"
         responses: 
           204: 
             description: "Quest deleted successfully"
-          401: 
-            description: "Unauthorized"
           403: 
             description: "Admin access required"
-          404: 
-            description: "Quest not found"
-    /api/quests/submit: 
-      post: 
-        tags: 
-          - "Quests"
-        summary: "Submit answer to a quest"
-        description: "Submits user's answer and checks if it's correct"
-        security: 
-          - 
-            JWT: []
-        requestBody: 
-          required: true
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/SubmitAnswerInput"
-        responses: 
-          200: 
-            description: "Answer checked successfully"
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/QuestResultDTO"
-          400: 
-            description: "Invalid answer format"
-          401: 
-            description: "Unauthorized"
           404: 
             description: "Quest not found"
     /api/quests: 
       post: 
         tags: 
           - "Quests"
-          - "Admin"
-        summary: "Create a new quest (Admin only)"
-        description: "Creates a new quest of any type. Requires admin privileges.\n\nFor dictation and translate quests, audio files are automatically generated using TTS and saved to /media folder.\n"
+        summary: "Create a quest (admin only)"
         security: 
           - 
-            JWT: []
+            bearerAuth: []
         requestBody: 
           required: true
           content: 
@@ -1912,41 +1335,74 @@
               schema: 
                 oneOf: 
                   - 
-                    $ref: "#/components/schemas/CreateQuestMatchWordsInput"
+                    type: "object"
+                    required: 
+                      - "type"
+                      - "levelId"
+                      - "word"
+                      - "translate"
+                    properties: 
+                      type: 
+                        type: "string"
+                        enum: 
+                          - "MATCH_WORDS"
+                      levelId: 
+                        type: "integer"
+                      word: 
+                        type: "string"
+                      translate: 
+                        type: "string"
                   - 
-                    $ref: "#/components/schemas/CreateQuestDictationInput"
+                    type: "object"
+                    required: 
+                      - "type"
+                      - "levelId"
+                      - "correctSentence"
+                      - "correctWords"
+                    properties: 
+                      type: 
+                        type: "string"
+                        enum: 
+                          - "DICTATION"
+                      levelId: 
+                        type: "integer"
+                      correctSentence: 
+                        type: "string"
+                      correctWords: 
+                        type: "array"
+                        items: 
+                          type: "string"
+                      distractorWords: 
+                        type: "array"
+                        items: 
+                          type: "string"
                   - 
-                    $ref: "#/components/schemas/CreateQuestTranslateInput"
-              examples: 
-                match_words: 
-                  summary: "Match Words Quest"
-                  value: 
-                    type: "match_words"
-                    levelId: 1
-                    word: "apple"
-                    translate: "яблоко"
-                dictation: 
-                  summary: "Dictation Quest"
-                  value: 
-                    type: "dictation"
-                    levelId: 1
-                    text: "I like apples"
-                    language: "en"
-                    distractorWords: 
-                      - "oranges"
-                      - "bananas"
-                      - "grapes"
-                translate: 
-                  summary: "Translate Quest"
-                  value: 
-                    type: "translate"
-                    levelId: 1
-                    sourceSentence: "Я люблю яблоки"
-                    correctSentence: "I like apples"
-                    targetLanguage: "en"
-                    distractorWords: 
-                      - "oranges"
-                      - "bananas"
+                    type: "object"
+                    required: 
+                      - "type"
+                      - "levelId"
+                      - "sourceSentence"
+                      - "correctSentence"
+                      - "correctWords"
+                    properties: 
+                      type: 
+                        type: "string"
+                        enum: 
+                          - "TRANSLATE"
+                      levelId: 
+                        type: "integer"
+                      sourceSentence: 
+                        type: "string"
+                      correctSentence: 
+                        type: "string"
+                      correctWords: 
+                        type: "array"
+                        items: 
+                          type: "string"
+                      distractorWords: 
+                        type: "array"
+                        items: 
+                          type: "string"
         responses: 
           201: 
             description: "Quest created successfully"
@@ -1955,35 +1411,120 @@
                 schema: 
                   $ref: "#/components/schemas/QuestDTO"
           400: 
-            description: "Invalid request data"
-          401: 
-            description: "Unauthorized"
+            description: "Invalid quest type"
           403: 
             description: "Admin access required"
           404: 
             description: "Level not found"
+    /api/stats/leaderboard: 
+      get: 
+        tags: 
+          - "Stats"
+        summary: "Get leaderboard"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "query"
+            name: "type"
+            required: true
+            schema: 
+              type: "string"
+              enum: 
+                - "all"
+                - "friends"
+            description: "Leaderboard type"
+        responses: 
+          200: 
+            description: "Leaderboard data"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/LeaderboardDTO"
+          400: 
+            description: "Invalid leaderboard type"
+          401: 
+            description: "Unauthorized"
+    /api/user/language: 
+      put: 
+        tags: 
+          - "User"
+        summary: "Set user's learning language"
+        security: 
+          - 
+            bearerAuth: []
+        requestBody: 
+          required: true
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                required: 
+                  - "languageId"
+                properties: 
+                  languageId: 
+                    type: "integer"
+                    description: "ID of the language to learn"
+                    example: 1
+        responses: 
+          200: 
+            description: "Language updated successfully"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/UserDTO"
+          401: 
+            description: "Unauthorized"
+          404: 
+            description: "Language not found"
+    /api/user/profile: 
+      get: 
+        tags: 
+          - "User"
+        summary: "Get user profile"
+        security: 
+          - 
+            bearerAuth: []
+        responses: 
+          200: 
+            description: "User profile"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/UserDTO"
+          401: 
+            description: "Unauthorized"
+          404: 
+            description: "User not found"
   tags: 
     - 
       name: "Authentication"
-      description: "User authentication and authorization"
+      description: "User authentication and session management"
     - 
-      name: "Languages"
-      description: "Language management and selection"
-    - 
-      name: "Modules"
-      description: "Learning modules management"
-    - 
-      name: "Levels"
-      description: "Level management within modules"
-    - 
-      name: "Quests"
-      description: "Quest (task) management and submission"
-    - 
-      name: "Progress"
-      description: "User progress tracking and statistics"
-    - 
-      name: "Admin"
-      description: "Administrative operations (requires admin role)"
+      name: "User"
+      description: "User profile management endpoints"
     - 
       name: "Friends"
-      description: "Friend management and social features"
+      description: "Friend management endpoints"
+    - 
+      name: "Stats"
+      description: "Statistics and leaderboard endpoints"
+    - 
+      name: "Languages"
+      description: "Language management endpoints"
+    - 
+      name: "Modules"
+      description: "Module management endpoints"
+    - 
+      name: "Lessons"
+      description: "Lesson management endpoints"
+    - 
+      name: "Levels"
+      description: "Level management endpoints"
+    - 
+      name: "Quests"
+      description: "Quest management endpoints"
+    - 
+      name: "Media"
+      description: "Media file endpoints"

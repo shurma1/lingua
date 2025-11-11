@@ -1,21 +1,18 @@
-
 import { KokoroTTS } from 'kokoro-js';
+import * as fs from 'fs';
+import * as path from 'path';
 import logger from '../utils/logger';
 import { TTS_MODEL, TTS_DTYPE } from '../config';
 
 export interface KokoroGenerateResult {
-  audio?: Float32Array;
-  data?: Float32Array | number[];
-  pcm?: Float32Array | number[];
-  sample_rate?: number;
-  sampleRate?: number;
-  [key: string]: unknown;
+	audio?: Float32Array;
+	data?: Float32Array | number[];
+	pcm?: Float32Array | number[];
+	sample_rate?: number;
+	sampleRate?: number;
+	[key: string]: unknown;
 }
 
-export interface SynthesizeOptions { voice?: string; }
-export interface SynthesizeResult { wav: Buffer; sampleRate: number; voice?: string; }
-
-function isStringArray(val: unknown): val is string[] { return Array.isArray(val) && val.every(v => typeof v === 'string'); }
 function isFloat32ArrayLike(val: unknown): val is Float32Array | number[] | ArrayLike<number> {
 	if (val instanceof Float32Array) return true;
 	if (Array.isArray(val) && val.every(n => typeof n === 'number')) return true;
@@ -23,10 +20,25 @@ function isFloat32ArrayLike(val: unknown): val is Float32Array | number[] | Arra
 	return false;
 }
 
+interface QueueItem {
+	text: string;
+	resolve: (filePath: string) => void;
+	reject: (error: Error) => void;
+}
+
 class TtsService {
 	private model: KokoroTTS | null = null;
 	private loadingPromise: Promise<void> | null = null;
-
+	private queue: QueueItem[] = [];
+	private isProcessing = false;
+	private outputDir = path.join(process.cwd(), 'media', 'tts');
+	
+	constructor() {
+		if (!fs.existsSync(this.outputDir)) {
+			fs.mkdirSync(this.outputDir, { recursive: true });
+		}
+	}
+	
 	init(): Promise<void> {
 		if (this.model) return Promise.resolve();
 		if (this.loadingPromise) return this.loadingPromise;
@@ -44,88 +56,115 @@ class TtsService {
 		})();
 		return this.loadingPromise;
 	}
-
-	isReady(): boolean { return this.model !== null; }
-
-	getVoices(): string[] {
-		if (!this.model) return [];
-		const candidateKeys = ['voices', 'availableVoices', 'voice_list'];
-		const modelObj: Record<string, unknown> = this.model as unknown as Record<string, unknown>;
-		for (const key of candidateKeys) {
-			const val = modelObj[key];
-			if (isStringArray(val)) return val;
-			if (val && typeof val === 'object' && !Array.isArray(val)) {
-				const keys = Object.keys(val as Record<string, unknown>);
-				if (keys.every(k => typeof k === 'string')) return keys;
-			}
-		}
-		for (const [k, v] of Object.entries(modelObj)) {
-			if (k.toLowerCase().includes('voice')) {
-				if (isStringArray(v)) return v;
-				if (v && typeof v === 'object') return Object.keys(v as Record<string, unknown>);
-			}
-		}
-		return [];
+	
+	synthesize(text: string): Promise<string> {
+		return new Promise((resolve, reject) => {
+			this.queue.push({ text, resolve, reject });
+			this.processQueue();
+		});
 	}
-
-	async synthesize(text: string, opts: SynthesizeOptions = {}): Promise<SynthesizeResult> {
+	
+	private async processQueue(): Promise<void> {
+		if (this.isProcessing || this.queue.length === 0) return;
+		
+		this.isProcessing = true;
+		
+		while (this.queue.length > 0) {
+			const item = this.queue.shift()!;
+			
+			try {
+				const filePath = await this.synthesizeInternal(item.text);
+				item.resolve(filePath);
+			} catch (error) {
+				item.reject(error as Error);
+			}
+		}
+		
+		this.isProcessing = false;
+	}
+	
+	private async synthesizeInternal(text: string): Promise<string> {
 		if (!this.model) throw new Error('TTS model not ready');
 		if (!text.trim()) throw new Error('Empty text');
-		const voices = this.getVoices();
-		let selected = opts.voice;
-		if (selected && voices.length && !voices.includes(selected)) logger.warn(`[TTS] Unknown voice '${selected}'. Known: ${voices.join(', ')}`);
-		if (!selected && voices.length) selected = voices[0];
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const generationOptions = selected ? { voice: selected as unknown as any } : undefined;
-     
-		const rawAudio = await this.model.generate(text, generationOptions) as unknown as KokoroGenerateResult;
+		
+		// Generate audio with default voice
+		const rawAudio = await this.model.generate(text) as unknown as KokoroGenerateResult;
 		const candidateAudio = (rawAudio.audio ?? rawAudio.data ?? rawAudio.pcm ?? rawAudio) as unknown;
 		const sampleRate = (typeof rawAudio.sample_rate === 'number' ? rawAudio.sample_rate : (typeof rawAudio.sampleRate === 'number' ? rawAudio.sampleRate : 22050));
+		
 		if (!isFloat32ArrayLike(candidateAudio)) throw new Error('Model returned unexpected audio format');
+		
 		const floatArray: Float32Array | number[] = candidateAudio instanceof Float32Array ? candidateAudio : Array.from(candidateAudio as ArrayLike<number>);
 		if (floatArray.length === 0) throw new Error('Model returned empty audio');
-		const pcm16 = this.floatTo16BitPCM(floatArray);
-		const wav = this.buildWav(sampleRate, pcm16, 1);
-		logger.debug('[TTS] Синтез завершен (%d samples, rate=%d, voice=%s)', floatArray.length, sampleRate, selected || 'default');
-		return { wav, sampleRate, voice: selected };
+		
+		// Generate unique filename
+		const filename = `tts_${Date.now()}_${Math.random().toString(36).substring(7)}.wav`;
+		const filePath = path.join(this.outputDir, filename);
+		
+		// Create WAV file with streaming
+		await this.writeWavFile(filePath, sampleRate, floatArray);
+		
+		logger.debug('[TTS] Синтез завершен (%d samples, rate=%d, file=%s)', floatArray.length, sampleRate, filename);
+		return filePath;
 	}
-
-	private floatTo16BitPCM(float32: Float32Array | number[]): Buffer {
-		const buffer = Buffer.alloc(float32.length * 2);
-		let offset = 0;
-		for (let i = 0; i < float32.length; i++) {
-			let s = float32[i] as number;
-			if (s > 1) s = 1; else if (s < -1) s = -1;
-			const int16 = s < 0 ? s * 0x8000 : s * 0x7fff;
-			buffer.writeInt16LE(int16, offset); offset += 2;
-		}
-		return buffer;
-	}
-
-	private buildWav(sampleRate: number, pcm16: Buffer, numChannels = 1): Buffer {
-		const byteRate = sampleRate * numChannels * 2;
-		const blockAlign = numChannels * 2;
-		const dataSize = pcm16.length;
-		const buffer = Buffer.alloc(44 + dataSize);
-		let o = 0;
-		const writeString = (s: string) => { buffer.write(s, o); o += s.length; };
-		const writeUint32 = (v: number) => { buffer.writeUInt32LE(v, o); o += 4; };
-		const writeUint16 = (v: number) => { buffer.writeUInt16LE(v, o); o += 2; };
-		writeString('RIFF');
-		writeUint32(36 + dataSize);
-		writeString('WAVE');
-		writeString('fmt ');
-		writeUint32(16);
-		writeUint16(1);
-		writeUint16(numChannels);
-		writeUint32(sampleRate);
-		writeUint32(byteRate);
-		writeUint16(blockAlign);
-		writeUint16(16);
-		writeString('data');
-		writeUint32(dataSize);
-		pcm16.copy(buffer, o);
-		return buffer;
+	
+	private async writeWavFile(filePath: string, sampleRate: number, floatArray: Float32Array | number[]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const stream = fs.createWriteStream(filePath);
+			
+			stream.on('error', reject);
+			stream.on('finish', resolve);
+			
+			// Write WAV header
+			const numChannels = 1;
+			const bitsPerSample = 16;
+			const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+			const blockAlign = numChannels * (bitsPerSample / 8);
+			const dataSize = floatArray.length * 2;
+			
+			const header = Buffer.alloc(44);
+			let offset = 0;
+			
+			// RIFF header
+			header.write('RIFF', offset); offset += 4;
+			header.writeUInt32LE(36 + dataSize, offset); offset += 4;
+			header.write('WAVE', offset); offset += 4;
+			
+			// fmt chunk
+			header.write('fmt ', offset); offset += 4;
+			header.writeUInt32LE(16, offset); offset += 4; // chunk size
+			header.writeUInt16LE(1, offset); offset += 2; // audio format (PCM)
+			header.writeUInt16LE(numChannels, offset); offset += 2;
+			header.writeUInt32LE(sampleRate, offset); offset += 4;
+			header.writeUInt32LE(byteRate, offset); offset += 4;
+			header.writeUInt16LE(blockAlign, offset); offset += 2;
+			header.writeUInt16LE(bitsPerSample, offset); offset += 2;
+			
+			// data chunk header
+			header.write('data', offset); offset += 4;
+			header.writeUInt32LE(dataSize, offset);
+			
+			stream.write(header);
+			
+			// Write PCM data in chunks
+			const chunkSize = 4096; // Write in 4KB chunks
+			for (let i = 0; i < floatArray.length; i += chunkSize) {
+				const end = Math.min(i + chunkSize, floatArray.length);
+				const chunk = Buffer.alloc((end - i) * 2);
+				
+				for (let j = i; j < end; j++) {
+					let sample = floatArray[j] as number;
+					if (sample > 1) sample = 1;
+					else if (sample < -1) sample = -1;
+					const int16 = sample < 0 ? sample * 0x8000 : sample * 0x7fff;
+					chunk.writeInt16LE(int16, (j - i) * 2);
+				}
+				
+				stream.write(chunk);
+			}
+			
+			stream.end();
+		});
 	}
 }
 
