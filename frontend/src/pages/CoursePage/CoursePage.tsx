@@ -1,4 +1,5 @@
 import { Levels } from "@components/Levels";
+
 import { usePopup } from "../../contexts/PopupContext";
 import DetailPage from "../DetailPage/DetailPage";
 

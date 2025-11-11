@@ -7,6 +7,7 @@ import "./setupDevMode";
 import "virtual:svg-icons-register";
 
 import App from "./App";
+
 import {HistoryProvider} from "@contexts/HistoryContext";
 
 import "./styles/main.scss";

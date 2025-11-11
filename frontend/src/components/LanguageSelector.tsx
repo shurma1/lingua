@@ -1,14 +1,12 @@
 import React, {useState} from "react";
 
+import Icon from "@components/Icon";
 import {CellList, CellSimple} from "@maxhub/max-ui";
-
+import styles from "@styles/components/LanguageSelector.module.scss";
 import cls from "@utils/cls";
 import {ImpactStyle} from "@WebApp/types";
 import {NotificationType} from "@WebApp/types";
 import WebApp from "@WebApp/WebApp";
-import Icon from "@components/Icon";
-
-import styles from "@styles/components/LanguageSelector.module.scss";
 
 
 export interface Language {

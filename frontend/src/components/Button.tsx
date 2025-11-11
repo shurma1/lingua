@@ -1,10 +1,9 @@
 import {FC, MouseEvent} from "react";
 
 import {Button as MaxButton, ButtonProps} from "@maxhub/max-ui";
-
-import WebApp from "@WebApp/WebApp";
 import {ImpactStyle} from "@WebApp/types/ImpactStyle";
 import {NotificationType} from "@WebApp/types/NotificationType";
+import WebApp from "@WebApp/WebApp";
 
 const Button: FC<ButtonProps> = ({onClick, disabled, ...props}) => {
 	const handleWrapperClick = (e: MouseEvent<HTMLDivElement>) => {

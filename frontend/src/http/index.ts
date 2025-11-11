@@ -1,28 +1,14 @@
-import axios from "axios";
+export { apiClient, ApiClient } from "./ApiClient";
+export { BaseApiClient } from "./BaseApiClient";
+export { AuthApiClient } from "./AuthApiClient";
+export { FriendsApiClient } from "./FriendsApiClient";
+export { LanguagesApiClient } from "./LanguagesApiClient";
+export { ModulesApiClient } from "./ModulesApiClient";
+export { LevelsApiClient } from "./LevelsApiClient";
+export { QuestsApiClient } from "./QuestsApiClient";
+export { LessonsApiClient } from "./LessonsApiClient";
+export { StatsApiClient } from "./StatsApiClient";
+export { UserApiClient } from "./UserApiClient";
+export { MediaApiClient } from "./MediaApiClient";
 
-import { API_URL } from "@config/api";
-import { useAuthStore } from "@store/authStore";
-
-const $api = axios.create({
-	baseURL: API_URL,
-});
-
-$api.interceptors.request.use((config) => {
-	const token = useAuthStore.getState().accessToken;
-	if (token) {
-		config.headers.Authorization = `Bearer ${token}`;
-	}
-	return config;
-});
-
-$api.interceptors.response.use(
-	(config) => config,
-	async (error) => {
-		if (error.response?.status === 401) {
-			useAuthStore.getState().clearAuth();
-		}
-		throw error;
-	},
-);
-
-export default $api;
+export { default } from "./ApiClient";

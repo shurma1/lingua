@@ -1,50 +1,152 @@
-import { useState, useEffect } from "react";
-
-import axios from "axios";
-
-import { API_URL } from "@config/api";
+import { useState, useEffect, useCallback } from "react";
 import { useAuthStore } from "@store/authStore";
-import { AuthResponse } from "@/types/auth";
-import WebApp from "@WebApp/WebApp";
+import { apiClient } from "@/http";
+import { AuthResponseDTO, UserDTO } from "@/types/api";
 
+// Main hook that returns both state and mutations
 export const useAuth = () => {
-	const [isLoading, setIsLoading] = useState(true);
+	const { accessToken, user, isAuthenticated } = useAuthStore();
+	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { setAuth, clearAuth, isAuthenticated, user } = useAuthStore();
+	const { setAuth, clearAuth } = useAuthStore();
 
+	// Setup auth token on apiClient whenever token changes
 	useEffect(() => {
-		const authenticate = async () => {
-			try {
-				const initData = WebApp.initData;
-				
-				if (!initData) {
-					throw new Error("WebApp initData not found");
-				}
+		const token = useAuthStore.getState().accessToken;
+		apiClient.setAuthToken(token);
+	}, [useAuthStore.getState().accessToken]);
 
-				const response = await axios.post<AuthResponse>(
-					`${API_URL}/auth`,
-					{ initData },
-				);
+	const authenticate = useCallback(async (initData: string) => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const response: AuthResponseDTO = await apiClient.auth.authenticate(initData);
+			setAuth(response.accessToken, response.user);
+			apiClient.setAuthToken(response.accessToken);
+			return response;
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : "Authentication failed";
+			setError(errorMessage);
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [setAuth]);
 
-				const { accessToken, user } = response.data;
-				setAuth(accessToken, user);
-				setError(null);
-			} catch (err) {
-				console.error("Authentication failed:", err);
-				setError(err instanceof Error ? err.message : "Authentication failed");
-				clearAuth();
-			} finally {
-				setIsLoading(false);
+	const getMe = useCallback(async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const user: UserDTO = await apiClient.auth.getMe();
+			const currentToken = useAuthStore.getState().accessToken;
+			if (currentToken) {
+				setAuth(currentToken, user);
 			}
-		};
-
-		authenticate();
+			return user;
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : "Failed to get user info";
+			setError(errorMessage);
+			
+			// Handle 401 errors by clearing auth
+			if (err && typeof err === "object" && "response" in err) {
+				const axiosError = err as { response?: { status?: number } };
+				if (axiosError.response?.status === 401) {
+					clearAuth();
+					apiClient.setAuthToken(null);
+				}
+			}
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
 	}, [setAuth, clearAuth]);
 
+	const logout = useCallback(() => {
+		clearAuth();
+		apiClient.setAuthToken(null);
+	}, [clearAuth]);
+
 	return {
+		// State
+		accessToken,
+		user,
+		isAuthenticated,
 		isLoading,
 		error,
-		isAuthenticated,
-		user,
+		// Mutations
+		authenticate,
+		getMe,
+		logout,
+	};
+};
+
+// Separate hook for just mutations (optional, for components that only need mutations)
+export const useAuthMutations = () => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+	const { setAuth, clearAuth } = useAuthStore();
+
+	// Setup auth token on apiClient whenever token changes
+	useEffect(() => {
+		const token = useAuthStore.getState().accessToken;
+		apiClient.setAuthToken(token);
+	}, [useAuthStore.getState().accessToken]);
+
+	const authenticate = useCallback(async (initData: string) => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const response: AuthResponseDTO = await apiClient.auth.authenticate(initData);
+			setAuth(response.accessToken, response.user);
+			apiClient.setAuthToken(response.accessToken);
+			return response;
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : "Authentication failed";
+			setError(errorMessage);
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [setAuth]);
+
+	const getMe = useCallback(async () => {
+		setIsLoading(true);
+		setError(null);
+		try {
+			const user: UserDTO = await apiClient.auth.getMe();
+			const currentToken = useAuthStore.getState().accessToken;
+			if (currentToken) {
+				setAuth(currentToken, user);
+			}
+			return user;
+		} catch (err) {
+			const errorMessage = err instanceof Error ? err.message : "Failed to get user info";
+			setError(errorMessage);
+			
+			// Handle 401 errors by clearing auth
+			if (err && typeof err === "object" && "response" in err) {
+				const axiosError = err as { response?: { status?: number } };
+				if (axiosError.response?.status === 401) {
+					clearAuth();
+					apiClient.setAuthToken(null);
+				}
+			}
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [setAuth, clearAuth]);
+
+	const logout = useCallback(() => {
+		clearAuth();
+		apiClient.setAuthToken(null);
+	}, [clearAuth]);
+
+	return {
+		authenticate,
+		getMe,
+		logout,
+		isLoading,
+		error,
 	};
 };

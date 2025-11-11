@@ -1,12 +1,14 @@
-import { create } from 'zustand';
-import { User } from '@/types/auth';
+import { create } from "zustand";
+
+import { UserDTO } from "@/types/api";
 
 interface AuthState {
 	accessToken: string | null;
-	user: User | null;
+	user: UserDTO | null;
 	isAuthenticated: boolean;
-	setAuth: (accessToken: string, user: User) => void;
+	setAuth: (accessToken: string, user: UserDTO) => void;
 	clearAuth: () => void;
+	updateUser: (user: UserDTO) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -16,11 +18,15 @@ export const useAuthStore = create<AuthState>((set) => ({
 	setAuth: (accessToken, user) => set({
 		accessToken,
 		user,
-		isAuthenticated: true
+		isAuthenticated: true,
 	}),
 	clearAuth: () => set({
 		accessToken: null,
 		user: null,
-		isAuthenticated: false
+		isAuthenticated: false,
 	}),
+	updateUser: (user) => set((state) => ({
+		...state,
+		user,
+	})),
 }));

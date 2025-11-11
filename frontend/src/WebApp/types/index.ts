@@ -5,5 +5,5 @@ import {Platform} from "./Platform";
 export {
 	ImpactStyle,
 	NotificationType,
-	Platform
-}
+	Platform,
+};

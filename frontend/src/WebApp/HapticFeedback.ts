@@ -4,7 +4,7 @@ import {WebAppRoot} from "./WebApp";
 import type {
 	ImpactStyle,
 	NotificationType,
-	Platform
+	Platform,
 } from "@WebApp/types";
 
 

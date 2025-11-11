@@ -1,10 +1,8 @@
 import { FC, ReactNode, useEffect, useState, useRef} from "react";
 
 import {Button, Typography} from "@maxhub/max-ui";
-
-import cls from "@utils/cls";
-
 import styles from "@styles/components/OnBoarding.module.scss";
+import cls from "@utils/cls";
 
 interface OwnProps {
 	children: ReactNode | ReactNode[];

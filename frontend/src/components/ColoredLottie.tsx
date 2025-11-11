@@ -1,8 +1,8 @@
 import { useMemo, forwardRef, useRef, useImperativeHandle } from "react";
 
+import { changeAnimationColor, hexToRgb } from "@utils/lottieColorUtils";
 import Lottie from "lottie-react";
 
-import { changeAnimationColor, hexToRgb } from "@utils/lottieColorUtils";
 
 import type { LottieComponentProps, LottieRefCurrentProps } from "lottie-react";
 

@@ -1,10 +1,11 @@
+import LeaderboardPage from "@pages/LeaderboardPage/LeaderboardPage";
+
 import groupAnimation from "../assets/lottie/group.json";
 import puzzleAnimation from "../assets/lottie/puzzle.json";
 import starAnimation from "../assets/lottie/star.json";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import CoursePage from "../pages/CoursePage/CoursePage";
 import GamePage from "../pages/GamePage/GamePage";
-import LeaderboardPage from "@pages/LeaderboardPage/LeaderboardPage";
 
 import type {TabNavigatorConfig} from "@components/TabBar/TabNavigator";
 

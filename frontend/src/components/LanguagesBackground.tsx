@@ -1,9 +1,10 @@
 import {CSSProperties, FC, useEffect, useRef} from "react";
 
-import {GREETING_STRINGS} from "@/constants/greetings";
 import styles from "@styles/components/LanguagesBackground.module.scss";
 import {generateRandomArrayFromArray} from "@utils/generateRandomArrayFromArray";
 import {random} from "@utils/random";
+
+import {GREETING_STRINGS} from "@/constants/greetings";
 
 
 interface GreetingWord {

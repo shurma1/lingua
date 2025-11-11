@@ -1,10 +1,10 @@
 import {useRef, useState} from "react";
 
+import ColoredLottie from "@components/ColoredLottie";
+import styles from "@styles/components/TabBar/TabBar.module.scss";
 import {ImpactStyle} from "@WebApp/types/ImpactStyle";
 import WebApp from "@WebApp/WebApp";
-import ColoredLottie from "@components/ColoredLottie";
 
-import styles from "@styles/components/TabBar/TabBar.module.scss";
 
 import type {LottieRefCurrentProps} from "lottie-react";
 
