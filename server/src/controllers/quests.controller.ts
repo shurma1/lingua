@@ -65,7 +65,10 @@ class QuestsController {
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/QuestDTO'
+	 *               oneOf:
+	 *                 - $ref: '#/components/schemas/QuestMatchWordsResponse'
+	 *                 - $ref: '#/components/schemas/QuestDictationResponse'
+	 *                 - $ref: '#/components/schemas/QuestTranslateResponse'
 	 *       404:
 	 *         description: Quest not found
 	 */
@@ -94,62 +97,73 @@ class QuestsController {
 	 *           schema:
 	 *             oneOf:
 	 *               - type: object
-	 *                 required: [type, levelId, word, translate]
+	 *                 required: [type, levelId, data]
 	 *                 properties:
 	 *                   type:
 	 *                     type: string
 	 *                     enum: [MATCH_WORDS]
 	 *                   levelId:
 	 *                     type: integer
-	 *                   word:
-	 *                     type: string
-	 *                   translate:
-	 *                     type: string
+	 *                     example: 1
+	 *                   data:
+	 *                     type: array
+	 *                     items:
+	 *                       type: object
+	 *                       required: [word, translate]
+	 *                       properties:
+	 *                         word:
+	 *                           type: string
+	 *                           example: Привет
+	 *                         translate:
+	 *                           type: string
+	 *                           example: Hello
 	 *               - type: object
-	 *                 required: [type, levelId, correctSentence, correctWords]
+	 *                 required: [type, levelId, correctSentence]
 	 *                 properties:
 	 *                   type:
 	 *                     type: string
 	 *                     enum: [DICTATION]
 	 *                   levelId:
 	 *                     type: integer
+	 *                     example: 1
 	 *                   correctSentence:
 	 *                     type: string
-	 *                   correctWords:
-	 *                     type: array
-	 *                     items:
-	 *                       type: string
+	 *                     example: Any sentence
 	 *                   distractorWords:
 	 *                     type: array
 	 *                     items:
 	 *                       type: string
+	 *                     example: [word3, word4]
 	 *               - type: object
-	 *                 required: [type, levelId, sourceSentence, correctSentence, correctWords]
+	 *                 required: [type, levelId, sourceSentence, correctSentence]
 	 *                 properties:
 	 *                   type:
 	 *                     type: string
 	 *                     enum: [TRANSLATE]
 	 *                   levelId:
 	 *                     type: integer
+	 *                     example: 1
 	 *                   sourceSentence:
 	 *                     type: string
+	 *                     example: Привет, я стив
 	 *                   correctSentence:
 	 *                     type: string
-	 *                   correctWords:
-	 *                     type: array
-	 *                     items:
-	 *                       type: string
+	 *                     example: Hello, i am steave
 	 *                   distractorWords:
 	 *                     type: array
 	 *                     items:
 	 *                       type: string
+	 *                     example: [are, is]
 	 *     responses:
 	 *       201:
 	 *         description: Quest created successfully
 	 *         content:
 	 *           application/json:
 	 *             schema:
-	 *               $ref: '#/components/schemas/QuestDTO'
+	 *               oneOf:
+	 *                 - $ref: '#/components/schemas/QuestMatchWordsResponse'
+	 *                 - $ref: '#/components/schemas/QuestDictationResponse'
+	 *                 - $ref: '#/components/schemas/QuestTranslateResponse'
 	 *       400:
 	 *         description: Invalid quest type
 	 *       403:

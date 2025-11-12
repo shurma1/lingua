@@ -315,26 +315,18 @@
             type: "string"
             description: "Module icon URL"
             example: "/icons/basics.png"
-      QuestMatchWordsDTO: 
+      MatchWordPairDTO: 
         type: "object"
         required: 
-          - "id"
-          - "questId"
           - "word"
           - "translate"
         properties: 
-          id: 
-            type: "integer"
-            example: 1
-          questId: 
-            type: "integer"
-            example: 1
           word: 
             type: "string"
-            example: "hello"
+            example: "Привет"
           translate: 
             type: "string"
-            example: "привет"
+            example: "Hello"
       WordDTO: 
         type: "object"
         required: 
@@ -342,91 +334,98 @@
           - "value"
         properties: 
           id: 
-            type: "integer"
-            example: 1
+            type: "string"
+            example: "1"
           value: 
             type: "string"
             example: "hello"
-          audioUrl: 
+          mediaId: 
             type: "string"
-            example: "/media/audio_1.wav"
-      QuestDictationDTO: 
-        type: "object"
-        required: 
-          - "id"
-          - "questId"
-          - "correctSentence"
-          - "words"
-        properties: 
-          id: 
-            type: "integer"
-            example: 1
-          questId: 
-            type: "integer"
-            example: 1
-          audioUrl: 
-            type: "string"
-            example: "/media/audio_1.wav"
-          correctSentence: 
-            type: "string"
-            example: "I like tea"
-          words: 
-            type: "array"
-            items: 
-              $ref: "#/components/schemas/WordDTO"
-      QuestTranslateDTO: 
-        type: "object"
-        required: 
-          - "id"
-          - "questId"
-          - "sourceSentence"
-          - "correctSentence"
-          - "words"
-        properties: 
-          id: 
-            type: "integer"
-            example: 1
-          questId: 
-            type: "integer"
-            example: 1
-          sourceSentence: 
-            type: "string"
-            example: "Я люблю чай"
-          correctSentence: 
-            type: "string"
-            example: "I like tea"
-          words: 
-            type: "array"
-            items: 
-              $ref: "#/components/schemas/WordDTO"
-      QuestDTO: 
+            example: "1"
+      QuestMatchWordsResponse: 
         type: "object"
         required: 
           - "id"
           - "type"
           - "levelId"
+          - "match_words"
         properties: 
           id: 
-            type: "integer"
-            example: 1
+            type: "string"
+            example: "4"
           type: 
             type: "string"
             enum: 
               - "MATCH_WORDS"
-              - "DICTATION"
-              - "TRANSLATE"
             example: "MATCH_WORDS"
           levelId: 
-            type: "integer"
-            example: 1
-          data: 
-            oneOf: 
-              - 
-                $ref: "#/components/schemas/QuestMatchWordsDTO"
-              - 
-                $ref: "#/components/schemas/QuestDictationDTO"
-              - 
-                $ref: "#/components/schemas/QuestTranslateDTO"
+            type: "string"
+            example: "1"
+          match_words: 
+            type: "array"
+            items: 
+              $ref: "#/components/schemas/MatchWordPairDTO"
+      QuestDictationResponse: 
+        type: "object"
+        required: 
+          - "id"
+          - "type"
+          - "levelId"
+          - "correctSentence"
+          - "words"
+        properties: 
+          id: 
+            type: "string"
+            example: "2"
+          type: 
+            type: "string"
+            enum: 
+              - "DICTATION"
+            example: "DICTATION"
+          levelId: 
+            type: "string"
+            example: "1"
+          mediaId: 
+            type: "string"
+            example: "10"
+          correctSentence: 
+            type: "string"
+            example: "a b c"
+          words: 
+            type: "array"
+            items: 
+              $ref: "#/components/schemas/WordDTO"
+      QuestTranslateResponse: 
+        type: "object"
+        required: 
+          - "id"
+          - "type"
+          - "levelId"
+          - "sourceSentence"
+          - "correctSentence"
+          - "words"
+        properties: 
+          id: 
+            type: "string"
+            example: "3"
+          type: 
+            type: "string"
+            enum: 
+              - "TRANSLATE"
+            example: "TRANSLATE"
+          levelId: 
+            type: "string"
+            example: "1"
+          sourceSentence: 
+            type: "string"
+            example: "Привет, меня зовут дима"
+          correctSentence: 
+            type: "string"
+            example: "Hello, my name is dima"
+          words: 
+            type: "array"
+            items: 
+              $ref: "#/components/schemas/WordDTO"
       UserDTO: 
         type: "object"
         required: 
@@ -1098,6 +1097,31 @@
                   $ref: "#/components/schemas/MediaDTO"
           404: 
             description: "Media not found"
+    /api/media/{mediaId}/file: 
+      get: 
+        tags: 
+          - "Media"
+        summary: "Get actual media file"
+        security: 
+          - 
+            bearerAuth: []
+        parameters: 
+          - 
+            in: "path"
+            name: "mediaId"
+            required: true
+            schema: 
+              type: "integer"
+        responses: 
+          200: 
+            description: "Media file"
+            content: 
+              audio/wav: 
+                schema: 
+                  type: "string"
+                  format: "binary"
+          404: 
+            description: "Media not found"
     /api/languages/{languageId}/modules: 
       get: 
         tags: 
@@ -1291,7 +1315,13 @@
             content: 
               application/json: 
                 schema: 
-                  $ref: "#/components/schemas/QuestDTO"
+                  oneOf: 
+                    - 
+                      $ref: "#/components/schemas/QuestMatchWordsResponse"
+                    - 
+                      $ref: "#/components/schemas/QuestDictationResponse"
+                    - 
+                      $ref: "#/components/schemas/QuestTranslateResponse"
           404: 
             description: "Quest not found"
       delete: 
@@ -1334,8 +1364,7 @@
                     required: 
                       - "type"
                       - "levelId"
-                      - "word"
-                      - "translate"
+                      - "data"
                     properties: 
                       type: 
                         type: "string"
@@ -1343,17 +1372,27 @@
                           - "MATCH_WORDS"
                       levelId: 
                         type: "integer"
-                      word: 
-                        type: "string"
-                      translate: 
-                        type: "string"
+                        example: 1
+                      data: 
+                        type: "array"
+                        items: 
+                          type: "object"
+                          required: 
+                            - "word"
+                            - "translate"
+                          properties: 
+                            word: 
+                              type: "string"
+                              example: "Привет"
+                            translate: 
+                              type: "string"
+                              example: "Hello"
                   - 
                     type: "object"
                     required: 
                       - "type"
                       - "levelId"
                       - "correctSentence"
-                      - "correctWords"
                     properties: 
                       type: 
                         type: "string"
@@ -1361,16 +1400,17 @@
                           - "DICTATION"
                       levelId: 
                         type: "integer"
+                        example: 1
                       correctSentence: 
                         type: "string"
-                      correctWords: 
-                        type: "array"
-                        items: 
-                          type: "string"
+                        example: "Any sentence"
                       distractorWords: 
                         type: "array"
                         items: 
                           type: "string"
+                        example: 
+                          - "word3"
+                          - "word4"
                   - 
                     type: "object"
                     required: 
@@ -1378,7 +1418,6 @@
                       - "levelId"
                       - "sourceSentence"
                       - "correctSentence"
-                      - "correctWords"
                     properties: 
                       type: 
                         type: "string"
@@ -1386,25 +1425,33 @@
                           - "TRANSLATE"
                       levelId: 
                         type: "integer"
+                        example: 1
                       sourceSentence: 
                         type: "string"
+                        example: "Привет, я стив"
                       correctSentence: 
                         type: "string"
-                      correctWords: 
-                        type: "array"
-                        items: 
-                          type: "string"
+                        example: "Hello, i am steave"
                       distractorWords: 
                         type: "array"
                         items: 
                           type: "string"
+                        example: 
+                          - "are"
+                          - "is"
         responses: 
           201: 
             description: "Quest created successfully"
             content: 
               application/json: 
                 schema: 
-                  $ref: "#/components/schemas/QuestDTO"
+                  oneOf: 
+                    - 
+                      $ref: "#/components/schemas/QuestMatchWordsResponse"
+                    - 
+                      $ref: "#/components/schemas/QuestDictationResponse"
+                    - 
+                      $ref: "#/components/schemas/QuestTranslateResponse"
           400: 
             description: "Invalid quest type"
           403: 

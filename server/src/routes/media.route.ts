@@ -5,5 +5,6 @@ import { authMiddleware } from '../middleware/auth.middleware';
 const router = Router();
 
 router.get('/:mediaId', authMiddleware, mediaController.getMediaById.bind(mediaController));
+router.get('/:mediaId/file', authMiddleware, mediaController.getMediaFile.bind(mediaController));
 
 export default router;

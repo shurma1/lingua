@@ -18,6 +18,24 @@ class MediaService {
 	}
 
 	/**
+	 * Get media file path
+	 */
+	async getMediaFilePath(mediaId: number): Promise<string> {
+		const media = await AudioMedia.findByPk(mediaId);
+		if (!media) {
+			throw ApiError.errorByType('MEDIA_NOT_FOUND');
+		}
+
+		const filePath = path.join(process.cwd(), 'media', 'tts', media.filename);
+		
+		if (!fs.existsSync(filePath)) {
+			throw ApiError.errorByType('MEDIA_NOT_FOUND');
+		}
+
+		return filePath;
+	}
+
+	/**
 	 * Create media record from file
 	 */
 	async createMedia(filePath: string): Promise<AudioMedia> {

@@ -11,7 +11,13 @@ import { DistractorWords } from '../models/entities/DistractorWords';
 import { QuestType } from '../models/types/QuestType';
 import { ApiError } from '../error/apiError';
 import type { CreateQuestData } from '../types/quest';
-import { QuestDTO, QuestMatchWordsDTO, QuestDictationDTO, QuestTranslateDTO } from '../dtos';
+import { 
+	QuestDTO, 
+	QuestMatchWordsResponseDTO, 
+	QuestDictationResponseDTO, 
+	QuestTranslateResponseDTO,
+	QuestResponseDTO 
+} from '../dtos';
 import ttsService from './tts.service';
 import mediaService from './media.service';
 import { Op } from 'sequelize';
@@ -37,7 +43,7 @@ class QuestsService {
 	/**
 	 * Get quest by ID with full data
 	 */
-	async getQuestById(questId: number): Promise<QuestDTO> {
+	async getQuestById(questId: number): Promise<QuestResponseDTO> {
 		const quest = await Quest.findByPk(questId);
 		if (!quest) {
 			throw ApiError.errorByType('QUEST_NOT_FOUND');
@@ -47,25 +53,25 @@ class QuestsService {
 
 		switch (quest.type) {
 			case 'MATCH_WORDS':
-				questData = await this.getMatchWordsData(questId);
+				questData = await this.getMatchWordsData(quest);
 				break;
 			case 'DICTATION':
-				questData = await this.getDictationData(questId);
+				questData = await this.getDictationData(quest);
 				break;
 			case 'TRANSLATE':
-				questData = await this.getTranslateData(questId);
+				questData = await this.getTranslateData(quest);
 				break;
 			default:
 				throw ApiError.errorByType('INVALID_QUEST_TYPE');
 		}
 
-		return QuestDTO.fromQuest(quest, questData);
+		return questData;
 	}
 
 	/**
 	 * Create a quest (admin only)
 	 */
-	async createQuest(data: CreateQuestData): Promise<QuestDTO> {
+	async createQuest(data: CreateQuestData): Promise<QuestResponseDTO> {
 		const level = await Level.findByPk(data.levelId);
 		if (!level) {
 			throw ApiError.errorByType('LEVEL_NOT_FOUND');
@@ -74,24 +80,23 @@ class QuestsService {
 		// Initialize TTS service
 		await ttsService.init();
 
-		let quest: Quest;
-		let questData;
+		let questData: QuestResponseDTO;
 
 		switch (data.type) {
 			case 'MATCH_WORDS':
-				({ quest, questData } = await this.createMatchWordsQuest(data));
+				questData = await this.createMatchWordsQuest(data);
 				break;
 			case 'DICTATION':
-				({ quest, questData } = await this.createDictationQuest(data));
+				questData = await this.createDictationQuest(data);
 				break;
 			case 'TRANSLATE':
-				({ quest, questData } = await this.createTranslateQuest(data));
+				questData = await this.createTranslateQuest(data);
 				break;
 			default:
 				throw ApiError.errorByType('INVALID_QUEST_TYPE');
 		}
 
-		return QuestDTO.fromQuest(quest, questData);
+		return questData;
 	}
 
 	/**
@@ -119,21 +124,21 @@ class QuestsService {
 
 	// Private helper methods
 
-	private async getMatchWordsData(questId: number): Promise<QuestMatchWordsDTO> {
-		const matchWords = await QuestMatchWords.findOne({
-			where: { questId }
+	private async getMatchWordsData(quest: Quest): Promise<QuestMatchWordsResponseDTO> {
+		const matchWords = await QuestMatchWords.findAll({
+			where: { questId: quest.id }
 		});
 
-		if (!matchWords) {
+		if (!matchWords || matchWords.length === 0) {
 			throw ApiError.errorByType('QUEST_NOT_FOUND');
 		}
 
-		return new QuestMatchWordsDTO(matchWords);
+		return new QuestMatchWordsResponseDTO(quest, matchWords);
 	}
 
-	private async getDictationData(questId: number): Promise<QuestDictationDTO> {
+	private async getDictationData(quest: Quest): Promise<QuestDictationResponseDTO> {
 		const dictation = await QuestDictation.findOne({
-			where: { questId },
+			where: { questId: quest.id },
 			include: [
 				{
 					model: Sentence,
@@ -147,7 +152,8 @@ class QuestsService {
 									model: Words,
 									as: 'word'
 								}
-							]
+							],
+							order: [['position', 'ASC']]
 						}
 					]
 				},
@@ -179,16 +185,17 @@ class QuestsService {
 		const distractorWords = dictation.distractor?.distractorWords?.map((dw: any) => dw.word) || [];
 		const allWords = [...correctWords, ...distractorWords];
 
-		return new QuestDictationDTO(
+		return new QuestDictationResponseDTO(
+			quest,
 			dictation,
 			dictation.correctSentence.text,
 			allWords
 		);
 	}
 
-	private async getTranslateData(questId: number): Promise<QuestTranslateDTO> {
+	private async getTranslateData(quest: Quest): Promise<QuestTranslateResponseDTO> {
 		const translate = await QuestTranslate.findOne({
-			where: { questId },
+			where: { questId: quest.id },
 			include: [
 				{
 					model: Sentence,
@@ -202,7 +209,8 @@ class QuestsService {
 									model: Words,
 									as: 'word'
 								}
-							]
+							],
+							order: [['position', 'ASC']]
 						}
 					]
 				},
@@ -234,44 +242,51 @@ class QuestsService {
 		const distractorWords = translate.distractor?.distractorWords?.map((dw: any) => dw.word) || [];
 		const allWords = [...correctWords, ...distractorWords];
 
-		return new QuestTranslateDTO(
+		return new QuestTranslateResponseDTO(
+			quest,
 			translate,
 			translate.correctSentence.text,
 			allWords
 		);
 	}
 
-	private async createMatchWordsQuest(data: CreateQuestData & { type: 'MATCH_WORDS' }) {
+	private async createMatchWordsQuest(data: CreateQuestData & { type: 'MATCH_WORDS' }): Promise<QuestMatchWordsResponseDTO> {
 		const quest = await Quest.create({
 			type: QuestType.MATCH_WORDS,
 			levelId: data.levelId
 		});
 
-		const matchWords = await QuestMatchWords.create({
-			questId: quest.id,
-			word: data.word,
-			translate: data.translate
-		});
+		// Create multiple quest_match_words rows from data array
+		const matchWordsRecords = await Promise.all(
+			data.data.map(item =>
+				QuestMatchWords.create({
+					questId: quest.id,
+					word: item.word,
+					translate: item.translate
+				})
+			)
+		);
 
-		return {
-			quest,
-			questData: new QuestMatchWordsDTO(matchWords)
-		};
+		return new QuestMatchWordsResponseDTO(quest, matchWordsRecords);
 	}
 
-	private async createDictationQuest(data: CreateQuestData & { type: 'DICTATION' }) {
+	private async createDictationQuest(data: CreateQuestData & { type: 'DICTATION' }): Promise<QuestDictationResponseDTO> {
+		// Strip extra characters and split into words
+		const cleanedSentence = data.correctSentence.trim();
+		const correctWords = this.stripAndSplitSentence(cleanedSentence);
+
 		// Create audio for sentence
-		const audioPath = await ttsService.synthesize(data.correctSentence);
+		const audioPath = await ttsService.synthesize(cleanedSentence);
 		const audioMedia = await mediaService.createMedia(audioPath);
 
 		// Create sentence
 		const sentence = await Sentence.create({
-			text: data.correctSentence,
+			text: cleanedSentence,
 			audioMediaId: audioMedia.id
 		});
 
 		// Create or get words
-		const wordRecords = await this.getOrCreateWords(data.correctWords);
+		const wordRecords = await this.getOrCreateWords(correctWords);
 
 		// Create sentence words
 		await Promise.all(
@@ -315,23 +330,26 @@ class QuestsService {
 		});
 
 		// Fetch full data for response
-		const questData = await this.getDictationData(quest.id);
-
-		return { quest, questData };
+		const questData = await this.getDictationData(quest);
+		return questData;
 	}
 
-	private async createTranslateQuest(data: CreateQuestData & { type: 'TRANSLATE' }) {
+	private async createTranslateQuest(data: CreateQuestData & { type: 'TRANSLATE' }): Promise<QuestTranslateResponseDTO> {
+		// Split correctSentence into words
+		const cleanedSentence = data.correctSentence.trim();
+		const correctWords = this.stripAndSplitSentence(cleanedSentence);
+
 		// Create sentence with audio
-		const audioPath = await ttsService.synthesize(data.correctSentence);
+		const audioPath = await ttsService.synthesize(cleanedSentence);
 		const audioMedia = await mediaService.createMedia(audioPath);
 
 		const sentence = await Sentence.create({
-			text: data.correctSentence,
+			text: cleanedSentence,
 			audioMediaId: audioMedia.id
 		});
 
 		// Create or get words
-		const wordRecords = await this.getOrCreateWords(data.correctWords);
+		const wordRecords = await this.getOrCreateWords(correctWords);
 
 		// Create sentence words
 		await Promise.all(
@@ -375,9 +393,17 @@ class QuestsService {
 		});
 
 		// Fetch full data for response
-		const questData = await this.getTranslateData(quest.id);
+		const questData = await this.getTranslateData(quest);
+		return questData;
+	}
 
-		return { quest, questData };
+	/**
+	 * Strip extra characters from sentence and split into words
+	 */
+	private stripAndSplitSentence(sentence: string): string[] {
+		// Remove punctuation and extra whitespace, then split
+		const cleaned = sentence.replace(/[.,!?;:"""''()]/g, ' ').replace(/\s+/g, ' ').trim();
+		return cleaned.split(' ').filter(word => word.length > 0);
 	}
 
 	private async getOrCreateWords(wordValues: string[]): Promise<Words[]> {
