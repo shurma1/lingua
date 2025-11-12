@@ -6,8 +6,7 @@ import type { Module } from './Module';
 export class Level extends Model<InferAttributes<Level>, InferCreationAttributes<Level>> {
 	declare id: CreationOptional<number>;
 	declare moduleId: ForeignKey<Module['id']>;
-	declare name: string;
-	declare questsCount: CreationOptional<number>;
+	declare icon: string;
 }
 
 Level.init(
@@ -27,15 +26,9 @@ Level.init(
 			},
 			onDelete: 'CASCADE',
 		},
-		name: {
+		icon: {
 			type: DataTypes.STRING,
 			allowNull: false,
-		},
-		questsCount: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			defaultValue: 0,
-			field: 'quests_count',
 		},
 	},
 	{
@@ -43,10 +36,6 @@ Level.init(
 		tableName: 'level',
 		timestamps: false,
 		indexes: [
-			{
-				unique: true,
-				fields: ['module_id', 'name'],
-			},
 			{
 				fields: ['module_id'],
 			},

@@ -230,7 +230,7 @@
         required: 
           - "id"
           - "moduleId"
-          - "name"
+          - "icon"
           - "questsCount"
         properties: 
           id: 
@@ -241,10 +241,10 @@
             type: "integer"
             description: "Module ID"
             example: 1
-          name: 
+          icon: 
             type: "string"
-            description: "Level name"
-            example: "Level 1"
+            description: "Level icon"
+            example: "🎯"
           questsCount: 
             type: "integer"
             description: "Total number of quests in level"
@@ -960,9 +960,9 @@
               schema: 
                 type: "object"
                 properties: 
-                  name: 
+                  icon: 
                     type: "string"
-                  questsCount: 
+                  moduleId: 
                     type: "integer"
         responses: 
           200: 
@@ -971,8 +971,6 @@
               application/json: 
                 schema: 
                   $ref: "#/components/schemas/LevelDTO"
-          400: 
-            description: "Invalid quests count"
           403: 
             description: "Admin access required"
           404: 
@@ -1014,15 +1012,12 @@
                 type: "object"
                 required: 
                   - "moduleId"
-                  - "name"
-                  - "questsCount"
+                  - "icon"
                 properties: 
                   moduleId: 
                     type: "integer"
-                  name: 
+                  icon: 
                     type: "string"
-                  questsCount: 
-                    type: "integer"
         responses: 
           201: 
             description: "Level created successfully"

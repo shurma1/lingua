@@ -72,7 +72,8 @@ class LevelsController {
 	async getLevelById(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const levelId = parseInt(req.params.levelId, 10);
-			const level = await levelsService.getLevelById(levelId);
+			const userId = req.user?.userId;
+			const level = await levelsService.getLevelById(levelId, userId);
 			res.status(200).json(level);
 		} catch (error) {
 			next(error);
@@ -95,15 +96,12 @@ class LevelsController {
 	 *             type: object
 	 *             required:
 	 *               - moduleId
-	 *               - name
-	 *               - questsCount
+	 *               - icon
 	 *             properties:
 	 *               moduleId:
 	 *                 type: integer
-	 *               name:
+	 *               icon:
 	 *                 type: string
-	 *               questsCount:
-	 *                 type: integer
 	 *     responses:
 	 *       201:
 	 *         description: Level created successfully
@@ -118,8 +116,8 @@ class LevelsController {
 	 */
 	async createLevel(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
-			const { moduleId, name, questsCount } = req.body;
-			const level = await levelsService.createLevel(moduleId, name, questsCount);
+			const { moduleId, icon } = req.body;
+			const level = await levelsService.createLevel(moduleId, icon);
 			res.status(201).json(level);
 		} catch (error) {
 			next(error);
@@ -147,9 +145,9 @@ class LevelsController {
 	 *           schema:
 	 *             type: object
 	 *             properties:
-	 *               name:
+	 *               icon:
 	 *                 type: string
-	 *               questsCount:
+	 *               moduleId:
 	 *                 type: integer
 	 *     responses:
 	 *       200:
@@ -158,8 +156,6 @@ class LevelsController {
 	 *           application/json:
 	 *             schema:
 	 *               $ref: '#/components/schemas/LevelDTO'
-	 *       400:
-	 *         description: Invalid quests count
 	 *       403:
 	 *         description: Admin access required
 	 *       404:
@@ -168,8 +164,8 @@ class LevelsController {
 	async updateLevel(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const levelId = parseInt(req.params.levelId, 10);
-			const { name, questsCount } = req.body;
-			const level = await levelsService.updateLevel(levelId, { name, questsCount });
+			const { icon, moduleId } = req.body;
+			const level = await levelsService.updateLevel(levelId, { icon, moduleId });
 			res.status(200).json(level);
 		} catch (error) {
 			next(error);

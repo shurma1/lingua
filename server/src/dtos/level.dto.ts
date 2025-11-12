@@ -24,7 +24,7 @@ import type { UserLevel } from '../models/entities/UserLevel';
  *       required:
  *         - id
  *         - moduleId
- *         - name
+ *         - icon
  *         - questsCount
  *       properties:
  *         id:
@@ -35,10 +35,10 @@ import type { UserLevel } from '../models/entities/UserLevel';
  *           type: integer
  *           description: Module ID
  *           example: 1
- *         name:
+ *         icon:
  *           type: string
- *           description: Level name
- *           example: Level 1
+ *           description: Level icon
+ *           example: "🎯"
  *         questsCount:
  *           type: integer
  *           description: Total number of quests in level
@@ -61,19 +61,19 @@ export class UserProgressDTO {
 export class LevelDTO {
 	id: number;
 	moduleId: number;
-	name: string;
+	icon: string;
 	questsCount: number;
 	userProgress?: UserProgressDTO;
 
-	constructor(level: Level, userLevel?: UserLevel) {
+	constructor(level: Level, questsCount: number, userLevel?: UserLevel) {
 		this.id = level.id;
 		this.moduleId = level.moduleId;
-		this.name = level.name;
-		this.questsCount = level.questsCount;
+		this.icon = level.icon;
+		this.questsCount = questsCount;
 		this.userProgress = userLevel ? new UserProgressDTO(userLevel) : undefined;
 	}
 
-	static fromLevel(level: Level, userLevel?: UserLevel): LevelDTO {
-		return new LevelDTO(level, userLevel);
+	static fromLevel(level: Level, questsCount: number, userLevel?: UserLevel): LevelDTO {
+		return new LevelDTO(level, questsCount, userLevel);
 	}
 }
