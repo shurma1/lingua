@@ -3,7 +3,7 @@ import {Platform} from "@WebApp/types";
 import BackButton from "./BackButton";
 import HapticFeedback from "./HapticFeedback";
 
-const WebAppRoot = window.Telegram.WebApp;
+const WebAppRoot = window.WebApp;
 
 class WebApp {
 	
@@ -12,14 +12,74 @@ class WebApp {
 	public initData: string;
 	
 	constructor() {
-		const platoform = this.Platform;
-		this.HapticFeedback = new HapticFeedback(platoform);
+		const platform = this.Platform;
+		this.HapticFeedback = new HapticFeedback(platform);
 		this.BackButton = new BackButton();
 		this.initData = WebAppRoot.initData;
 	}
 	
+	public shareMaxContent(text: string, link: string) {
+		WebAppRoot.shareMaxContent(text, link);
+	}
+	
+	public shareContent(text: string, link: string) {
+		WebAppRoot.shareContent(text, link);
+	}
+	
+	public openLink(url: string) {
+		WebAppRoot.openLink(url);
+	}
+	
+	public openMaxLink(url: string) {
+		WebAppRoot.openMaxLink(url);
+	}
+	
+	public requestContact() {
+		WebAppRoot.requestContact();
+	}
+	
+	public enableClosingConfirmation() {
+		WebAppRoot.enableClosingConfirmation();
+	}
+	
+	public disableClosingConfirmation() {
+		WebAppRoot.disableClosingConfirmation();
+	}
+	
+	public downloadFile(url: string, fileName: string) {
+		WebAppRoot.downloadFile(url, fileName);
+	}
+	
+	public openCodeReader(fileSelect?: boolean) {
+		WebAppRoot.openCodeReader(fileSelect);
+	}
+	
+	public ready() {
+		WebAppRoot.ready();
+	}
+	
+	public close() {
+		WebAppRoot.close();
+	}
+	
 	get Platform(): Platform {
 		return WebAppRoot.platform as Platform;
+	}
+	
+	get ScreenCapture() {
+		return WebAppRoot.ScreenCapture;
+	}
+	
+	get DeviceStorage() {
+		return WebAppRoot.DeviceStorage;
+	}
+	
+	get SecureStorage() {
+		return WebAppRoot.SecureStorage;
+	}
+	
+	get BiometricManager() {
+		return WebAppRoot.BiometricManager;
 	}
 }
 

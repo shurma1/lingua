@@ -20,19 +20,19 @@ class HapticFeedback {
 		return HAPTIC_AVAILABLE_PLATFORMS.includes(this.platform);
 	}
 	
-	impactOccurred(impactStyle: ImpactStyle, force = false) {
+	impactOccurred(impactStyle: ImpactStyle, force = false, disableVibrationFallback = false) {
 		if(! force && ! this.isHapticAvailable) return;
-		WebAppRoot.HapticFeedback.impactOccurred(impactStyle);
+		WebAppRoot.HapticFeedback.impactOccurred(impactStyle, disableVibrationFallback);
 	}
 	
-	notificationOccurred(notificationType: NotificationType, force = false) {
+	notificationOccurred(notificationType: NotificationType, force = false, disableVibrationFallback = false) {
 		if(! force && ! this.isHapticAvailable) return;
-		WebAppRoot.HapticFeedback.notificationOccurred(notificationType);
+		WebAppRoot.HapticFeedback.notificationOccurred(notificationType, disableVibrationFallback);
 	}
 	
-	selectionChanged(force = false) {
+	selectionChanged(force = false, disableVibrationFallback = false) {
 		if(! force && ! this.isHapticAvailable) return;
-		WebAppRoot.HapticFeedback.selectionChanged();
+		WebAppRoot.HapticFeedback.selectionChanged(disableVibrationFallback);
 	}
 }
 

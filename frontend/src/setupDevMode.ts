@@ -20,17 +20,15 @@ export const getCloseHandler = () => closeHandler || (() => {});
 
 if (import.meta.env.DEV) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const telegramWindow = window as any;
+	const maxWindow = window as any;
 
-	if (!telegramWindow.Telegram) {
-		telegramWindow.Telegram = {};
+	if (!maxWindow.WebApp) {
+		const mockAPI = createMockWebAppAPI(
+			(message, duration) => getNotificationHandler()(message, duration),
+			(isVisible) => getBackButtonChangeHandler()(isVisible),
+			() => getCloseHandler()(),
+		);
+
+		maxWindow.WebApp = mockAPI;
 	}
-
-	const mockAPI = createMockWebAppAPI(
-		(message, duration) => getNotificationHandler()(message, duration),
-		(isVisible) => getBackButtonChangeHandler()(isVisible),
-		() => getCloseHandler()(),
-	);
-
-	telegramWindow.Telegram.WebApp = mockAPI;
 }
