@@ -22,13 +22,12 @@ if (import.meta.env.DEV) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const maxWindow = window as any;
 
-	if (!maxWindow.WebApp) {
-		const mockAPI = createMockWebAppAPI(
-			(message, duration) => getNotificationHandler()(message, duration),
-			(isVisible) => getBackButtonChangeHandler()(isVisible),
-			() => getCloseHandler()(),
-		);
+	console.log('[setupDevMode] Creating mock WebApp API...');
+	const mockAPI = createMockWebAppAPI(
+		(message, duration) => getNotificationHandler()(message, duration),
+		(isVisible) => getBackButtonChangeHandler()(isVisible),
+		() => getCloseHandler()(),
+	);
 
-		maxWindow.WebApp = mockAPI;
-	}
+	maxWindow.WebApp = mockAPI;
 }

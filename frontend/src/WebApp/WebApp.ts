@@ -3,19 +3,30 @@ import {Platform} from "@WebApp/types";
 import BackButton from "./BackButton";
 import HapticFeedback from "./HapticFeedback";
 
-const WebAppRoot = window.WebApp;
+// Lazy initialization to support dev mode mock
+let _webAppRoot: any = null;
+const getWebAppRoot = () => {
+	if (!_webAppRoot) {
+		_webAppRoot = window.WebApp;
+	}
+	return _webAppRoot;
+};
+
+const WebAppRoot = getWebAppRoot();
 
 class WebApp {
 	
 	public HapticFeedback: HapticFeedback;
 	public BackButton: BackButton;
-	public initData: string;
 	
 	constructor() {
 		const platform = this.Platform;
 		this.HapticFeedback = new HapticFeedback(platform);
 		this.BackButton = new BackButton();
-		this.initData = WebAppRoot.initData;
+	}
+	
+	get initData(): string {
+		return getWebAppRoot().initData;
 	}
 	
 	public shareMaxContent(text: string, link: string) {

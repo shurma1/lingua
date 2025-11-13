@@ -27,7 +27,7 @@ const CoursePage = () => {
 	}, [user?.languageId, fetchModulesByLanguage]);
 
 	// Get the current module or fallback to the first module
-	const currentModule = currentModuleId 
+	const currentModule = currentModuleId
 		? modules.find(m => m.id === currentModuleId)
 		: modules[0];
 
@@ -55,7 +55,7 @@ const CoursePage = () => {
 					<Levels levels={levels}/>
 				</div>
 				<div className={styles.footer}>
-					<SquareButton onClick={handleOpenDetail} backgroundColor="var(--accent-color)">
+					<SquareButton onClick={handleOpenDetail} backgroundColor="var(--accent-color)" borderColor="var(--sub-accent-color)">
 						{currentModule ? (
 							<span>Модуль: {currentModule.icon && <span>{currentModule.icon}</span>} {currentModule.name}</span>
 						) : (

@@ -25,10 +25,10 @@ export const SquareButton: React.FC<SquareButtonProps> = ({
 			className={cls(styles.squareButton, [styles.bordered, type === "bordered"])}
 			onClick={onClick}
 			style={{
-				...(backgroundColor && { backgroundColor }),
-				...(borderColor && { borderColor }),
+				"--button-border-color": borderColor,
+				"--button-background-color": backgroundColor,
 				...(color && { color }),
-			}}
+			} as React.CSSProperties}
 		>
 			{children}
 		</button>

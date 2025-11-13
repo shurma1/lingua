@@ -1,11 +1,23 @@
-.page {
-	padding: 20px;
-	min-height: calc(100vh - 100px);
+.container {
+  height: calc(100vh - var(--tabbar-height));
+  position: relative;
 }
 
-.container {
-	max-width: 600px;
-	margin: 0 auto;
+:global(.dev) .container {
+  height: calc(100vh - var(--tabbar-height) - var(--dev-header-height));
+}
+
+.content {
+  padding: var(--padding-s);
+  position: relative;
+  max-width: 600px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  filter: blur(4px);
 }
 
 .title {
@@ -13,10 +25,67 @@
 	font-weight: 700;
 	margin-bottom: 16px;
 	color: var(--accent-color);
+    text-align: center;
+}
+
+.exp {
+  color: var(--red-color);
 }
 
 .description {
 	font-size: 16px;
 	color: var(--innactive-color);
 	line-height: 1.5;
+	margin-bottom: 24px;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.button {
+  width: 100%;
+}
+
+.overlay {
+	position: absolute;
+	width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+    z-index: 10;
+}
+
+.overlayContent {
+  text-align: center;
+  color: var(--text-color);
+  filter: none;
+  padding: var(--padding-s);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lockAnimation {
+  width: 30%;
+}
+
+.expLabel {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red-color);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.expValue {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  line-height: 1;
 }
