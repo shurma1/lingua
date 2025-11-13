@@ -77,7 +77,7 @@ export const createMockWebAppAPI = (
 	return {
 		platform: "web",
 		version: "25.9.16",
-		initData: "auth_date%3D1733485316394%26query_id%3D158b120b-7aa3-4a0f-a198-52ace06d0658%26user%3D%257B%2522language_code%2522%253A%2522ru%2522%252C%2522first_name%2522%253A%2522%25D0%2592%25D0%25B0%25D1%2581%25D1%258F%2522%252C%2522last_name%2522%253A%2522%2522%252C%2522photo_url%2522%253Anull%252C%2522username%2522%253Anull%252C%2522id%2522%253A400%257D%26hash%3Df982406d90b118d8e90e26b33c5cec0cadd3fc30354f2955c75ff8e3d14d130d",
+		initData: "chat=%7B%22id%22%3A114466461%2C%22type%22%3A%22DIALOG%22%7D&hash=c9f4024356c00654bf01c747d51d6a93c7f1bd29f970e760289e9ecf8ed649bd&auth_date=1763070764&query_id=ca042ff9-4a36-496a-a34e-2f34c695b5cc&user=%7B%22id%22%3A45106827%2C%22first_name%22%3A%22%D0%90%D0%BB%D0%B8%D1%81%D0%B0%22%2C%22last_name%22%3A%22%22%2C%22username%22%3Anull%2C%22language_code%22%3A%22ru%22%2C%22photo_url%22%3A%22https%3A%2F%2Fi.oneme.ru%2Fi%3Fr%3DBTGBPUwtwgYUeoFhO7rESmr8oG_VfGWjcAfqjUJkNmANIptrQijXqnQfKDoLcQt8nJs%22%7D&ip=95.139.154.156",
 		initDataUnsafe: {
 			query_id: "158b120b-7aa3-4a0f-a198-52ace06d0658",
 			auth_date: 1733485316394,
