@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect, useState, useRef} from "react";
 
-import {Button, Typography} from "@maxhub/max-ui";
+import Button from "@components/ui/Button";
+import {Typography} from "@maxhub/max-ui";
 import styles from "@styles/components/OnBoarding.module.scss";
 import cls from "@utils/cls";
 
@@ -81,6 +82,7 @@ const OnBoarding: FC<OwnProps> = ({
 					disabled={!isButtonActive}
 					size="large"
 					className={styles.button}
+					containerClasses={styles.containerButton}
 					onClick={onButtonClick}
 					
 				>

@@ -66,6 +66,10 @@
   width: 100%;
 }
 
+.containerButton {
+  width: 100%;
+}
+
 
 :global(.dev) .onboarding {
   max-height: calc(100vh - var(--dev-header-height));
