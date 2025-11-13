@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from "react";
+import { FC } from "react";
 
 import Avatar from "@components/ui/Avatar";
 import Icon from "@components/ui/Icon";

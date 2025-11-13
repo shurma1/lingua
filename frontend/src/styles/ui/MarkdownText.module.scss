@@ -1,0 +1,89 @@
+.markdownText {
+  color: var(--text-primary-color);
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 16px 0 8px 0;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-primary-color);
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
+
+  h5 {
+    font-size: 16px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
+  p {
+    margin: 8px 0;
+  }
+
+  strong, b {
+    font-weight: 700;
+  }
+
+  em, i {
+    font-style: italic;
+  }
+
+  u {
+    text-decoration: underline;
+  }
+
+  div {
+    margin: 4px 0;
+  }
+
+  br {
+    display: block;
+    content: "";
+    margin: 4px 0;
+  }
+
+  &_preview {
+    display: inline;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-secondary-color);
+    
+    // В preview режиме все элементы inline
+    * {
+      display: inline;
+      margin: 0;
+      padding: 0;
+    }
+
+    strong, b {
+      font-weight: 700;
+    }
+
+    em, i {
+      font-style: italic;
+    }
+
+    u {
+      text-decoration: underline;
+    }
+  }
+}

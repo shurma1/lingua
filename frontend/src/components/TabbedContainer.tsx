@@ -3,8 +3,8 @@ import {ComponentType, useState} from "react";
 import styles from "@styles/components/TabbedContainer.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
 
-import PageContainer from "./ui/PageContainer";
 import TopBar from "./TopBar";
+import PageContainer from "./ui/PageContainer";
 
 export interface TabConfig {
 	id: string;

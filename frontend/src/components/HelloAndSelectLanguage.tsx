@@ -3,6 +3,7 @@ import {FC, useCallback, useState, useEffect} from "react";
 import LanguagesBackground from "@components/LanguagesBackground";
 import {LanguageSelector} from "@components/LanguageSelector";
 import OnBoarding from "@components/OnBoarding";
+
 import { useLanguages, useLanguagesMutations } from "@/hooks/useLanguages";
 import { useUserMutations } from "@/hooks/useUser";
 
@@ -48,7 +49,7 @@ const HelloAndSelectLanguage: FC<OwnProps> = ({onClose}) => {
 				setShowBackgroundAnimation(false);
 			}, ONBOARDING_ANIMATION_DURATION);
 		}
-	}, [step])
+	}, [step]);
 	
 	const handleButtonClick = useCallback(async () => {
 		switch (step) {

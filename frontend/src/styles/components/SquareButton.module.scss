@@ -1,0 +1,44 @@
+.squareButton {
+  --button-border-color: var(--border-color);
+  --button-background-color: var(--background-primary-color);
+
+  box-shadow: 0 4px 0 var(--button-border-color);
+
+  background: var(--button-background-color);
+  color: var(--text-primary-color);
+
+  border: none;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  padding: var(--padding-s);
+
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.25rem;
+
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.05s ease;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:active {
+    box-shadow: 0 0 0 var(--button-border-color);
+    transform: translateY(4px);
+  }
+}
+
+.active {
+  --button-border-color: var(--accent-color);
+  --button-background-color: var(--background-secondary-color);
+}
+.bordered {
+  border: 2px solid var(--button-border-color);
+}

@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
+
 import { useFriendsStore } from "@store/friendsStore";
+
 import { apiClient } from "@/http";
 import { FriendDTO, FriendInviteDTO, FriendshipDTO } from "@/types/api";
 

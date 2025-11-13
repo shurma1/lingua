@@ -28,6 +28,7 @@ export const useLessonsStore = create<LessonsState>((set) => ({
 	})),
 	
 	removeLesson: (moduleId) => set((state) => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { [moduleId]: _, ...rest } = state.lessonsByModule;
 		return { lessonsByModule: rest, error: null };
 	}),
@@ -36,8 +37,8 @@ export const useLessonsStore = create<LessonsState>((set) => ({
 	
 	setError: (error) => set({ error, isLoading: false }),
 	
-	clearLessons: () => set({ 
-		lessonsByModule: {}, 
-		error: null, 
+	clearLessons: () => set({
+		lessonsByModule: {},
+		error: null,
 	}),
 }));

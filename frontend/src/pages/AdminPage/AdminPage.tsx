@@ -1,7 +1,7 @@
 import LanguagePanel from "@components/AdminPanel/LanguagePanel";
-import ModulePanel from "@components/AdminPanel/ModulePanel";
 import LessonPanel from "@components/AdminPanel/LessonPanel";
 import LevelPanel from "@components/AdminPanel/LevelPanel";
+import ModulePanel from "@components/AdminPanel/ModulePanel";
 import QuestPanel from "@components/AdminPanel/QuestPanel";
 import TabbedContainer, { TabConfig } from "@components/TabbedContainer";
 

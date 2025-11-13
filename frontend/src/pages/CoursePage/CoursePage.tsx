@@ -1,5 +1,12 @@
-import { Levels } from "@components/Levels";
+import { useEffect } from "react";
+
 import Header from "@components/Header";
+import { Levels } from "@components/Levels";
+import { SquareButton } from "@components/SquareButton";
+
+
+import { useModules, useModulesMutations } from "@/hooks/useModules";
+import { useAuthStore } from "@/store/authStore";
 
 import { usePopup } from "../../contexts/PopupContext";
 import DetailPage from "../DetailPage/DetailPage";
@@ -8,6 +15,21 @@ import styles from "./CoursePage.module.scss";
 
 const CoursePage = () => {
 	const { openPopup } = usePopup();
+	const { user } = useAuthStore();
+	const { modules, currentModuleId } = useModules();
+	const { fetchModulesByLanguage } = useModulesMutations();
+
+	// Fetch modules when user's language changes
+	useEffect(() => {
+		if (user?.languageId) {
+			fetchModulesByLanguage(user.languageId);
+		}
+	}, [user?.languageId, fetchModulesByLanguage]);
+
+	// Get the current module or fallback to the first module
+	const currentModule = currentModuleId 
+		? modules.find(m => m.id === currentModuleId)
+		: modules[0];
 
 	const handleOpenDetail = () => {
 		openPopup(<DetailPage />);
@@ -28,7 +50,20 @@ const CoursePage = () => {
 	return (
 		<div className={styles.container}>
 			<Header />
-			<Levels levels={levels}/>
+			<div className={styles.content}>
+				<div className={styles.levelsWrapper}>
+					<Levels levels={levels}/>
+				</div>
+				<div className={styles.footer}>
+					<SquareButton onClick={handleOpenDetail} backgroundColor="var(--accent-color)">
+						{currentModule ? (
+							<span>Модуль: {currentModule.icon && <span>{currentModule.icon}</span>} {currentModule.name}</span>
+						) : (
+							"Модуль"
+						)}
+					</SquareButton>
+				</div>
+			</div>
 		</div>
 	);
 };

@@ -1,0 +1,329 @@
+.questPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--padding-s);
+  background-color: var(--background-primary-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--margin-s);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.headerControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+.headerSelectors {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.languageSelect {
+  width: 100%;
+  flex: 1;
+}
+
+.moduleSelect {
+  width: 100%;
+  flex: 1;
+}
+
+.levelSelect {
+  width: 100%;
+  flex: 1;
+}
+
+.addButton {
+  flex-shrink: 0;
+}
+
+.tableContainer {
+  flex: 1;
+  overflow: auto;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--transition-ease-base-fast);
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+
+  &_delete {
+    background-color: var(--red-color);
+  }
+
+  &_view {
+    background-color: var(--blue-color, #007AFF);
+  }
+}
+
+// Form styles
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selectError {
+  border-radius: 8px;
+  
+  & > div {
+    border-color: var(--red-color);
+  }
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary-color);
+}
+
+.input {
+  padding: 12px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--background-secondary-color);
+  color: var(--text-primary-color);
+  font-size: 16px;
+  transition: border-color var(--transition-ease-base-fast);
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-color);
+  }
+
+  &::placeholder {
+    color: var(--text-secondary-color);
+  }
+
+  &_error {
+    border-color: var(--red-color);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 4px;
+  color: var(--red-color);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+// Delete confirmation styles
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 0;
+
+  p {
+    margin: 0;
+    color: var(--text-primary-color);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
+.questInfo {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: var(--background-secondary-color);
+  text-align: center;
+
+  strong {
+    color: var(--text-primary-color);
+    font-size: 18px;
+  }
+}
+
+// Empty state
+.emptyState {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+
+  p {
+    color: var(--text-secondary-color);
+    font-size: 16px;
+    text-align: center;
+  }
+}
+
+// Word pairs table
+.addPairButton {
+  align-self: flex-start;
+}
+
+.wordPairsTable {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background-color: var(--background-secondary-color);
+
+    th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--border-color);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background-color: var(--background-secondary-color);
+      }
+    }
+
+    td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-primary-color);
+
+      &:last-child {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.removeButton {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--red-color);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--transition-ease-base-fast);
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+// Quest view popup
+.questView {
+  padding: 20px 0;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.questDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary-color);
+  }
+
+  span {
+    font-size: 14px;
+    color: var(--text-secondary-color);
+    padding: 8px 12px;
+    background-color: var(--background-secondary-color);
+    border-radius: 6px;
+  }
+}
+
+.wordsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.wordChip {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: var(--background-secondary-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-primary-color);
+}

@@ -1,5 +1,7 @@
 import { useState, useCallback } from "react";
+
 import { useLeaderboardStore } from "@store/leaderboardStore";
+
 import { apiClient } from "@/http";
 import { LeaderboardDTO, LeaderboardType } from "@/types/api";
 

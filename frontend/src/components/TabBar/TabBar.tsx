@@ -1,7 +1,5 @@
 import {useRef, useState} from "react";
 
-import React, { FC, ReactElement, ReactNode } from "react";
-
 import ColoredLottie from "@components/ui/ColoredLottie";
 import styles from "@styles/components/TabBar/TabBar.module.scss";
 import {ImpactStyle} from "@WebApp/types/ImpactStyle";

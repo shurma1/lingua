@@ -9,6 +9,9 @@ export interface LevelItem {
   color?: "green" | "blue" | "purple" | "red" | "gold";
   onClick?: () => void;
   children?: React.ReactNode;
+  backgroundColor?: string;
+  borderColor?: string;
+  textColor?: string;
 }
 
 interface LevelsProps {
@@ -25,8 +28,10 @@ export const Levels: React.FC<LevelsProps> = ({ levels }) => {
 				>
 					<LevelButton
 						level={level.level}
-						color={level.color}
 						onClick={level.onClick}
+						backgroundColor={level.backgroundColor}
+						borderColor={level.borderColor}
+						textColor={level.textColor}
 					>
 						{level.children}
 					</LevelButton>

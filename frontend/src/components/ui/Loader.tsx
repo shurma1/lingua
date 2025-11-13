@@ -39,7 +39,7 @@ const Loader = forwardRef<LoaderRef, LoaderProps>((
 		
 		const introDuration = ((FIRST_ANIMATION_SEGMENT[1] - FIRST_ANIMATION_SEGMENT[0]) / FRAME_RATE) * 1000;
 		const timer = setTimeout(() => {
-			console.log(13)
+			console.log(13);
 			setIsIntroComplete(true);
 			onSectionAnimationEnd();
 		}, introDuration);

@@ -1,4 +1,4 @@
-import {FC} from "react";
+import React from "react";
 
 import VirtualList from "@components/ui/VirtualList";
 import cls from "@utils/cls";

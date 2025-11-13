@@ -4,7 +4,7 @@
   width: 80px;
   height: 65px;
   border-radius: 50%;
-  background: #58cc02;
+  background: var(--accent-color);
   border: none;
   cursor: pointer;
   font-weight: 700;
@@ -12,84 +12,14 @@
   color: white;
   text-align: center;
   text-decoration: none;
-  box-shadow: 0 8px 0 #48a547;
+  box-shadow: 0 8px 0 var(--sub-accent-color);
   transition: all 0.05s ease;
   outline: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  &:hover {
-    background: #5cd604;
-  }
-
   &:active {
-    box-shadow: 0 3px 0 #48a547;
+    box-shadow: 0 3px 0 var(--sub-accent-color);
     transform: translateY(5px);
-  }
-}
-
-// Color variants
-.green {
-  background: #58cc02;
-  box-shadow: 0 8px 0 #48a547;
-
-  &:hover {
-    background: #5cd604;
-  }
-
-  &:active {
-    box-shadow: 0 3px 0 #48a547;
-  }
-}
-
-.blue {
-  background: #1cb0f6;
-  box-shadow: 0 8px 0 #1899d6;
-
-  &:hover {
-    background: #1ebeff;
-  }
-
-  &:active {
-    box-shadow: 0 3px 0 #1899d6;
-  }
-}
-
-.purple {
-  background: #ce82ff;
-  box-shadow: 0 8px 0 #a568cc;
-
-  &:hover {
-    background: #d89bff;
-  }
-
-  &:active {
-    box-shadow: 0 3px 0 #a568cc;
-  }
-}
-
-.red {
-  background: #ff4b4b;
-  box-shadow: 0 8px 0 #cc3c3c;
-
-  &:hover {
-    background: #ff5e5e;
-  }
-
-  &:active {
-    box-shadow: 0 3px 0 #cc3c3c;
-  }
-}
-
-.gold {
-  background: #ffc800;
-  box-shadow: 0 8px 0 #cc9f00;
-
-  &:hover {
-    background: #ffd633;
-  }
-
-  &:active {
-    box-shadow: 0 3px 0 #cc9f00;
   }
 }

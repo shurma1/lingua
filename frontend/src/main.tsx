@@ -6,6 +6,7 @@ import "virtual:svg-icons-register";
 
 import App from "./App";
 
+// eslint-disable-next-line import/order
 import {HistoryProvider} from "@contexts/HistoryContext";
 
 import "./styles/main.scss";
