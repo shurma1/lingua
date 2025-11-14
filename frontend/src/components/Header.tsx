@@ -1,18 +1,29 @@
 import { FC } from "react";
 
+import LanguageSelect from "@pages/LanguageSelect/LanguageSelect";
+
 import { useLanguages } from "@/hooks/useLanguages";
 import { useUser } from "@/hooks/useUser";
 import { formatNumber } from "@/utils/formatNumber";
 
+import { usePopup } from "../contexts/PopupContext";
 import styles from "../styles/components/Header.module.scss";
+
 
 import Icon from "./ui/Icon";
 
 const Header: FC = () => {
 	const { user } = useUser();
 	const { languages } = useLanguages();
+	const { openPopup } = usePopup();
 
-	const selectedLanguage = languages.find((lang) => lang.id === user?.languageId);
+	const handleOpenLanguages = () => {
+		openPopup(<LanguageSelect />);
+	};
+    
+	const selectedLanguage = languages.find((lang) => {
+        return Number(lang.id) === Number(user?.languageId);
+    });
 
 	if (!user) {
 		return null;
@@ -20,11 +31,12 @@ const Header: FC = () => {
 
 	return (
 		<header className={styles.container}>
-			<div className={styles.language}>
-				{selectedLanguage?.icon && (
-					<span className={styles.languageIcon}>{selectedLanguage.icon}</span>
-				)}
-			</div>
+			<button
+				onClick={handleOpenLanguages}
+				className={styles.language}
+			>
+				{selectedLanguage?.icon || "🌐"}
+			</button>
 
 			<div className={styles.stats}>
 				<div className={styles.stat}>
