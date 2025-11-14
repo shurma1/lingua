@@ -31,9 +31,17 @@ export const QuestTranslate: React.FC<QuestTranslateProps> = ({
 		mediaId: word.mediaId,
 	}));
 
+	const normalizeText = (text: string): string => {
+		return text
+			.toLowerCase()
+			.replace(/[^\p{L}\p{N}\s]/gu, "")
+			.replace(/\s+/g, " ")
+			.trim();
+	};
+
 	const handleCheckAnswer = () => {
-		const userAnswer = currentSentence.trim();
-		const correctAnswer = quest.correctSentence.trim();
+		const userAnswer = normalizeText(currentSentence);
+		const correctAnswer = normalizeText(quest.correctSentence);
 		
 		if (userAnswer === correctAnswer) {
 			setSentenceType("success");
