@@ -37,3 +37,4 @@ server/.vscode/*
 server/!.vscode/extensions.json
 server/.idea
 server/.DS_Store
+frontend/src/components/development/mockWebAppAPI.ts
