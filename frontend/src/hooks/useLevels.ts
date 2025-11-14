@@ -20,7 +20,7 @@ export const useLevels = () => {
 export const useLevelsMutations = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { setLevels, addLevel, updateLevel, removeLevel, updateLevelProgress } = useLevelsStore();
+	const { setLevels, addLevel, updateLevel, removeLevel } = useLevelsStore();
 
 	const fetchLevelsByModule = useCallback(async (moduleId: number) => {
 		setIsLoading(true);
