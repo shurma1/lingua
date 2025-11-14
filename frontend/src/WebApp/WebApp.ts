@@ -3,16 +3,17 @@ import {Platform} from "@WebApp/types";
 import BackButton from "./BackButton";
 import HapticFeedback from "./HapticFeedback";
 
-// Lazy initialization to support dev mode mock
-let _webAppRoot: any = null;
-const getWebAppRoot = () => {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-expect-error
+let _webAppRoot: MAX.WebApp = null;
+const getWebAppRoot = (): MAX.WebApp => {
 	if (!_webAppRoot) {
 		_webAppRoot = window.WebApp;
 	}
 	return _webAppRoot;
 };
 
-const WebAppRoot = getWebAppRoot();
+const WebAppRoot = window.WebApp;
 
 class WebApp {
 	
@@ -30,11 +31,11 @@ class WebApp {
 	}
 	
 	public shareMaxContent(text: string, link: string) {
-		WebAppRoot.shareMaxContent(text, link);
+		WebAppRoot.shareMaxContent({text, link});
 	}
 	
 	public shareContent(text: string, link: string) {
-		WebAppRoot.shareContent(text, link);
+		WebAppRoot.shareContent({text, link});
 	}
 	
 	public openLink(url: string) {

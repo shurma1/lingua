@@ -1,13 +1,12 @@
 import {FC, useEffect, useState} from "react";
 
 import {LanguageSelector} from "@components/LanguageSelector";
-import {Button, Typography} from "@maxhub/max-ui";
-
 import {usePopup} from "@contexts/PopupContext";
+
+import Popup from "@/components/ui/Popup";
 import {useLanguages, useLanguagesMutations, useUserMutations, useUser} from "@/hooks";
 
 import styles from "./LanguageSelect.module.scss";
-import Popup from "@/components/ui/Popup";
 
 const LanguageSelect: FC = () => {
 	const { fetchLanguages } = useLanguagesMutations();
@@ -52,8 +51,6 @@ const LanguageSelect: FC = () => {
 		<Popup title="Выбор языка" buttonText="Применить" onButtonClick={handleButtonClick} buttonDisabled={!selectedLanguage || selectedLanguage === String(user?.languageId)}>
 			<div className={styles.wrapper}>
 				<div className={styles.languageSelect}>
-					<Typography.Headline variant="large-strong">Изменить язык:</Typography.Headline>
-					<Typography.Body>В этом popup-окне вы можете изменить язык: </Typography.Body>
 					{langSelector}
 				</div>
 			</div>

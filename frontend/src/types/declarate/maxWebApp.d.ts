@@ -30,8 +30,8 @@ declare global {
 			disableClosingConfirmation(): void;
 			openLink(url: string): void;
 			openMaxLink(url: string): void;
-			shareContent(text: string, link: string): void;
-			shareMaxContent(text: string, link: string): void;
+			shareContent({text: string, link: string}): void;
+			shareMaxContent({text: string, link: string}): void;
 			downloadFile(url: string, fileName: string): void;
 			openCodeReader(fileSelect?: boolean): void;
 		}

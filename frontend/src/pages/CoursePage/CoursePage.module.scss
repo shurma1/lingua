@@ -5,8 +5,6 @@
 }
 
 .container {
-	max-width: 600px;
-	margin: 0 auto;
 	height: calc(100vh - var(--tabbar-height));
 	display: flex;
 	flex-direction: column;
@@ -44,12 +42,12 @@
 	overflow-x: hidden;
 
 
-    
+
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
     display: none;
   }
-  
+
   /* Hide scrollbar for IE, Edge and Firefox */
   -ms-overflow-style: none;
   scrollbar-width: none;

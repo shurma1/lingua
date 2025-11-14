@@ -73,15 +73,15 @@ export const createMockWebAppAPI = (
 ): MockWebAppAPI => {
 	let backButtonVisible = false;
 	let screenCaptureEnabled = false;
-
+	
 	return {
 		platform: "web",
 		version: "25.9.16",
-		initData: "hash=8c659197b32c4eab9224032c6e85058e362de352540a32ccb11d0198a5722515&chat=%7B%22id%22%3A8036181%2C%22type%22%3A%22DIALOG%22%7D&ip=95.156.206.143&user=%7B%22id%22%3A68699971%2C%22first_name%22%3A%22%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80%22%2C%22last_name%22%3A%22%D0%9C%D0%B0%D1%80%D1%82%D1%8B%D0%BD%D0%B5%D0%BD%D0%BA%D0%BE%22%2C%22username%22%3Anull%2C%22language_code%22%3A%22ru%22%2C%22photo_url%22%3A%22https%3A%2F%2Fi.oneme.ru%2Fi%3Fr%3DBTGBPUwtwgYUeoFhO7rESmr8SRtXugA9CwIEFRkb7PpRFaZBVzvOAthNPjIn4_dI3n0%22%7D&query_id=2dcfc2a7-7f14-4723-bc3c-4ce51d9eacdd&auth_date=1763120831",
+		initData: "chat=%7B%22id%22%3A114466461%2C%22type%22%3A%22DIALOG%22%7D&hash=c9f4024356c00654bf01c747d51d6a93c7f1bd29f970e760289e9ecf8ed649bd&auth_date=1763070764&query_id=ca042ff9-4a36-496a-a34e-2f34c695b5cc&user=%7B%22id%22%3A45106827%2C%22first_name%22%3A%22%D0%90%D0%BB%D0%B8%D1%81%D0%B0%22%2C%22last_name%22%3A%22%22%2C%22username%22%3Anull%2C%22language_code%22%3A%22ru%22%2C%22photo_url%22%3A%22https%3A%2F%2Fi.oneme.ru%2Fi%3Fr%3DBTGBPUwtwgYUeoFhO7rESmr8oG_VfGWjcAfqjUJkNmANIptrQijXqnQfKDoLcQt8nJs%22%7D&ip=95.139.154.156",
 		initDataUnsafe: {
-			query_id: "bded064f-ebb7-470f-a6df-48a1f439bf10",
-			auth_date: 1763120480,
-			hash: "5531a1f324bf389f707bf5f4f9ac50c6b7d3855bf04d7e2954a45452ae5e5ffa",
+			query_id: "158b120b-7aa3-4a0f-a198-52ace06d0658",
+			auth_date: 1733485316394,
+			hash: "f982406d90b118d8e90e26b33c5cec0cadd3fc30354f2955c75ff8e3d14d130d",
 			user: {
 				id: 400,
 				first_name: "Вася",
@@ -89,7 +89,7 @@ export const createMockWebAppAPI = (
 				language_code: "ru",
 			},
 		},
-
+		
 		BackButton: {
 			get isVisible() {
 				return backButtonVisible;
@@ -118,7 +118,7 @@ export const createMockWebAppAPI = (
 				}
 			},
 		},
-
+		
 		HapticFeedback: {
 			impactOccurred(style: string, disableVibrationFallback?: boolean) {
 				onNotification(`Haptic: impact (${style}), fallback=${!disableVibrationFallback}`, 1000);
@@ -130,7 +130,7 @@ export const createMockWebAppAPI = (
 				onNotification(`Haptic: selection changed, fallback=${!disableVibrationFallback}`, 1000);
 			},
 		},
-
+		
 		ScreenCapture: {
 			get isScreenCaptureEnabled() {
 				return screenCaptureEnabled;
@@ -144,7 +144,7 @@ export const createMockWebAppAPI = (
 				onNotification("ScreenCapture disabled (screenshots allowed)", 1000);
 			},
 		},
-
+		
 		DeviceStorage: {
 			setItem(key: string, value: string) {
 				deviceStorageData.set(key, value);
@@ -164,7 +164,7 @@ export const createMockWebAppAPI = (
 				onNotification("DeviceStorage.clear()", 1000);
 			},
 		},
-
+		
 		SecureStorage: {
 			setItem(key: string, value: string) {
 				secureStorageData.set(key, value);
@@ -180,7 +180,7 @@ export const createMockWebAppAPI = (
 				onNotification(`SecureStorage.removeItem("${key}")`, 1000);
 			},
 		},
-
+		
 		BiometricManager: {
 			isInited: false,
 			isBiometricAvailable: false,
@@ -205,57 +205,57 @@ export const createMockWebAppAPI = (
 				onNotification("BiometricManager.openSettings()", 1000);
 			},
 		},
-
+		
 		ready() {
 			onNotification("WebApp.ready()", 1000);
 		},
-
+		
 		close() {
 			onClose();
 			onNotification("WebApp.close()", 1000);
 		},
-
+		
 		requestContact() {
 			onNotification("WebApp.requestContact()", 2000);
 		},
-
+		
 		enableClosingConfirmation() {
 			onNotification("Closing confirmation enabled", 1000);
 		},
-
+		
 		disableClosingConfirmation() {
 			onNotification("Closing confirmation disabled", 1000);
 		},
-
+		
 		openLink(url: string) {
 			onNotification(`openLink: ${url}`, 2000);
 			window.open(url, "_blank");
 		},
-
+		
 		openMaxLink(url: string) {
 			onNotification(`openMaxLink: ${url}`, 2000);
 		},
-
+		
 		shareContent(text: string, link: string) {
 			onNotification(`shareContent: ${text}, ${link}`, 2000);
 		},
-
+		
 		shareMaxContent(text: string, link: string) {
 			onNotification(`shareMaxContent: ${text}, ${link}`, 2000);
 		},
-
+		
 		downloadFile(url: string, fileName: string) {
 			onNotification(`downloadFile: ${fileName} from ${url}`, 2000);
 		},
-
+		
 		openCodeReader(fileSelect = true) {
 			onNotification(`openCodeReader(fileSelect=${fileSelect})`, 2000);
 		},
-
+		
 		onEvent(eventName: string, _callback: (...args: any[]) => void) {
 			onNotification(`onEvent: ${eventName}`, 1000);
 		},
-
+		
 		offEvent(eventName: string, _callback: (...args: any[]) => void) {
 			onNotification(`offEvent: ${eventName}`, 1000);
 		},
