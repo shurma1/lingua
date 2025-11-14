@@ -8,6 +8,15 @@
   width: 100%;
 }
 
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
 .levelItem {
   display: flex;
   justify-content: center;

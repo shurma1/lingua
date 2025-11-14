@@ -18,9 +18,19 @@ interface ModulesState {
 	clearModules: () => void;
 }
 
+// Initialize currentModuleId from localStorage
+const getInitialModuleId = (): number | null => {
+	const savedModuleId = localStorage.getItem("currentModuleId");
+	if (savedModuleId) {
+		const moduleId = Number(savedModuleId);
+		return !isNaN(moduleId) ? moduleId : null;
+	}
+	return null;
+};
+
 export const useModulesStore = create<ModulesState>((set) => ({
 	modules: [],
-	currentModuleId: null,
+	currentModuleId: getInitialModuleId(),
 	isLoading: false,
 	error: null,
 
@@ -43,7 +53,12 @@ export const useModulesStore = create<ModulesState>((set) => ({
 		error: null,
 	})),
 	
-	setCurrentModuleId: (moduleId) => set({ currentModuleId: moduleId }),
+	setCurrentModuleId: (moduleId) => {
+		if (moduleId !== null) {
+			localStorage.setItem("currentModuleId", moduleId.toString());
+		}
+		set({ currentModuleId: moduleId });
+	},
 	
 	setLoading: (isLoading) => set({ isLoading }),
 	

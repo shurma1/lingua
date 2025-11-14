@@ -1,21 +1,3 @@
-
-.podiumStand {
-  position: relative;
-  margin: 10em auto 0;
-  width: 20em; height: 20em;
-  background: dimgrey;
-}
-
-.podiumFirstPlace {
-  position: absolute;
-  transform-origin: bottom right;
-  content: '';
-  right: 0; bottom: 100%; left: 0;
-  height: 4em;
-  background: silver;
-  clip-path: polygon(0% 100%, 17.5% 50%, 82.5% 50%, 100% 100%); //используй для отрисовки подиума 3d
-}
-
 .leaderboard {
   display: flex;
   flex-direction: column;

@@ -20,7 +20,7 @@ class HapticFeedback {
 		return HAPTIC_AVAILABLE_PLATFORMS.includes(this.platform);
 	}
 	
-	impactOccurred(impactStyle: ImpactStyle, force = false, disableVibrationFallback = false) {
+	impactOccurred(impactStyle: ImpactStyle, force = false, disableVibrationFallback = true) {
 		if(! force && ! this.isHapticAvailable) return;
 		WebAppRoot.HapticFeedback.impactOccurred(impactStyle, disableVibrationFallback);
 	}

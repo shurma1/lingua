@@ -77,7 +77,7 @@ const TabBar = ({ activeTab, onTabChange, tabs }: TabBarProps) => {
 		if(activeTab === tabId) return;
 		
 		onTabChange(tabId);
-		WebApp.HapticFeedback.impactOccurred(ImpactStyle.LIGHT);
+		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
 		setTimeout(() => {
 			const lottieRef = getRefForTab(tabId);
 			if (lottieRef.current) {

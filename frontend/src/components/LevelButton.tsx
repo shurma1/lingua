@@ -1,6 +1,8 @@
 import React from "react";
 
 import styles from "@styles/components/LevelButton.module.scss";
+import {ImpactStyle} from "@WebApp/types";
+import WebApp from "@WebApp/WebApp";
 
 interface LevelButtonProps {
   level?: number | string;
@@ -19,10 +21,16 @@ export const LevelButton: React.FC<LevelButtonProps> = ({
 	borderColor,
 	textColor,
 }) => {
+	
+	const handleClick = () => {
+		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
+		if(onClick) onClick();
+	};
+	
 	return (
 		<button
 			className={styles.levelButton}
-			onClick={onClick}
+			onClick={handleClick}
 			style={{
 				...(backgroundColor && { backgroundColor }),
 				...(borderColor && { borderColor }),

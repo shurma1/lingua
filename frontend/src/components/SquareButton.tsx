@@ -2,6 +2,8 @@ import React from "react";
 
 import styles from "@styles/components/SquareButton.module.scss";
 import cls from "@utils/cls";
+import {ImpactStyle} from "@WebApp/types";
+import WebApp from "@WebApp/WebApp";
 
 interface SquareButtonProps {
   onClick?: () => void;
@@ -20,10 +22,16 @@ export const SquareButton: React.FC<SquareButtonProps> = ({
 	borderColor,
 	color,
 }) => {
+	
+	const handleClick = () => {
+		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
+		if(onClick) onClick();
+	};
+	
 	return (
 		<button
 			className={cls(styles.squareButton, [styles.bordered, type === "bordered"])}
-			onClick={onClick}
+			onClick={handleClick}
 			style={{
 				"--button-border-color": borderColor,
 				"--button-background-color": backgroundColor,
