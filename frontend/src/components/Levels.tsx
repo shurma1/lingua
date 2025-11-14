@@ -1,6 +1,7 @@
 import React from "react";
 
 import { LevelButton } from "@components/LevelButton";
+import { Typography } from "@maxhub/max-ui";
 import styles from "@styles/components/Levels.module.scss";
 
 export interface LevelItem {
@@ -19,6 +20,14 @@ interface LevelsProps {
 }
 
 export const Levels: React.FC<LevelsProps> = ({ levels }) => {
+	if (!levels || levels.length === 0) {
+		return (
+			<div className={styles.emptyState}>
+				<Typography.Title>Упс.. В этом модуле уровней пока нет :/</Typography.Title>
+			</div>
+		);
+	}
+	
 	return (
 		<div className={styles.levels}>
 			{levels.map((level) => (

@@ -122,3 +122,53 @@
   background: var(--podium-third-place-secondary-color);
   clip-path: polygon(0% 100%, 0% 40%, 82.5% 40%, 100% 100%);
 }
+
+
+
+@media (screen and max-height: 750px) {
+  .podiumFirstPlace {
+    height: 8em;
+  }
+
+  .podiumSecondPlace {
+    height: 6em;
+  }
+
+  .podiumThirdPlace {
+    height: 4em;
+  }
+
+  .podiumFirstPlace span {
+    font-size: 8em;
+  }
+
+  .podiumSecondPlace span {
+    font-size: 6em;
+  }
+
+  .podiumThirdPlace span {
+    font-size: 4em;
+  }
+
+}
+
+@media (screen and max-height: 650px) {
+  .podiumFirstPlace {
+    height: 7em;
+  }
+
+  .podiumSecondPlace {
+    height: 5em;
+  }
+
+  .podiumThirdPlace {
+    height: 3em;
+  }
+}
+
+@media (screen and max-width: 450px) {
+  .podiumStand {
+    width: 5em;
+  }
+}
+

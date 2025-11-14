@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import {useEffect, useMemo} from "react";
 
 import Header from "@components/Header";
 import { Levels } from "@components/Levels";
+import ModuleSelectionPopup from "@components/ModuleSelectionPopup";
 import { SquareButton } from "@components/SquareButton";
-
+import { usePopup } from "@contexts/PopupContext";
 
 import { useModules, useModulesMutations } from "@/hooks/useModules";
+import { useLevels, useLevelsMutations } from "@/hooks/useLevels";
 import { useAuthStore } from "@/store/authStore";
 
-import { usePopup } from "../../contexts/PopupContext";
 import DetailPage from "../DetailPage/DetailPage";
 
 import styles from "./CoursePage.module.scss";
@@ -18,44 +19,52 @@ const CoursePage = () => {
 	const { user } = useAuthStore();
 	const { modules, currentModuleId } = useModules();
 	const { fetchModulesByLanguage } = useModulesMutations();
-
-	// Fetch modules when user's language changes
+	const { levels } = useLevels();
+	const { fetchLevelsByModule } = useLevelsMutations();
+	
 	useEffect(() => {
 		if (user?.languageId) {
 			fetchModulesByLanguage(user.languageId);
 		}
 	}, [user?.languageId, fetchModulesByLanguage]);
-
-	// Get the current module or fallback to the first module
-	const currentModule = currentModuleId
-		? modules.find(m => m.id === currentModuleId)
-		: modules[0];
-
+	
+	const currentModule = useMemo(() => {
+		return currentModuleId
+			? modules.find(m => String(m.id) === String(currentModuleId))
+			: modules[0];
+	}, [currentModuleId, modules]);
+	
+	useEffect(() => {
+		if (currentModule?.id) {
+			fetchLevelsByModule(currentModule.id);
+		}
+	}, [currentModule?.id, fetchLevelsByModule]);
+	
 	const handleOpenDetail = () => {
 		openPopup(<DetailPage />);
 	};
 
-	const levels = [
-		{ id: 1, level: 1, color: "green" as const, onClick: handleOpenDetail },
-		{ id: 2, level: 2, color: "green" as const, onClick: handleOpenDetail },
-		{ id: 3, level: 3, color: "blue" as const, onClick: handleOpenDetail },
-		{ id: 4, level: 4, color: "purple" as const, onClick: handleOpenDetail },
-		{ id: 5, level: 5, color: "gold" as const, onClick: handleOpenDetail },
-		{ id: 6, level: 6, color: "green" as const, onClick: handleOpenDetail },
-		{ id: 7, level: 7, color: "blue" as const, onClick: handleOpenDetail },
-		{ id: 8, level: 8, color: "purple" as const, onClick: handleOpenDetail },
-		{ id: 9, level: 9, color: "gold" as const, onClick: handleOpenDetail },
-	];
+	const handleOpenModuleSelection = () => {
+		openPopup(<ModuleSelectionPopup />);
+	};
+	
+	const levelsWithHandlers = useMemo(() => {
+		return levels.map((level) => ({
+			id: level.id,
+			level: level.icon,
+			onClick: handleOpenDetail,
+		}));
+	}, [levels]);
 
 	return (
 		<div className={styles.container}>
 			<Header />
 			<div className={styles.content}>
 				<div className={styles.levelsWrapper}>
-					<Levels levels={levels}/>
+					<Levels levels={levelsWithHandlers}/>
 				</div>
 				<div className={styles.footer}>
-					<SquareButton onClick={handleOpenDetail} backgroundColor="var(--accent-color)" borderColor="var(--sub-accent-color)">
+					<SquareButton onClick={handleOpenModuleSelection} backgroundColor="var(--accent-color)" borderColor="var(--sub-accent-color)">
 						{currentModule ? (
 							<span>Модуль: {currentModule.icon && <span>{currentModule.icon}</span>} {currentModule.name}</span>
 						) : (

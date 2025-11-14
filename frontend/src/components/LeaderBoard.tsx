@@ -13,9 +13,7 @@ import styles from "../styles/components/LeaderBoard.module.scss";
 import cls from "../utils/cls";
 
 interface LeaderBoardProps {
-	/** Optional explicit users list (e.g. for testing); if omitted data will be fetched */
 	users?: RatingUser[];
-	/** Which leaderboard to show */
 	type?: LeaderboardType;
 	className?: string;
 }
@@ -23,22 +21,21 @@ interface LeaderBoardProps {
 export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type = "all", className }) => {
 	const { allLeaderboard, friendsLeaderboard, isLoading: storeLoading, error: storeError } = useLeaderboard();
 	const { fetchLeaderboard, isLoading: localLoading, error: localError } = useLeaderboardMutations();
-
-	// Decide which leaderboard data to use when no static users are passed
+	
 	const leaderboardData = type === "friends" ? friendsLeaderboard : allLeaderboard;
 	const fromApi = !users;
 
 	useEffect(() => {
-		if (!fromApi) return; // static users provided
+		if (!fromApi) return;
 		if (!leaderboardData) {
-			fetchLeaderboard(type).catch(() => {}); // error handled in hook/store
+			fetchLeaderboard(type).catch(() => {});
 		}
 	 
 	}, [fromApi, leaderboardData, type]);
 
 	const apiUsers: RatingUser[] = useMemo(() => {
 		if (!leaderboardData) return [];
-		// API already sends position; we sort by it to ensure correct placement
+
 		const sortedByPosition = [...leaderboardData.leaders].sort((a, b) => a.position - b.position);
 		return sortedByPosition.map(u => ({
 			id: u.userId,
@@ -49,8 +46,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type = "all", c
 	}, [leaderboardData]);
 
 	const effectiveUsers = users ?? apiUsers;
-
-	// If coming from API we keep position ordering; otherwise sort by stars
+	
 	const sorted = useMemo(() => {
 		if (fromApi) return effectiveUsers;
 		return [...effectiveUsers].sort((a, b) => b.stars - a.stars);
@@ -81,7 +77,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type = "all", c
 				<LeaderBoardList
 					items={rest}
 					itemHeight={60}
-					containerHeight={400}
+					containerHeight={window.innerHeight*0.4}
 					renderItem={(user, index) => (
 						<div className={styles.userRow} key={user.id}>
 							<span className={styles.rank}>{index + 4}</span>

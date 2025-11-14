@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import ApiLoader from "@components/ApiLoader";
+// import ApiLoader from "@components/ApiLoader";
 import DevWrapper from "@components/development/DevWrapper";
 import HelloAndSelectLanguage from "@components/HelloAndSelectLanguage";
 import TabNavigator from "@components/TabBar/TabNavigator";
@@ -11,6 +11,7 @@ import { PopupProvider, usePopup } from "@contexts/PopupContext";
 import WebApp from "@WebApp/WebApp";
 
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleInitialization } from "@/hooks/useModuleInitialization";
 import { useUser } from "@/hooks/useUser";
 
 const isDev = import.meta.env.DEV;
@@ -19,10 +20,12 @@ const AppContent = () => {
 	const { openPopup } = usePopup();
 	const { user } = useUser();
 	const tabsConfig = getTabsConfig(openPopup);
+	
+	useModuleInitialization();
 
 	return (
 		<>
-			<ApiLoader/>
+			{/* <ApiLoader/> */}
 			<TabNavigator tabs={tabsConfig} defaultTabId="puzzle" />
 			<PopupContainer />
 			 {user?.languageId === null && <HelloAndSelectLanguage/>}

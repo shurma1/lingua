@@ -9,6 +9,7 @@ export { useLanguages, useLanguagesMutations } from "./useLanguages";
 
 // Modules hooks
 export { useModules, useModulesMutations } from "./useModules";
+export { useModuleInitialization } from "./useModuleInitialization";
 
 // Levels hooks
 export { useLevels, useLevelsMutations } from "./useLevels";

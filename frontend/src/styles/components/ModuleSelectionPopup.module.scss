@@ -1,0 +1,51 @@
+.container {
+	padding: var(--padding-s);
+	max-width: 600px;
+	margin: 0 auto;
+    min-height: 100vh;
+    background-color: var(--background-primary-color);
+    box-sizing: border-box;
+}
+
+:global(.dev) .container {
+    min-height: calc(100vh - var(--dev-header-height));
+}
+
+.title {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: var(--padding-s);
+	text-align: center;
+	color: var(--text-primary-color);
+}
+
+.modulesGrid {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	button {
+		width: 100%;
+	}
+}
+
+.moduleContent {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--padding-xs);
+	padding: var(--padding-xs);
+}
+
+.icon {
+	font-size: 32px;
+	flex-shrink: 0;
+}
+
+.name {
+	font-size: 14px;
+	font-weight: 500;
+	text-align: left;
+	word-break: break-word;
+	flex: 1;
+}

@@ -5,7 +5,9 @@ import {LanguageSelector} from "@components/LanguageSelector";
 import OnBoarding from "@components/OnBoarding";
 
 import { useLanguages, useLanguagesMutations } from "@/hooks/useLanguages";
+import { useModulesMutations } from "@/hooks/useModules";
 import { useUserMutations } from "@/hooks/useUser";
+import { useModulesStore } from "@/store/modulesStore";
 
 const welcomeScreenInfo = {
 	id: 1,
@@ -31,6 +33,8 @@ const HelloAndSelectLanguage: FC<OwnProps> = ({onClose}) => {
 	const { languages } = useLanguages();
 	const { fetchLanguages } = useLanguagesMutations();
 	const { setLanguage } = useUserMutations();
+	const { fetchModulesByLanguage } = useModulesMutations();
+	const { setCurrentModuleId } = useModulesStore();
 	const [step, setStep] = useState<number>(1);
 	const [isFullScreen, setFullScreen] = useState(false);
 	const [selectedLanguage, setSelectedLanguage] = useState<string>("");
@@ -62,7 +66,17 @@ const HelloAndSelectLanguage: FC<OwnProps> = ({onClose}) => {
 			case 2: {
 				if (selectedLanguage) {
 					try {
+						// Set the language for the user
 						await setLanguage(Number(selectedLanguage));
+						
+						// Fetch all modules for the selected language
+						const modules = await fetchModulesByLanguage(Number(selectedLanguage));
+						
+						// Set the first module as active
+						if (modules && modules.length > 0) {
+							setCurrentModuleId(modules[0].id);
+						}
+						
 						if(onClose) onClose();
 					} catch (error) {
 						console.error("Failed to set language:", error);
@@ -71,7 +85,7 @@ const HelloAndSelectLanguage: FC<OwnProps> = ({onClose}) => {
 				return;
 			}
 		}
-	}, [step, selectedLanguage, setLanguage, onClose]);
+	}, [step, selectedLanguage, setLanguage, fetchModulesByLanguage, setCurrentModuleId, onClose]);
 	
 	
 	const langSelector = <LanguageSelector
