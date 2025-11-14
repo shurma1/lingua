@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import Icon from "@components/ui/Icon";
 import {CellList, CellSimple} from "@maxhub/max-ui";
@@ -28,6 +28,12 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
 	onSelect,
 }) => {
 	const [selectedLanguage, setSelectedLanguage] = useState<string | null>(initialSelectedLanguage || null);
+
+	useEffect(() => {
+		if (initialSelectedLanguage !== undefined && initialSelectedLanguage !== null) {
+			setSelectedLanguage(initialSelectedLanguage);
+		}
+	}, [initialSelectedLanguage]);
 
 	const handleSelect = (languageCode: string) => {
 		setSelectedLanguage(languageCode);

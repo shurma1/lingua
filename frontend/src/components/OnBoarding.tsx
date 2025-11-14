@@ -6,13 +6,13 @@ import styles from "@styles/components/OnBoarding.module.scss";
 import cls from "@utils/cls";
 
 interface OwnProps {
-	children: ReactNode | ReactNode[];
-	title?: string;
-	description?: string;
-	buttonText?: string;
-	isButtonActive?: boolean;
-	onButtonClick?: () => void;
-	isFullScreen?: boolean;
+    children: ReactNode | ReactNode[];
+    title?: string;
+    description?: string;
+    buttonText?: string;
+    isButtonActive?: boolean;
+    onButtonClick?: () => void;
+    isFullScreen?: boolean;
 }
 
 const OnBoarding: FC<OwnProps> = ({
