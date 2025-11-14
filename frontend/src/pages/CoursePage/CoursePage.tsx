@@ -10,7 +10,7 @@ import { useModules, useModulesMutations } from "@/hooks/useModules";
 import { useLevels, useLevelsMutations } from "@/hooks/useLevels";
 import { useAuthStore } from "@/store/authStore";
 
-import DetailPage from "../DetailPage/DetailPage";
+import LevelPage from "../LevelPage/LevelPage";
 
 import styles from "./CoursePage.module.scss";
 
@@ -40,8 +40,8 @@ const CoursePage = () => {
 		}
 	}, [currentModule?.id, fetchLevelsByModule]);
 	
-	const handleOpenDetail = () => {
-		openPopup(<DetailPage />);
+	const handleOpenLevel = (levelId: number) => {
+		openPopup(<LevelPage levelId={levelId} />);
 	};
 
 	const handleOpenModuleSelection = () => {
@@ -52,7 +52,7 @@ const CoursePage = () => {
 		return levels.map((level) => ({
 			id: level.id,
 			level: level.icon,
-			onClick: handleOpenDetail,
+			onClick: () => handleOpenLevel(level.id),
 		}));
 	}, [levels]);
 
