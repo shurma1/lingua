@@ -1,0 +1,77 @@
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--padding-xs);
+  width: 100%;
+}
+
+.progressTrack {
+  flex: 1;
+  background-color: var(--background-secondary-color);
+  border-radius: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 100px;
+  transition: width var(--animation-speed-2) var(--transition-ease-base);
+  position: relative;
+  background:  var(--accent-color);
+
+
+  &.animated {
+    animation: expand var(--animation-speed-2) var(--transition-ease-base);
+  }
+}
+
+.percentage {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary-color);
+  min-width: 45px;
+  text-align: right;
+}
+
+.small {
+  .progressTrack {
+    height: 4px;
+  }
+
+  .percentage {
+    font-size: 12px;
+  }
+}
+
+.medium {
+  .progressTrack {
+    height: 8px;
+  }
+
+  .percentage {
+    font-size: 14px;
+  }
+}
+
+.large {
+  .progressTrack {
+    height: 12px;
+  }
+
+  .percentage {
+    font-size: 16px;
+  }
+}
+
+@keyframes expand {
+  from {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  to {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
