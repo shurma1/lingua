@@ -81,7 +81,7 @@ export interface LevelDTO {
 	moduleId: number;
 	icon: string;
 	questsCount: number;
-	userProgress?: UserProgressDTO | null;
+	userProgress?: UserProgressDTO;
 }
 
 export interface MediaDTO {

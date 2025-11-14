@@ -1,7 +1,8 @@
 import React from "react";
 
 import styles from "@styles/components/LevelButton.module.scss";
-import {ImpactStyle} from "@WebApp/types";
+import cls from "@utils/cls";
+import {ImpactStyle, NotificationType} from "@WebApp/types";
 import WebApp from "@WebApp/WebApp";
 
 interface LevelButtonProps {
@@ -11,6 +12,7 @@ interface LevelButtonProps {
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
+  disabled?: boolean;
 }
 
 export const LevelButton: React.FC<LevelButtonProps> = ({
@@ -20,21 +22,34 @@ export const LevelButton: React.FC<LevelButtonProps> = ({
 	backgroundColor,
 	borderColor,
 	textColor,
+	disabled = false,
 }) => {
 	
 	const handleClick = () => {
+		if (disabled) {
+			WebApp.HapticFeedback.notificationOccurred(NotificationType.ERROR);
+			return;
+		}
 		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
 		if(onClick) onClick();
 	};
 	
 	return (
 		<button
-			className={styles.levelButton}
+			className={cls(styles.levelButton, [styles.disabled, disabled])}
 			onClick={handleClick}
 			style={{
-				...(backgroundColor && { backgroundColor }),
-				...(borderColor && { borderColor }),
-				...(textColor && { color: textColor }),
+				...(disabled ? {
+					backgroundColor: "var(--innactive-color)",
+					borderColor: "var(--innactive-color)",
+					color: "var(--text-secondary-color)",
+					cursor: "not-allowed",
+					opacity: 0.6,
+				} : {
+					...(backgroundColor && { backgroundColor }),
+					...(borderColor && { borderColor }),
+					...(textColor && { color: textColor }),
+				}),
 			}}
 		>
 			{children || level}

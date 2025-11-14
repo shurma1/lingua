@@ -53,6 +53,7 @@ const CoursePage = () => {
 			id: level.id,
 			level: level.icon,
 			onClick: () => handleOpenLevel(level.id),
+			userProgress: level.userProgress,
 		}));
 	}, [levels]);
 

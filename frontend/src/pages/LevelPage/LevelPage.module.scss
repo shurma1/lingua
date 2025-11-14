@@ -35,6 +35,12 @@
   width: 100%;
   box-sizing: border-box;
   background: var(--background-secondary-color);
+  transition: var(--transition-ease-base-fast);
+  transform: translateY(100%);
+}
+
+.footerShow {
+  transform: translateY(0%);
 }
 
 .button {

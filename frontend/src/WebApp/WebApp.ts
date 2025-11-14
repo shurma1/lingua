@@ -30,6 +30,10 @@ class WebApp {
 		return getWebAppRoot().initData;
 	}
 	
+	get initDataUnsafe() {
+		return getWebAppRoot().initDataUnsafe;
+	}
+	
 	public shareMaxContent(text: string, link: string) {
 		WebAppRoot.shareMaxContent({text, link});
 	}

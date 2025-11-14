@@ -446,15 +446,12 @@ const QuestPanel: FC = () => {
 	useEffect(() => {
 		if (selectedLanguageId) {
 			loadModules(selectedLanguageId);
-			setSelectedModuleId(null);
-			setSelectedLevelId(null);
 		}
 	}, [selectedLanguageId]);
 
 	useEffect(() => {
 		if (selectedModuleId) {
 			loadLevels(selectedModuleId);
-			setSelectedLevelId(null);
 		} else {
 			setLevels([]);
 		}
@@ -472,9 +469,6 @@ const QuestPanel: FC = () => {
 		try {
 			const data = await fetchLanguages();
 			setLanguages(data);
-			if (data.length > 0 && !selectedLanguageId) {
-				setSelectedLanguageId(data[0].id);
-			}
 		} catch (error) {
 			console.error("Failed to load languages:", error);
 		}
@@ -484,9 +478,6 @@ const QuestPanel: FC = () => {
 		try {
 			const data = await fetchModulesByLanguage(languageId);
 			setModules(data);
-			if (data.length > 0 && !selectedModuleId) {
-				setSelectedModuleId(data[0].id);
-			}
 		} catch (error) {
 			console.error("Failed to load modules:", error);
 		}
@@ -496,9 +487,6 @@ const QuestPanel: FC = () => {
 		try {
 			const data = await fetchLevelsByModule(moduleId);
 			setLevels(data);
-			if (data.length > 0 && !selectedLevelId) {
-				setSelectedLevelId(data[0].id);
-			}
 		} catch (error) {
 			console.error("Failed to load levels:", error);
 		}
@@ -654,8 +642,8 @@ const QuestPanel: FC = () => {
 		return UI_STRINGS.QUEST_TYPES[quest.type];
 	};
 
-	const availableModules = modules.filter((mod) => mod.languageId === selectedLanguageId);
-	const availableLevels = levels.filter((lvl) => lvl.moduleId === selectedModuleId);
+	const availableModules = modules.filter((mod) => Number(mod.languageId) === Number(selectedLanguageId));
+	const availableLevels = levels.filter((lvl) => Number(lvl.moduleId) === Number(selectedModuleId));
 
 	return (
 		<div className={styles.questPanel}>

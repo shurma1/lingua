@@ -1,9 +1,10 @@
-import {Typography} from "@maxhub/max-ui";
 import {useRef, useEffect} from "react";
 
+import {Typography} from "@maxhub/max-ui";
+
+import lockAnimation from "@/assets/lottie/lock.json";
 import Button from "@/components/ui/Button";
 import ColoredLottie from "@/components/ui/ColoredLottie";
-import lockAnimation from "@/assets/lottie/lock.json";
 
 import styles from "./GamePage.module.scss";
 

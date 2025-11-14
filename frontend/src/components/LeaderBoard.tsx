@@ -3,6 +3,7 @@ import React, { useMemo, useEffect } from "react";
 import LeaderBoardList from "@components/LeaderBoardList";
 import Podium from "@components/Podium";
 import Avatar from "@components/ui/Avatar";
+import FullScreenLoader from "@components/ui/FullScreenLoader";
 import Icon from "@components/ui/Icon";
 
 import { useLeaderboard, useLeaderboardMutations } from "@/hooks/useLeaderboard";
@@ -59,7 +60,9 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type = "all", c
 	const error = storeError || localError;
 
 	if (isLoading) {
-		return <div className={cls(styles.leaderboard, className)}>Загрузка...</div>;
+		return <div className={cls(styles.loader, className)}>
+			<FullScreenLoader/>
+		</div>;
 	}
 
 	if (error) {

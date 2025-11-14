@@ -431,11 +431,11 @@ const LessonPanel: FC = () => {
 	};
 
 	const getModuleName = (moduleId: number): string => {
-		const module = modules.find((mod) => mod.id === moduleId);
+		const module = modules.find((mod) => Number(mod.id) === Number(moduleId));
 		return module ? `${module.icon} ${module.name}` : "-";
 	};
 
-	const availableModules = modules.filter((mod) => mod.languageId === selectedLanguageId);
+	const availableModules = modules.filter((mod) => Number(mod.languageId) === Number(selectedLanguageId));
 
 	return (
 		<div className={styles.lessonPanel}>

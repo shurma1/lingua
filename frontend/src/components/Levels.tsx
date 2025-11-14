@@ -13,6 +13,11 @@ export interface LevelItem {
   backgroundColor?: string;
   borderColor?: string;
   textColor?: string;
+  disabled?: boolean;
+  userProgress?: {
+    questsCount: number;
+    score: number;
+  };
 }
 
 interface LevelsProps {
@@ -28,9 +33,23 @@ export const Levels: React.FC<LevelsProps> = ({ levels }) => {
 		);
 	}
 	
+	const levelsWithAccess = levels.map((level, index) => {
+		console.log(level);
+		if (index === 0) {
+			return { ...level, disabled: false };
+		}
+		const previousLevel = levels[index - 1];
+		const isPreviousLevelCompleted = previousLevel?.userProgress !== undefined;
+		
+		return {
+			...level,
+			disabled: !isPreviousLevelCompleted,
+		};
+	});
+	
 	return (
 		<div className={styles.levels}>
-			{levels.map((level) => (
+			{levelsWithAccess.map((level) => (
 				<div
 					key={level.id}
 					className={styles.levelItem}
@@ -41,6 +60,7 @@ export const Levels: React.FC<LevelsProps> = ({ levels }) => {
 						backgroundColor={level.backgroundColor}
 						borderColor={level.borderColor}
 						textColor={level.textColor}
+						disabled={level.disabled}
 					>
 						{level.children}
 					</LevelButton>

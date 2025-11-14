@@ -8,7 +8,7 @@ import WebApp from "@WebApp/WebApp";
 
 import type {LottieRefCurrentProps} from "lottie-react";
 
-const MULTIPLY_CLICK_COUNT = 2; //10
+const MULTIPLY_CLICK_COUNT = 5; //10
 const MULTIPLY_CLICK_MAX_DELAY_MS = 500;
 
 export interface TabConfig {

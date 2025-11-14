@@ -240,7 +240,7 @@ const ModulePanel: FC = () => {
 				onSave={async (data) => {
 					try {
 						const newModule = await apiClient.modules.createModule(data as CreateModuleRequestDTO);
-						if (newModule.languageId === selectedLanguageId) {
+						if (Number(newModule.languageId) === Number(selectedLanguageId)) {
 							setModules((prev) => [...prev, newModule]);
 						}
 						closePopup();
@@ -298,7 +298,7 @@ const ModulePanel: FC = () => {
 	};
 
 	const getLanguageName = (languageId: number): string => {
-		const language = languages.find((lang) => lang.id === languageId);
+		const language = languages.find((lang) => Number(lang.id) === Number(languageId));
 		return language ? `${language.icon} ${language.name}` : "-";
 	};
 

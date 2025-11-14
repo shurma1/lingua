@@ -22,7 +22,7 @@ if (import.meta.env.DEV) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const maxWindow = window as any;
 
-	console.log('[setupDevMode] Creating mock WebApp API...');
+	console.log("[setupDevMode] Creating mock WebApp API...");
 	const mockAPI = createMockWebAppAPI(
 		(message, duration) => getNotificationHandler()(message, duration),
 		(isVisible) => getBackButtonChangeHandler()(isVisible),

@@ -23,3 +23,14 @@
     transform: translateY(5px);
   }
 }
+
+.disabled{
+  background: var(--innactive-color);
+  box-shadow: 0 3px 0 var(--innactive-secondary-color);
+  transform: translateY(5px);
+
+  &:active {
+    box-shadow: 0 3px 0 var(--innactive-secondary-color);
+    transform: translateY(5px);
+  }
+}

@@ -171,44 +171,47 @@ class LevelsService {
 			throw ApiError.errorByType('LEVEL_NOT_FOUND');
 		}
 
-		// Calculate stars and exp (formula: stars = score / 100)
-		const earnedStars = Math.floor(score / 100);
-		const earnedExp = score;
-
-		// Update or create UserLevel
-		const [userLevel] = await UserLevel.findOrCreate({
+		// Check if level was already completed
+		const existingUserLevel = await UserLevel.findOne({
 			where: {
 				userId,
 				levelId
-			},
-			defaults: {
+			}
+		});
+
+		const isFirstCompletion = !existingUserLevel;
+
+		// Update or create UserLevel
+		if (existingUserLevel) {
+			existingUserLevel.questsCount += 1;
+			existingUserLevel.score += score;
+			await existingUserLevel.save();
+		} else {
+			await UserLevel.create({
 				userId,
 				levelId,
 				questsCount: 1,
 				score
-			}
-		});
-
-		if (!userLevel.isNewRecord) {
-			userLevel.questsCount += 1;
-			userLevel.score += score;
-			await userLevel.save();
+			});
 		}
 
-		// Update user stars and exp
+		// Get user and update rewards only on first completion
 		const user = await User.findByPk(userId);
-		if (user) {
-			user.stars += earnedStars;
-			user.exp += earnedExp;
-			await user.save();
-
-			return {
-				stars: user.stars,
-				exp: user.exp
-			};
+		if (!user) {
+			throw ApiError.errorByType('USER_NOT_FOUND');
 		}
 
-		return { stars: earnedStars, exp: earnedExp };
+		if (isFirstCompletion) {
+			// Add rewards only on first completion
+			user.stars += 10;
+			user.exp += 1;
+			await user.save();
+		}
+
+		return {
+			stars: user.stars,
+			exp: user.exp
+		};
 	}
 }
 

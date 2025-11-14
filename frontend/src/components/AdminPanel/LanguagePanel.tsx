@@ -174,7 +174,7 @@ const LanguagePanel: FC = () => {
 					try {
 						const updatedLanguage = await apiClient.languages.updateLanguage(language.id, data);
 						setLanguages((prev) =>
-							prev.map((lang) => (lang.id === language.id ? updatedLanguage : lang)),
+							prev.map((lang) => (Number(lang.id) === Number(language.id) ? updatedLanguage : lang)),
 						);
 						closePopup();
 					} catch (error) {
@@ -193,7 +193,7 @@ const LanguagePanel: FC = () => {
 				onButtonClick={async () => {
 					try {
 						await apiClient.languages.deleteLanguage(language.id);
-						setLanguages((prev) => prev.filter((lang) => lang.id !== language.id));
+						setLanguages((prev) => prev.filter((lang) => Number(lang.id) !== Number(language.id)));
 						closePopup();
 					} catch (error) {
 						console.error("Failed to delete language:", error);

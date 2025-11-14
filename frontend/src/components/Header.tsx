@@ -1,6 +1,8 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import LanguageSelect from "@pages/LanguageSelect/LanguageSelect";
+import { motion, useSpring, useTransform } from "framer-motion";
+
 
 import { useLanguages } from "@/hooks/useLanguages";
 import { useUser } from "@/hooks/useUser";
@@ -12,6 +14,24 @@ import styles from "../styles/components/Header.module.scss";
 
 import Icon from "./ui/Icon";
 
+// Animated number component
+const AnimatedNumber: FC<{ value: number }> = ({ value }) => {
+	const spring = useSpring(value, { 
+		damping: 30, 
+		stiffness: 200,
+		duration: 0.5,
+	});
+	const display = useTransform(spring, (current) => 
+		formatNumber(Math.round(current)),
+	);
+
+	useEffect(() => {
+		spring.set(value);
+	}, [spring, value]);
+
+	return <motion.span>{display}</motion.span>;
+};
+
 const Header: FC = () => {
 	const { user } = useUser();
 	const { languages } = useLanguages();
@@ -22,8 +42,8 @@ const Header: FC = () => {
 	};
     
 	const selectedLanguage = languages.find((lang) => {
-        return Number(lang.id) === Number(user?.languageId);
-    });
+		return Number(lang.id) === Number(user?.languageId);
+	});
 
 	if (!user) {
 		return null;
@@ -41,12 +61,16 @@ const Header: FC = () => {
 			<div className={styles.stats}>
 				<div className={styles.stat}>
 					<Icon name="star-16" size={12} className={styles.statIcon} />
-					<span className={styles.statValue}>{formatNumber(user.stars)}</span>
+					<span className={styles.statValue}>
+						<AnimatedNumber value={user.stars} />
+					</span>
 				</div>
 
 				<div className={styles.stat}>
 					<span className={styles.statLabel}>EXP</span>
-					<span className={styles.statValue}>{formatNumber(user.exp)}</span>
+					<span className={styles.statValue}>
+						<AnimatedNumber value={user.exp} />
+					</span>
 				</div>
 			</div>
 		</header>

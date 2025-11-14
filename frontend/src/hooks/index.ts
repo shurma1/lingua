@@ -28,3 +28,6 @@ export { useUser, useUserMutations } from "./useUser";
 
 // History hook (existing)
 export { useHistory } from "./useHistory";
+
+// Media hook
+export { useMedia } from "./useMedia";

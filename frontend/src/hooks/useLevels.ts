@@ -20,8 +20,7 @@ export const useLevels = () => {
 export const useLevelsMutations = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-	const { setLevels, addLevel, updateLevel, removeLevel } = useLevelsStore();
-	const { updateUser } = useAuthStore();
+	const { setLevels, addLevel, updateLevel, removeLevel, updateLevelProgress } = useLevelsStore();
 
 	const fetchLevelsByModule = useCallback(async (moduleId: number) => {
 		setIsLoading(true);
@@ -113,13 +112,22 @@ export const useLevelsMutations = () => {
 		try {
 			const response: SubmitLevelResponseDTO = await apiClient.levels.submitLevel(levelId, score);
 			
-			// Update user stats
+			// Update user stats - server returns already updated values
 			const currentUser = useAuthStore.getState().user;
 			if (currentUser) {
-				updateUser({
+				useAuthStore.getState().updateUser({
 					...currentUser,
-					stars: currentUser.stars + response.stars,
-					exp: currentUser.exp + response.exp,
+					stars: response.stars,
+					exp: response.exp,
+				});
+			}
+			
+			// Update level progress in the store to unlock next level immediately
+			const currentLevel = useLevelsStore.getState().levels.find(l => l.id === levelId);
+			if (currentLevel) {
+				useLevelsStore.getState().updateLevelProgress(levelId, {
+					questsCount: currentLevel.questsCount,
+					score: score,
 				});
 			}
 			
@@ -132,7 +140,7 @@ export const useLevelsMutations = () => {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [updateUser]);
+	}, []); // Empty dependency array since we use getState()
 
 	return {
 		fetchLevelsByModule,

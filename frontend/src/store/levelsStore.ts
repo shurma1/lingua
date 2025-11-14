@@ -11,6 +11,7 @@ interface LevelsState {
 	setLevels: (levels: LevelDTO[]) => void;
 	addLevel: (level: LevelDTO) => void;
 	updateLevel: (levelId: number, level: LevelDTO) => void;
+	updateLevelProgress: (levelId: number, userProgress: { questsCount: number; score: number }) => void;
 	removeLevel: (levelId: number) => void;
 	setCurrentLevelId: (levelId: number | null) => void;
 	setLoading: (isLoading: boolean) => void;
@@ -34,6 +35,13 @@ export const useLevelsStore = create<LevelsState>((set) => ({
 	updateLevel: (levelId, level) => set((state) => ({
 		levels: state.levels.map((l) => 
 			l.id === levelId ? level : l,
+		),
+		error: null,
+	})),
+	
+	updateLevelProgress: (levelId, userProgress) => set((state) => ({
+		levels: state.levels.map((l) => 
+			l.id === levelId ? { ...l, userProgress } : l,
 		),
 		error: null,
 	})),

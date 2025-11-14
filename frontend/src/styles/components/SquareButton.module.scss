@@ -42,3 +42,18 @@
 .bordered {
   border: 2px solid var(--button-border-color);
 }
+
+.disabled {
+  --button-border-color: var(--border-color);
+  --button-background-color: var(--background-primary-color);
+
+  box-shadow: 0 0 0 var(--button-border-color);
+
+  color: var(--border-color) !important;
+
+  &:active {
+    --button-border-color: var(--border-color);
+    --button-background-color: var(--background-primary-color);
+    transform: translateY(0);
+  }
+}

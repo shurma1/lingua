@@ -1,0 +1,66 @@
+.wordsKeyboard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-m);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sentenceStrips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  margin-bottom: var(--margin-s);
+  justify-content: center;
+  min-height: 60px;
+}
+
+.sentenceWord {
+  flex: 0 1 auto;
+  min-width: 80px;
+  max-width: 200px;
+}
+
+.wordBank {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-s);
+}
+
+.wordRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-s);
+  justify-content: center;
+}
+
+.wordButton {
+  flex: 0 1 auto;
+  min-width: 80px;
+  max-width: 200px;
+
+  button {
+    font-size: 1rem;
+    padding: 12px 20px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .wordButton {
+    min-width: 70px;
+    max-width: 150px;
+
+    button {
+      font-size: 0.9rem;
+      padding: 10px 16px;
+    }
+  }
+
+  .sentenceWord {
+    min-width: 70px;
+    max-width: 150px;
+  }
+}
