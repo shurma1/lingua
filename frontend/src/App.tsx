@@ -7,10 +7,8 @@ import Loader, { type LoaderRef } from "@components/ui/Loader";
 import PopupContainer from "@components/ui/PopupContainer";
 import { getTabsConfig } from "@config/tabsConfig";
 import { PopupProvider, usePopup } from "@contexts/PopupContext";
-import {Typography} from "@maxhub/max-ui";
 import WebApp from "@WebApp/WebApp";
 
-import Popup  from "@/components/ui/Popup";
 import {useFriendsMutations} from "@/hooks";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleInitialization } from "@/hooks/useModuleInitialization";
@@ -22,14 +20,10 @@ const AppContent = () => {
 	const { openPopup } = usePopup();
 	const { user } = useUser();
 	const tabsConfig = getTabsConfig(openPopup);
-	const { acceptInvite, fetchFriends } = useFriendsMutations();
+	const { acceptInvite } = useFriendsMutations();
 	const [inviteProcessed, setInviteProcessed] = useState(false);
 	
 	useModuleInitialization();
-	
-	// useEffect(() => {
-	// 	console.log(WebApp.initDataUnsafe);
-	// });
  
 	const handleAccept = () => {
 		const inviteId = WebApp.initDataUnsafe.start_param;
@@ -40,20 +34,7 @@ const AppContent = () => {
 		
 		setInviteProcessed(true);
 		
-		const handleAcceptInvite = async () => {
-			const friendship = await acceptInvite(Number(inviteId));
-			const friendId = friendship.user2Id;
-			const friends = await fetchFriends();
-			const currentFriend = friends.find(friend => friend.userId === friendId);
-			alert(JSON.stringify(currentFriend));
-		};
-  
-		openPopup(
-			<Popup title="Приглашение принято" buttonText="Отлично" onButtonClick={handleAcceptInvite}>,
-				<Typography.Body>Вы успешно приняли приглашение!</Typography.Body>
-				<Typography.Body>Пользователь добавлен в ваш список друзей</Typography.Body>
-			</Popup>,
-		);
+		acceptInvite(Number(inviteId));
 	};
 
 	useEffect(() => {
