@@ -1,11 +1,7 @@
 .switchContainer {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 16px auto 30px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
 
   .switchTrack {
     display: flex;
@@ -13,18 +9,16 @@
     position: relative;
     background-color: var(--background-primary-color);
     border-radius: 24px;
-    padding: 7px;
-    padding-right: 3px;
-    width: 100%;
+    padding: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 
     .switchIndicator {
       position: absolute;
       height: calc(100% - 8px);
-      width: calc(50% - 2px);
-      background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+      width: calc(50% - 4px);
+      background: var(--accent-color);
       border-radius: 20px;
-      transition: left 0.3s ease-in-out;
+      transition: var(--transition-ease-base-fast);
       pointer-events: none;
       top: 4px;
 
@@ -33,48 +27,43 @@
       }
 
       &.right {
-        left: 49%
+        right: 4px;
       }
     }
 
     .switchOption {
-      flex: 0 1 auto;
+      flex: 1;
       padding: 10px 24px;
       border: none;
       font-size: 14px;
       font-weight: 500;
-      color: var(--text-secondary-color);
+      color: rgba(255, 255, 255, 0.6);
       cursor: pointer;
-      border-radius: 18px;
+      border-radius: 20px;
       white-space: nowrap;
       position: relative;
       z-index: 2;
       background: transparent;
-      transition: color 0.3s ease-in-out, font-weight 0.3s ease-in-out;
+      transition: color 0.2s ease-in-out;
       min-width: 100px;
       text-align: center;
 
       &:disabled {
         cursor: not-allowed;
-        opacity: 0.6;
-      }
-
-      &:hover:not(:disabled) {
-        color: var(--text-secondary-color);
+        opacity: 0.4;
       }
 
       &.active {
         color: white;
+        font-weight: 600;
+      }
 
-        &:not(:disabled) {
-          cursor: pointer;
-        }
+      &:hover:not(:disabled):not(.active) {
+        color: rgba(255, 255, 255, 0.8);
       }
     }
   }
 }
-
-
 
 
 

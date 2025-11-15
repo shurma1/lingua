@@ -3,9 +3,8 @@ import React, { useMemo, useEffect, useState } from "react";
 import LeaderBoardList from "@components/LeaderBoardList";
 import Podium from "@components/Podium";
 import Avatar from "@components/ui/Avatar";
-import FullScreenLoader from "@components/ui/FullScreenLoader";
 import Icon from "@components/ui/Icon";
-import LeaderboardSwitch from "./ui/LeaderboardSwitch";
+
 
 import { useLeaderboard, useLeaderboardMutations } from "@/hooks/useLeaderboard";
 import { LeaderboardType } from "@/types/api";
@@ -13,6 +12,8 @@ import { RatingUser } from "@/types/RatingUser";
 
 import styles from "../styles/components/LeaderBoard.module.scss";
 import cls from "../utils/cls";
+
+import LeaderboardSwitch from "./ui/LeaderboardSwitch";
 
 interface LeaderBoardProps {
 	users?: RatingUser[];
@@ -36,7 +37,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialTy
 	const fromApi = !users;
 
 	useEffect(() => {
-		if (!fromApi) return; 
+		if (!fromApi) return;
 		if (!leaderboardData) {
 			fetchLeaderboard(activeType).catch(() => {});
 		}
@@ -45,8 +46,22 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialTy
 
 	const apiUsers: RatingUser[] = useMemo(() => {
 		if (!leaderboardData) return [];
-		const sortedByPosition = [...leaderboardData.leaders].sort((a, b) => a.position - b.position);
-		return sortedByPosition.map(u => ({
+		const allUsers = [...leaderboardData.leaders];
+		
+		if (leaderboardData.currentUser && leaderboardData.currentUser.position <= 100) {
+			const currentUserId = leaderboardData.currentUser.userId;
+			const isCurrentUserInList = allUsers.some(u => u.userId === currentUserId);
+			
+			if (!isCurrentUserInList) {
+				allUsers.push(leaderboardData.currentUser);
+			}
+		}
+		
+		const sortedByPosition = allUsers.sort((a, b) => a.position - b.position);
+		
+		const limited = sortedByPosition.slice(0, 100);
+		
+		return limited.map(u => ({
 			id: u.userId,
 			username: u.username,
 			photoUrl: u.photoUrl ?? null,
@@ -68,7 +83,7 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialTy
 	const error = storeError || localError;
 
 	return (
-		<div className={cls(styles.leaderboard, className)}>
+		<div>
 			{showSwitch && (
 				<LeaderboardSwitch
 					value={activeType}
@@ -76,35 +91,32 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialTy
 					className={styles.switchWrapper}
 				/>
 			)}
-			{isLoading && <div className={styles.emptyState}>Загрузка...</div>}
-			{error && <div className={styles.emptyState}>Ошибка: {error}</div>}
-			{!isLoading && !error && effectiveUsers.length === 0 && (
-				<div className={styles.emptyState}>Нет данных рейтинга</div>
-			)}
-			{!isLoading && !error && effectiveUsers.length > 0 && (
-				<>
-					<Podium users={podium} />
-					{rest.length > 0 && (
+			<div className={cls(styles.leaderboard, className)}>
+				{isLoading && <div className={styles.emptyState}>Загрузка...</div>}
+				{error && <div className={styles.emptyState}>Ошибка: {error}</div>}
+				{!isLoading && !error && (
+					<>
+						<Podium users={podium}/>
 						<LeaderBoardList
 							items={rest}
 							itemHeight={60}
-							containerHeight={400}
+							containerHeight={window.innerHeight * 0.3}
 							renderItem={(user, index) => (
 								<div className={styles.userRow} key={user.id}>
 									<span className={styles.rank}>{index + 4}</span>
-									<Avatar 
-										url={user.photoUrl} 
-										initials={user.username.slice(0, 2).toUpperCase()} 
-										className={styles.avatar} 
+									<Avatar
+										url={user.photoUrl}
+										initials={user.username.slice(0, 2).toUpperCase()}
+										className={styles.avatar}
 									/>
 									<span className={styles.username}>{user.username}</span>
-									<span className={styles.stars}><Icon name="star-16" size={10} /> {user.stars}</span>
+									<span className={styles.stars}><Icon name="star-16" size={10}/> {user.stars}</span>
 								</div>
 							)}
 						/>
-					)}
-				</>
-			)}
+					</>
+				)}
+			</div>
 		</div>
 	);
 };

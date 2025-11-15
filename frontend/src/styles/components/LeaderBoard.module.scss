@@ -1,7 +1,7 @@
 .leaderboard {
   display: flex;
   flex-direction: column;
-  bottom: var(--tabbar-height);
+  bottom: 0;
   width: 100%;
   position: absolute;
 }

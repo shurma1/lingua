@@ -32,7 +32,7 @@ export const LeaderboardSwitch: React.FC<LeaderboardSwitchProps> = ({
 			onChange("friends");
 		}
 	};
-
+	//ужас
 	return (
 		<div className={`${styles.switchContainer} ${className}`}>
 			<div className={styles.switchTrack}>

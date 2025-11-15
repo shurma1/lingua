@@ -1,0 +1,1 @@
+export const BOT_TAG = "t118_hakaton_bot";
