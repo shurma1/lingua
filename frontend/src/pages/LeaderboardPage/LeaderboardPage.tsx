@@ -47,6 +47,7 @@ const LeaderboardPage = () => {
 				)}
 			</div>
 			<LeaderBoard
+				type={leaderboardType}
 				onTypeChange={setLeaderboardType}
 				showSwitch={false}
 			/>

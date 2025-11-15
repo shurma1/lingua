@@ -26,6 +26,13 @@ interface LeaderBoardProps {
 export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialType = "all", showSwitch = true, className, onTypeChange }) => {
 	const [activeType, setActiveType] = useState<LeaderboardType>(initialType);
 
+	// Синхронизация с внешним типом
+	useEffect(() => {
+		if (initialType !== activeType) {
+			setActiveType(initialType);
+		}
+	}, [initialType]);
+
 	const handleTypeChange = (type: LeaderboardType) => {
 		setActiveType(type);
 		onTypeChange?.(type);
@@ -38,11 +45,9 @@ export const LeaderBoard: React.FC<LeaderBoardProps> = ({ users, type: initialTy
 
 	useEffect(() => {
 		if (!fromApi) return;
-		if (!leaderboardData) {
-			fetchLeaderboard(activeType).catch(() => {});
-		}
-	 
-	}, [fromApi, leaderboardData, activeType]);
+		// Всегда запрашиваем данные при смене типа
+		fetchLeaderboard(activeType).catch(() => {});
+	}, [fromApi, activeType, fetchLeaderboard]);
 
 	const apiUsers: RatingUser[] = useMemo(() => {
 		if (!leaderboardData) return [];

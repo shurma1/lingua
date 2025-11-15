@@ -1,8 +1,10 @@
 import React from "react";
 
-import { LeaderboardType } from "@/types/api";
+import {LeaderboardType} from "@/types/api";
 
 import styles from "../../styles/ui/LeaderboardSwitch.module.scss";
+import WebApp from "@WebApp/WebApp";
+import {ImpactStyle} from "@WebApp/types";
 
 interface LeaderboardSwitchProps {
 	/** Current selected mode */
@@ -22,12 +24,14 @@ export const LeaderboardSwitch: React.FC<LeaderboardSwitchProps> = ({
 	className = "",
 }) => {
 	const handleAllUsers = () => {
+		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
 		if (!disabled && value !== "all") {
 			onChange("all");
 		}
 	};
 
 	const handleFriends = () => {
+		WebApp.HapticFeedback.impactOccurred(ImpactStyle.MEDIUM);
 		if (!disabled && value !== "friends") {
 			onChange("friends");
 		}
